@@ -8,7 +8,8 @@ from django.contrib.postgres.fields import JSONField
 class Product(models.Model):
     # name = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     # text = models.TextField()
-    name = models.CharField(primary_key=True, max_length=25, blank=False)
+#     id=models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=25, blank=False)
     owner = models.CharField(max_length=25, default='')
     data = JSONField(default=list)
     created_date = models.DateTimeField(
