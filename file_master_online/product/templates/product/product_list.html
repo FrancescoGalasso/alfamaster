@@ -1,19 +1,28 @@
+{% load staticfiles %}
 <html>
     <head>
-        <title>Django Girls blog</title>
+        <title>Alfa Master File</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/product.css' %}">
     </head>
     <body>
         <div>
-            <h1><a href="">Django Girls Blog</a></h1>
+            <h1><a href="">Alfa Master File</a></h1>
         </div>
 
         <script>
 
-            console.log("Print the posts");
+            console.log("Show the products");
          
         </script>
 
-        {{ products }}
+        {% for product in products %}
+        <div>
+            <h1><a href="">{{ product.name }}</a></h1>
+            <p>{{ product.data|linebreaksbr }}</p>
+        </div>
+        {% endfor %}
         
     </body>
 </html>
