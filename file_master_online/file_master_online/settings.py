@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'product'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -88,7 +89,7 @@ DATABASES = {
         'USER': 'admin',
         'PASSWORD': 'alfaadmin',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 

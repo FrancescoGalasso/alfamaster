@@ -1,1 +1,6 @@
+# ignore all files .pyc
 *.pyc
+# ignore folder containing Python 3 bytecode compiled and ready to be executed.
+__pycache__
+# ignore db sqlite
+db.sqlite3
