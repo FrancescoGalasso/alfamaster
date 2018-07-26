@@ -1,0 +1,14 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Alfa Master File</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/product.css' %}">
+    </head>
+    <body>
+        <h1><a href="/">Alfa Master File</a></h1>
+        {% block content %}
+        {% endblock %}     
+    </body>
+</html>
