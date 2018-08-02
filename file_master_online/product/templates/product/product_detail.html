@@ -1,7 +1,33 @@
-{% extends 'product/base.html' %}
+{% extends 'product/base.html' %} {% block content %}
+<!-- <h1>{{ product.name }}</h1>
+        <p>product.data : {{ product.data}}</p>
+        <p>{{prod_name}}</p>
+        <p>{{data}}</p>
 
-{% block content %}
-        <h1>{{ product.name }}</h1>
-        <p>{{ product.data|linebreaksbr }}</p>
-    </div>
+        {% for p in data%}
+        <p>{{p}}</p>>
+        {% endfor %}
+
+        <table>
+                <tr>
+                    {% for p in data%}
+                  <th>{{p}}</th>
+                  {% endfor %}
+                </tr>
+                <tr>
+                  <th> pippo</th>
+                  <th> topolino</th>
+                  <th> paperopoli</th>
+                  <th> {{ result.date }}</th>
+                </tr> 
+                </table>
+
+    </div> -->
+
+<h4>{{store_name}} store</h4>
+<p>{{store_address.street}}</p>
+<p>{{store_address.city}},{{store_address.state}}</p>
+<hr/>
+<p>We offer: {{store_amenities.0}} and {{store_amenities.1}}</p>
+<p>Menu includes : {{store_menu.1.1}} and {{store_menu.2.1}}</p>
 {% endblock %}
