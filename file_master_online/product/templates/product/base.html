@@ -3,12 +3,41 @@
     <head>
         <title>Alfa Master File</title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="{% static 'css/product.css' %}">
+        <style>
+                table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    padding: 5px;
+                    text-align: left;    
+                }
+
+                .testimonial-group > .row {
+                    overflow-x: auto;
+                    white-space: nowrap;
+                    /* background: rgb(231, 245, 143); */
+                    }
+                    .testimonial-group > .row > .col-xs-4 {
+                    display: inline-block;
+                    float: none;
+                    margin-left: 1%;
+                    }
+
+                    /* Decorations */
+                    .col-xs-4 { color: #fff; font-size: 48px; padding-bottom: 20px; padding-top: 18px; }
+
+                </style>
     </head>
     <body>
+
         <h1><a href="/">Alfa Master File</a></h1>
         {% block content %}
-        {% endblock %}     
+        {% endblock %}    
+
     </body>
 </html>

@@ -1,43 +1,13 @@
 {% extends 'product/base.html' %} 
 {% block content %}
 
-<!-- <h4>Product Name:
-  <b>{{product_name}}</b>
-</h4>
-<p>Product Raw Material: {{product_raw}}</p>
-<p>Product RM Cost: {{product_rmcost}}</p>
-<p>Product Specific weight: {{product_weight}}</p>
-<hr/>
-<p>Product Base</p>
-
-<p>{{product_bases.0.base_name}}</p>
-<p>{{product_bases.0.g_100g}}</p>
-<p>{{product_bases.1}}</p>
-
-<hr/>
-<p>{{products}}</p>
-<p>{{list}}</p>
-<p>{{list.0}}</p> -->
-
-<hr/>
-
-<p>raw_material: {{list.0.raw_material}}</p>
-<p>{{list.0.bases}}</p>
-<p>specific_weight: {{list.0.specific_weight}}</p>
-<p>RM_cost: {{list.0.RM_cost}}</p>
-<ul>
-  {% for elem in list.0.bases %}
-  <li>elem : {{elem.g_100g}}</li>
-  {% endfor %}
-</ul>
-
 <hr/>
 
 {% comment %}
 Loop through the dictionary's items to get the keys and values:
   for key, value in test.items
 {% endcomment %}
-
+{% comment %}
 <h2>{{prod_name}}</h2>
 {% for itemlists in list %}
 <ul>
@@ -55,5 +25,80 @@ Loop through the dictionary's items to get the keys and values:
   {% endfor %}
 </ul>
 {% endfor %}
+
+<hr/>
+{% endcomment %}  
+<h2>{{prod_name}}</h2>
+{% for itemlists in list %}
+<table style="width:70%">
+  {% for k,v in itemlists.items %}
+  <tr>
+    {% if k != "bases" %}
+    <th>{{k}}:</th>
+    <td>{{v}}</td>
+    {% else %}
+    {%for element in v%}
+    <p>base name: {{ element.name}}</p>
+    <p>base %w/w: {{ element.g_100g}}</p>
+    {% endfor %}
+    {% endif %}
+  </tr>
+  {% endfor %}
+</table>
+{% endfor %}
+
+<hr/>
+
+<h2>{{prod_name}}</h2>
+{% for itemlists in list %}
+<table width="400" style="float: Left;">
+  <tr>
+    {% for k,v in itemlists.items %}
+    {% if k != "bases" %}
+    <th>{{k}}</th>
+    {% endif %}
+    {% endfor %}
+  </tr>
+  <tr>
+    {% for k,v in itemlists.items %}
+    {% if k != "bases" %}
+    <td>{{v}}</td>
+    {% endif %}
+    {% endfor %}
+  </tr>
+</table>
+{% endfor %}
+
+<div class="container testimonial-group">
+  <div class="row text-center">
+    {% for itemlists in list %} 
+      {% for k,v in itemlists.items %} 
+        {% if k == "bases" %} 
+          {%for element in v%}
+            <div class="col-xs-4">
+            <table>
+                <caption>{{ element.name}}</caption>
+              <tr>
+                <th>%w/w</th>
+                <th>mL/100g</th>
+                <th>%v/v</th>
+                <th>mL/1000g</th>
+                <th>Formula Cost [$/L]</th>
+              </tr>
+              <tr>
+                <td>{{element.g_100g}}</td>
+                <td>{{element.ml_100g}}</td>
+                <td>{{element.v_100v}}</td>
+                <td>{{element.ml_1000ml}}</td>
+                <td>{{element.formula_cost}}</td>
+              </tr>
+            </table>
+          </div>
+            {% endfor %} 
+          {% endif %} 
+        {% endfor %}
+      {% endfor %}
+  </div>
+</div>
 
 {% endblock %}
