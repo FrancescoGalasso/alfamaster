@@ -27,7 +27,7 @@ Loop through the dictionary's items to get the keys and values:
 {% endfor %}
 
 <hr/>
-{% endcomment %}  
+
 <h2>{{prod_name}}</h2>
 {% for itemlists in list %}
 <table style="width:70%">
@@ -48,10 +48,10 @@ Loop through the dictionary's items to get the keys and values:
 {% endfor %}
 
 <hr/>
-
+{% endcomment %}  
 <h2>{{prod_name}}</h2>
 {% for itemlists in list %}
-<table width="400" style="float: Left;">
+<table width="400" style="float: Left; margin-top: 52px;">
   <tr>
     {% for k,v in itemlists.items %}
     {% if k != "bases" %}
