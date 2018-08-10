@@ -22,6 +22,8 @@ def product_detail(request, pk):
         lista = data['data']
         stdlogger.debug("       *** [debug] product data: {}".format(lista))
     except:
+        import traceback
+        print traceback.format_exc()
         lista = { }
     return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name})    
     # return render(request, 'product/product_detail.html')
