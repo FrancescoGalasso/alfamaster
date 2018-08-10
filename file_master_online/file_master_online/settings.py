@@ -132,3 +132,63 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'root': {
+        'level': 'DEBUG',
+        # 'handlers': ['sentry'],
+    },    
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'formatters': {
+        'simple': {
+            'format': '[%(asctime)s] %(levelname)s %(message)s',
+	    'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'verbose': {
+            'format': '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s',
+	    'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        # 'sentry': {
+        #     'level': 'DEBUG',
+        #     'class': 'raven.contrib.django.handlers.SentryHandler',
+        # },
+        'development_logfile': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.FileHandler',
+            'filename': '/home/galasso/Desktop/django_dev2.log',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'product': {
+            'handlers': ['console','development_logfile'],
+         },
+        'dba': {
+            'handlers': ['console'],
+        },
+        'django': {
+            'handlers': ['console'],
+        },
+        'py.warnings': {
+            'handlers': ['console','development_logfile'],
+        },
+    }
+}
