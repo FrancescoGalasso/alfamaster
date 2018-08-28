@@ -25,80 +25,71 @@ Loop through the dictionary's items to get the keys and values:
   {% endfor %}
 </ul>
 {% endfor %}
+{% endcomment %}
 
-<hr/>
+
 
 <h2>{{prod_name}}</h2>
-{% for itemlists in list %}
-<table style="width:70%">
-  {% for k,v in itemlists.items %}
-  <tr>
-    {% if k != "bases" %}
-    <th>{{k}}:</th>
-    <td>{{v}}</td>
-    {% else %}
-    {%for element in v%}
-    <p>base name: {{ element.name}}</p>
-    <p>base %w/w: {{ element.g_100g}}</p>
-    {% endfor %}
-    {% endif %}
-  </tr>
-  {% endfor %}
-</table>
-{% endfor %}
 
-<hr/>
-{% endcomment %}  
-<h2>{{prod_name}}</h2>
-{% for itemlists in list %}
-<table width="400" style="float: Left; margin-top: 52px;">
-  <tr>
-    {% for k,v in itemlists.items %}
-    {% if k != "bases" %}
-    <th>{{k}}</th>
-    {% endif %}
-    {% endfor %}
-  </tr>
-  <tr>
-    {% for k,v in itemlists.items %}
-    {% if k != "bases" %}
-    <td>{{v}}</td>
-    {% endif %}
-    {% endfor %}
-  </tr>
-</table>
-{% endfor %}
+      <table class="table table-condensed table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Raw material</th>
+              <th>Specific weight</th>
+              <th>RM cost</th>
+              <th>Bases</th>
+            </tr>
+          </thead>
+          <tbody>
 
-<div class="container testimonial-group" style="padding-left: 100px;">
-  <div class="row text-center">
-    {% for itemlists in list %} 
-      {% for k,v in itemlists.items %} 
-        {% if k == "bases" %} 
-          {%for element in v%}
-            <div class="col-xs-4">
-            <table>
-                <caption>{{ element.name}}</caption>
-              <tr>
-                <th>%w/w</th>
-                <th>mL/100g</th>
-                <th>%v/v</th>
-                <th>mL/1000g</th>
-                <th>Formula Cost [$/L]</th>
+                {% for itemlists in list %} 
+                <script type="text/javascript"> 
+                  var a = "{{itemlists|safe}}";
+                  console.log(a);
+               </script>
+                <tr>
+                {% for k,v in itemlists.items %}
+                {% if k != "bases" %}
+                <td>{{v}}</td>
+                <script type="text/javascript"> 
+                  var a = "{{v}}";
+                  console.log(a);
+               </script>
+                {% endif %}
+                {% endfor %}
+                {% for k,v in itemlists.items %}
+                {% if k == "bases" %}
+                <td>
+                  <table class="table table-condensed table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>%w/w</th>
+                          <th>mL/100g</th>
+                          <th>%v/v</th>
+                          <th>mL/1000g</th>
+                          <th>Formula Cost [$/L]</th>
+                        </tr>
+                      </thead>
+                      {%for element in v%}
+                      <tbody>
+                        <tr>
+                          <td>{{element.name}}</td>
+                          <td>{{element.g_100g}}</td>
+                          <td>{{element.ml_100g}}</td>
+                          <td>{{element.v_100v}}</td>
+                          <td>{{element.ml_1000ml}}</td>
+                          <td>{{element.formula_cost}}</td>
+                        </tr>
+                      </tbody>  
+                  {% endfor %} 
+                  </table>
+                </td>
+                {% endif %}
+                {% endfor %}
               </tr>
-              <tr>
-                <td>{{element.g_100g}}</td>
-                <td>{{element.ml_100g}}</td>
-                <td>{{element.v_100v}}</td>
-                <td>{{element.ml_1000ml}}</td>
-                <td>{{element.formula_cost}}</td>
-              </tr>
-            </table>
-          </div>
-            {% endfor %} 
-          {% endif %} 
-        {% endfor %}
-      {% endfor %}
-  </div>
-</div>
+                {% endfor %}
+          </tbody>
+        </table>
 
 {% endblock %}
