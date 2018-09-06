@@ -3,6 +3,8 @@ from django.utils import timezone
 from .models import Product
 from django.shortcuts import render, get_object_or_404
 import json
+from .forms import ProductForm
+
 
 # Python logging package
 import logging
@@ -32,3 +34,8 @@ def product_detail(request, pk):
 def product_list(request):
     products = Product.objects.all()
     return render(request, 'product/product_list.html', {'products': products})
+
+
+def product_new(request):
+    form = ProductForm()
+    return render(request, 'product/product_edit2.html', {'form': form})

@@ -1,0 +1,77 @@
+{% extends 'product/base.html' %}
+
+{% block content %}
+
+    <br><input type="text" name="firstname" placeholder="Type product's name"><br>
+
+    <br/>
+
+    <table id="display" style="width:100%">
+            <!-- thead -->
+        <thead>
+        <tr>
+            <th style="visibility:hidden;"></th>
+            <th style="visibility:hidden;"></th>
+            <th style="visibility:hidden;"></th>
+        </tr>
+        <tr>
+            <th>Raw material</th>
+            <th>Specific weight [g/mL]</th>
+            <th>RM cost [$/L]</th>
+        </tr>
+        </thead>
+                    <!-- tbody -->
+        <tbody>
+        <tr id="delete_row0">
+                <!-- <td><button id="delete_row0" style="margin-right: 3; display: none;" onclick="deleteRow(this.id)">X</button><input type="text" name="firstname" placeholder="Type raw material name"></td> -->
+                <td><button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type raw material name"></td>
+                <td><input type="text" name="firstname" placeholder="Type specific weight"></td>
+                <td><input type="text" name="firstname" placeholder="Type RM cost"></td>
+        </tr>
+        </tbody>
+    </table>
+    
+    <div><button onclick="addRawMaterial()" style="margin-top: 10">Add new Raw Material</button><button onclick="addNewBase()" style="margin-left: 15">Add new base</button></div>
+
+
+
+    <script type="text/javascript">
+        var rowId = 0;
+
+        function getRowId() {
+            rowId += 1;
+            return rowId;
+        }
+
+
+        function addRawMaterial() {
+            // document.getElementById("field2").value = document.getElementById("field1").value;
+            console.log("clicked on 'Add new Raw Material'");
+            var table = document.getElementById("display");
+            var row = table.insertRow(-1);
+            row.id = 'delete_row' + getRowId();
+            console.log(row.id);
+            var cell1 = row.insertCell(0);
+            // cell1.innerHTML = '<button id="delete_row' + getRowId() + '" style="margin-right: 3; display: none;" onclick="deleteRow(this.id)">X</button><input type="text" name="firstname" placeholder="Type Raw Material name">';
+            cell1.innerHTML = '<button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type Raw Material name">';
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = '<input type="text" name="firstname" placeholder="Type Specific weight">';
+            var cell3 = row.insertCell(2);
+            cell3.innerHTML = '<input type="text" name="firstname" placeholder="Type RM cost">';
+
+        }
+        
+        function deleteRow(rowId) {
+            console.log(rowId);
+            console.log("Row index is: " + rowId);
+            var element = document. getElementById(rowId);
+            element. parentNode. removeChild(element);
+        }
+
+        var counter = 0;
+
+        $( document ).ready(function() {
+            console.log( "page HTML ready!" );   
+        });
+    </script>
+{% endblock %}
