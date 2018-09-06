@@ -24,14 +24,14 @@
         <tbody>
         <tr id="delete_row0">
                 <!-- <td><button id="delete_row0" style="margin-right: 3; display: none;" onclick="deleteRow(this.id)">X</button><input type="text" name="firstname" placeholder="Type raw material name"></td> -->
-                <td><button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type raw material name"></td>
+                <td><div style="width: 230px;"><button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type raw material name"></div></td>
                 <td><input type="text" name="firstname" placeholder="Type specific weight"></td>
                 <td><input type="text" name="firstname" placeholder="Type RM cost"></td>
         </tr>
         </tbody>
     </table>
     
-    <div><button onclick="addRawMaterial()" style="margin-top: 10">Add new Raw Material</button><button onclick="addNewBase()" style="margin-left: 15">Add new base</button></div>
+    <div><button onclick="addRawMaterial()" style="margin-top: 10">Add new Raw Material</button><button onclick="addColumn()" style="margin-left: 15">Add new base</button></div>
 
 
 
@@ -68,7 +68,9 @@
             element. parentNode. removeChild(element);
         }
 
-        var counter = 0;
+        function addNewBase(){
+            console.log("add new base");
+        }
 
         $( document ).ready(function() {
             console.log( "page HTML ready!" );   
