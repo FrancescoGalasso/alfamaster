@@ -24,7 +24,7 @@
         <tbody>
         <tr id="delete_row0">
                 <!-- <td><button id="delete_row0" style="margin-right: 3; display: none;" onclick="deleteRow(this.id)">X</button><input type="text" name="firstname" placeholder="Type raw material name"></td> -->
-                <td><div style="min-width: 100px;"><button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type raw material name"></div></td>
+                <td><div style="min-width: 230px;"><button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type raw material name"></div></td>
                 <td><input type="text" name="firstname" placeholder="Type specific weight"></td>
                 <td><input type="text" name="firstname" placeholder="Type RM cost"></td>
         </tr>
@@ -70,6 +70,49 @@
 
         function addNewBase(){
             console.log("add new base");
+        }
+
+        function addColumn() {    
+        // var tblHeadObj = document.getElementById('display').tHead; //table head
+        // for (var h=0; h< tblHeadObj.rows.length; h++) {
+        // var newTH = document.createElement('th');
+        // tblHeadObj.rows[h].appendChild(newTH); //append ne th to table
+        // newTH.innerHTML = 'Column '+ (tblHeadObj.rows[h].cells.length); //append th content to th
+        // }
+        
+            var thead_col = ["%w/w", "mL/100g", "%v/v", "mL/1000g", "Formula Cost [$/L]"]
+            var tbody_input = ['<input type="text" name="firstname" placeholder="Type %w/w">', '','','','']
+
+
+            var tblBodyObj = document.getElementById('display').tBodies[0]; //table body
+            for (var i=0; i< 5; i++) {
+                var newCell = tblBodyObj.rows[0].insertCell(-1); //create new cell
+                // console.log(thead_col);
+                // console.log(thead_col.length);
+                // console.log(thead_col[i]);
+                newCell.innerHTML = tbody_input[i]; //append th content to th
+            }
+
+            var tblHeadObj = document.getElementById('display').tHead; //table head
+            
+            var newTH = document.createElement('th');
+            tblHeadObj.rows[0].appendChild(newTH); //append ne th to table
+            // newTH.style='colspan=5';
+            // newTH.style["colspan"] = "5";
+            // newTH.style.color = "red"; //funzia
+            // newTH.style.height = "200px";
+            // netTH.style.colSpan = "5";
+            newTH.innerHTML = '<input type="text" placeholder="Type Base name">'; //append th content to th
+            newTH.colSpan = 5;
+
+            for (var i=0; i< 5; i++) {
+                var newTH = document.createElement('th');
+                tblHeadObj.rows[1].appendChild(newTH); //append ne th to table
+                // console.log(thead_col);
+                // console.log(thead_col.length);
+                // console.log(thead_col[i]);
+                newTH.innerHTML = thead_col[i]; //append th content to th
+            }
         }
 
         $( document ).ready(function() {
