@@ -23,7 +23,13 @@
                     <!-- tbody -->
         <tbody>
         <tr id="delete_row0">
-                <td><div style="min-width: 230px;"><button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type raw material name"></div></td>
+                <td>
+                    <div style="min-width: 230px;">
+                    <button style="position:absolute;margin-top: 13px;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button>
+                    <input type="text" name="firstname" placeholder="Type raw material name" style= "position:absolute; margin-top: 13px; margin-left: 33;">
+                    <button type="button" class="btn btn-xs" onclick="addColumn(this.parentNode.parentNode.parentNode)" style=" position:relative; margin-top: 43px;">Add new base</button>
+                    </div>
+                </td>
                 <td><input type="text" name="firstname" placeholder="Type specific weight"></td>
                 <td><input type="text" name="firstname" placeholder="Type RM cost"></td>
         </tr>
@@ -36,6 +42,10 @@
 
     <script type="text/javascript">
         var rowId = 0;
+        var basesCounter = 0;
+        var thead_col = ["%w/w", "mL/100g", "%v/v", "mL/1000g", "Formula Cost [$/L]"]
+        var tbody_input = ['<input type="text" name="firstname" placeholder="Type %w/w">', '','','','']
+        var list_bases_availble = []
 
         function getRowId() {
             rowId += 1;
@@ -44,18 +54,40 @@
 
 
         function addRawMaterial() {
+            // document.getElementById("field2").value = document.getElementById("field1").value;
             console.log("clicked on 'Add new Raw Material'");
             var table = document.getElementById("display");
             var row = table.insertRow(-1);
             row.id = 'delete_row' + getRowId();
-            console.log(row.id);
+            console.log("row id -> "+row.id);
             var cell1 = row.insertCell(0);
-            cell1.innerHTML = '<button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type Raw Material name">';
+            // cell1.innerHTML = '<button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type Raw Material name">';
+            cell1.innerHTML = ` 
+                <div style="min-width: 230px;">
+                    <button style="position:absolute;margin-top: 13px;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button>
+                    <input type="text" name="firstname" placeholder="Type raw material name" style= "position:absolute; margin-top: 13px; margin-left: 33;">
+                    <button type="button" class="btn btn-xs" onclick="addColumn(this.parentNode.parentNode.parentNode)" style=" position:relative; margin-top: 43px;">Add new base</button>
+                </div>` 
             var cell2 = row.insertCell(1);
             cell2.innerHTML = '<input type="text" name="firstname" placeholder="Type Specific weight">';
             var cell3 = row.insertCell(2);
             cell3.innerHTML = '<input type="text" name="firstname" placeholder="Type RM cost">';
+            
+            console.log("bases added Counter -> "+basesCounter);
 
+            var tblBodyObj = document.getElementById('display').tBodies[0]; //table body
+            // basesCounter++;     //TODO modificare
+            console.log("addRawMaterial basesCounter ->"+basesCounter)
+            list_bases_availble.push(basesCounter)
+            // basesCounter--;     //TODO modificare
+            for (var z=1; z<=basesCounter; z++){
+                for (var i=0; i< 5; i++) {
+                    var lastRow = tblBodyObj.rows.length - 1; 
+                    var newCell = tblBodyObj.rows[lastRow].insertCell(-1); //create new cell
+                    newCell.innerHTML = tbody_input[i]; //append th content to th
+                    newCell.className = "base"+z; //base1 , base2 ...
+                }
+            }
         }
         
         function deleteRow(rowId) {
@@ -65,34 +97,52 @@
             element. parentNode. removeChild(element);
         }
 
-        function addNewBase(){
-            console.log("add new base");
-        }
+        function addColumn(parentNode) {    
+            console.log("RowId -> "+ parentNode);
+            console.log("RowId index -> "+ parentNode.rowIndex);
+            basesCounter++;
 
-        function addColumn() {    
-        
-            var thead_col = ["%w/w", "mL/100g", "%v/v", "mL/1000g", "Formula Cost [$/L]"]
-            var tbody_input = ['<input type="text" name="firstname" placeholder="Type %w/w">', '','','','']
-
-
+            console.log("basesCounter ->"+basesCounter);
+            
+            // populate table tbody
             var tblBodyObj = document.getElementById('display').tBodies[0]; //table body
             for (var i=0; i< 5; i++) {
-                var newCell = tblBodyObj.rows[0].insertCell(-1); //create new cell
+                var newCell = tblBodyObj.rows[parentNode.rowIndex -2].insertCell(-1); //create new cell
                 newCell.innerHTML = tbody_input[i]; //append th content to th
+                newCell.className = "base"+basesCounter;
             }
 
+            // populate table thead
             var tblHeadObj = document.getElementById('display').tHead; //table head
             
             var newTH = document.createElement('th');
             tblHeadObj.rows[0].appendChild(newTH); //append ne th to table
-            newTH.innerHTML = '<input type="text" placeholder="Type Base name">'; //append th content to th
+            newTH.innerHTML = '<input type="text" placeholder="Type Base name"> <button type="button" class="btn btn-xs" onclick=deleteBase(this.parentNode.className) style="float:right">x</button>'; //append th content to th
             newTH.colSpan = 5;
+            newTH.className = "base"+basesCounter;
 
             for (var i=0; i< 5; i++) {
                 var newTH = document.createElement('th');
                 tblHeadObj.rows[1].appendChild(newTH); //append ne th to table
                 newTH.innerHTML = thead_col[i]; //append th content to th
+                newTH.className = "base"+basesCounter;
             }
+
+            var tbl = document.getElementById("display").rows[parentNode.rowIndex].cells.length;
+            console.log("number of column -> "+tbl);
+        }
+
+        function deleteBase(classToDelete){
+            console.log("deleteBase called");
+            console.log("class to delete -> "+classToDelete);
+
+            var paras = document.getElementsByClassName(classToDelete);
+            console.log(paras);
+            while (paras[0]) {
+                paras[0].parentNode.removeChild(paras[0]);
+            }
+            basesCounter--;
+            console.log("updated bases counter after base delete action -> "+basesCounter)
         }
 
         $( document ).ready(function() {
