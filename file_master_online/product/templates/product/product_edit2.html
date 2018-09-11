@@ -46,6 +46,8 @@
         var thead_col = ["%w/w", "mL/100g", "%v/v", "mL/1000g", "Formula Cost [$/L]"]
         var tbody_input = ['<input type="text" name="firstname" placeholder="Type %w/w">', '','','','']
         var list_bases_availble = []
+        var list_index_bases = []
+
 
         function getRowId() {
             rowId += 1;
@@ -101,7 +103,7 @@
             console.log("RowId -> "+ parentNode);
             console.log("RowId index -> "+ parentNode.rowIndex);
             basesCounter++;
-
+            avoidDuplicationCounter()
             console.log("basesCounter ->"+basesCounter);
             
             // populate table tbody
@@ -143,6 +145,76 @@
             }
             basesCounter--;
             console.log("updated bases counter after base delete action -> "+basesCounter)
+            console.log(getListClassName())
+        }
+        
+        
+        function getListClassName(){
+            var classes = [];
+
+            //jquery start - create list of classname used inside table
+            $('table *:not(script)').each(function(){
+            _classes = $(this).attr('class') ? $(this).attr('class').split(' ') : []
+            _classes.forEach(function(entry){
+                if(classes.indexOf(entry) < 0){
+                classes.push(entry)
+                }
+            })
+            })
+            //jquery end
+            
+            // remove pointless classes 
+            let value = ["btn", "btn-xs"]
+            for(var i = value.length - 1; i >= 0; i--) {
+                classes = classes.filter(item => item !== value[i])
+            }
+            return classes;
+        }
+
+        function avoidDuplicationCounter(){
+            var classes = [];
+
+            //jquery start - create list of classname used inside table
+            $('table *:not(script)').each(function(){
+            _classes = $(this).attr('class') ? $(this).attr('class').split(' ') : []
+            _classes.forEach(function(entry){
+                if(classes.indexOf(entry) < 0){
+                classes.push(entry)
+                }
+            })
+            })
+            //jquery end
+            
+            // remove pointless classes 
+            let value = ["btn", "btn-xs"]
+            for(var i = value.length - 1; i >= 0; i--) {
+                classes = classes.filter(item => item !== value[i])
+            }
+
+            for(var i = classes.length -1; i >= 0; i--){
+                var str = classes[i];
+                var res = str.replace("base", "");
+                list_index_bases.push(res)
+            }
+            
+            console.log(list_index_bases)
+            console.log(classes)
+        }
+
+        // https://stackoverflow.com/questions/5898656/test-if-an-element-contains-a-class
+        function avoidDuplicationCounter2(){
+            var currentCounter = basesCounter
+            var class_name = "base"+basesCounter
+            console.log("class_name -> "+class_name)
+            console.log("#### "+basesCounter)
+            var paras = document.getElementsByClassName(class_name)
+            if(paras.length > 0){
+                console.log("ERROR! classname already exists")
+
+            } else {
+                // basesCounter++;
+            }
+            console.log("#### "+basesCounter)
         }
 
         $( document ).ready(function() {
