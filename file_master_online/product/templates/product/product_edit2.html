@@ -21,30 +21,37 @@
         </tr>
         </thead>
                     <!-- tbody -->
-        <tbody>
+        <tbody id="body">
         <tr id="delete_row0">
                 <td>
                     <div style="min-width: 230px;">
                     <button style="position:absolute;margin-top: 13px;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button>
-                    <input type="text" name="firstname" placeholder="Type raw material name" style= "position:absolute; margin-top: 13px; margin-left: 33;">
+                    <input type="text" id="rw_row0" placeholder="Type raw material name" style= "position:absolute; margin-top: 13px; margin-left: 33;">
                     <button type="button" class="btn btn-xs" onclick="addColumn(this.parentNode.parentNode.parentNode)" style=" position:relative; margin-top: 43px;">Add new base</button>
                     </div>
                 </td>
-                <td><input type="text" name="firstname" placeholder="Type specific weight"></td>
-                <td><input type="text" name="firstname" placeholder="Type RM cost"></td>
+                <td><input type="text" id="sw_row0" placeholder="Type specific weight"></td>
+                <td><input type="text" id="rm_row0" placeholder="Type RM cost"></td>
         </tr>
         </tbody>
+                    <!-- tfoot -->
+        <tfoot style="border-top: 4.2px solid black;">
+            <tr>
+                <th colspan="3">Total</th>
+            </tr>
+        </tfoot>
     </table>
     
-    <div><button onclick="addRawMaterial()" style="margin-top: 10">Add new Raw Material</button><button onclick="addColumn()" style="margin-left: 15">Add new base</button></div>
+    <div><button onclick="addRawMaterial()" style="margin-top: 10">Add new Raw Material</button><button onclick="doStuff()" style="margin-left: 15">Add new base</button></div>
 
 
 
     <script type="text/javascript">
         var rowId = 0;
         var basesCounter = 0;
+        var rowsCounter = 2;
         var thead_col = ["%w/w", "mL/100g", "%v/v", "mL/1000g", "Formula Cost [$/L]"]
-        var tbody_input = ['<input type="text" name="firstname" placeholder="Type %w/w">', '','','','']
+        var tbody_input = ['<input type="text" id="myInput" name="firstname" placeholder="Type %w/w">', '','','','']
         var list_bases_availble = []
         var list_index_bases = []
 
@@ -58,30 +65,61 @@
         function addRawMaterial() {
             // document.getElementById("field2").value = document.getElementById("field1").value;
             console.log("clicked on 'Add new Raw Material'");
-            var table = document.getElementById("display");
-            var row = table.insertRow(-1);
+
+            // old method
+            // rowsCounter++;
+            // var table = document.getElementById("display");
+            var table2 = document.getElementById("body");
+            // console.log(table)
+            console.log(table2)
+            // var row = table.insertRow(-1);
+            var row = table2.insertRow();
+            // var row = table.insertRow(rowsCounter)
             row.id = 'delete_row' + getRowId();
             console.log("row id -> "+row.id);
             var cell1 = row.insertCell(0);
-            // cell1.innerHTML = '<button style="margin-right: 3;" onclick="deleteRow(this.parentNode.parentNode.id)">X</button><input type="text" name="firstname" placeholder="Type Raw Material name">';
             cell1.innerHTML = ` 
                 <div style="min-width: 230px;">
                     <button style="position:absolute;margin-top: 13px;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button>
-                    <input type="text" name="firstname" placeholder="Type raw material name" style= "position:absolute; margin-top: 13px; margin-left: 33;">
+                    <input type="text" placeholder="Type raw material name" style= "position:absolute; margin-top: 13px; margin-left: 33;">
                     <button type="button" class="btn btn-xs" onclick="addColumn(this.parentNode.parentNode.parentNode)" style=" position:relative; margin-top: 43px;">Add new base</button>
                 </div>` 
             var cell2 = row.insertCell(1);
             cell2.innerHTML = '<input type="text" name="firstname" placeholder="Type Specific weight">';
             var cell3 = row.insertCell(2);
             cell3.innerHTML = '<input type="text" name="firstname" placeholder="Type RM cost">';
+            // EOL old method
+
+            //jquery method
+            // row_id = 'delete_row' + getRowId();
+            // console.log("row id -> "+row_id);
+            // // var newRowContent = "<tr><td>newcontent</td><td>newcontent2</td></tr>"
+            // var newRowContent = `
+            //         <td>
+            //             <div style="min-width: 230px;">
+            //                 <button style="position:absolute;margin-top: 13px;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button>
+            //                 <input type="text" placeholder="Type raw material name" style= "position:absolute; margin-top: 13px; margin-left: 33;">
+            //                 <button type="button" class="btn btn-xs" onclick="addColumn(this.parentNode.parentNode.parentNode)" style=" position:relative; margin-top: 43px;">Add new base</button>
+            //             </div>
+            //         </td>
+            //         <td>
+            //             <input type="text" name="firstname" placeholder="Type Specific weight">
+            //         </td>
+            //         <td>
+            //             <div style="min-width: 230px;">
+            //                 <input type="text" name="firstname" placeholder="Type RM cost">
+            //             </div>
+            //         </td>
+            // `
+            // var newRow = "<tr id="+row_id+">"+newRowContent+"</tr>"
+            // console.log(newRow)
+            // $("#display tbody").append(newRowContent)
             
             console.log("bases added Counter -> "+basesCounter);
 
             var tblBodyObj = document.getElementById('display').tBodies[0]; //table body
-            // basesCounter++;     //TODO modificare
             console.log("addRawMaterial basesCounter ->"+basesCounter)
             list_bases_availble.push(basesCounter)
-            // basesCounter--;     //TODO modificare
             for (var z=1; z<=basesCounter; z++){
                 for (var i=0; i< 5; i++) {
                     var lastRow = tblBodyObj.rows.length - 1; 
@@ -97,6 +135,7 @@
             console.log("Row index is: " + rowId);
             var element = document. getElementById(rowId);
             element. parentNode. removeChild(element);
+            // rowsCounter--;
         }
 
         function addColumn(parentNode) {    
@@ -216,9 +255,125 @@
             }
             console.log("#### "+basesCounter)
         }
+        
+        function doStuff(){
+            //i should create a json here!
+            // https://stackoverflow.com/questions/5917647/create-a-json-array-from-html-table
+            console.log("doStuff!")
+            // var example = '{"data": [{"raw_material": "H20", "bases": [{"name": "pastel", "ml_100g": "2", "formula_cost": "222", "v_100v": "2", "g_100g": "x", "ml_1000ml": "2"}, {"name": "base2", "ml_100g": "2", "formula_cost": "222", "v_100v": "2", "g_100g": "x", "ml_1000ml": "2"}], "specific_weight": "1.123", "RM_cost": "0.07"}, {"raw_material": "resina", "bases": [{"name": "pastel", "ml_100g": "2", "formula_cost": "222", "v_100v": "2", "g_100g": "x", "ml_1000ml": "2"}, {"name": "base2", "ml_100g": "2", "formula_cost": "222", "v_100v": "2", "g_100g": "x", "ml_1000ml": "2"}, {"name": "base3", "ml_100g": "2", "formula_cost": "222", "v_100v": "2", "g_100g": "x", "ml_1000ml": "2"}], "specific_weight": "1.123", "RM_cost": "0.07"}]}'
+            // console.log(JSON.stringify(example, null, 4));
+            // console.log(JSON.parse(example))
+            var json = '{"data":[]}'
+            // var $row = $("#myTable  tbody:first-child  tr")
+            // console.log($row)
 
-        $( document ).ready(function() {
-            console.log( "page HTML ready!" );   
-        });
+
+            // var tableID = "display"
+            // var tbl = document.getElementById(tableID);
+            // var rCount = tbl.rows.length;
+            // console.log(rCount)
+            // try {
+            //     alert(tbl.rows[rCount - 1].cells[0].getElementsByTagName("input")[0].value);
+
+            // } catch (e) {
+            //     alert(e);
+            // }
+
+            var tableId = "display";
+            var t = document.getElementById(tableId);
+            var r = t.rows[t.rows.length-1];
+            var inputs = r.getElementsByTagName("input");
+            var result = new Array(inputs.length);
+            for (var i=0; i<inputs.length; i++){
+                result[i] = inputs[i].value; // not innerHTML or something
+                console.log(result[i])
+            }
+            return result;
+        }
+        
+        // stackoverflow 
+        // https://stackoverflow.com/questions/4364729/jquery-run-code-2-seconds-after-last-keypress
+        function throttle(f, delay){
+            var timer = null;
+            return function(){
+                var context = this, args = arguments;
+                clearTimeout(timer);
+                timer = window.setTimeout(function(){
+                    f.apply(context, args);
+                },
+                delay || 500);
+            };
+        }
+
+        var dictionary = {}
+
+        $('#display').keyup(throttle(function(e){
+            console.log("end of input")
+            var target_id = e.target.id
+            var target_value = e.target.value
+
+            // var row_id = $(e.target).parent().parent().parent().attr('id') ; //TODO working only with the raw material name
+            var row_id = ''
+            // console.log("parent id of input -> "+$(e.target).parent().parent().attr('id'))
+            // if ($(e.target).parent().parent().parent().attr('id') == '')
+            // var row_id = $(e.target).parent().parent().parent().attr('id') == undefined ?  console.log("parent id founded!") : console.log("parent id undefined. search for above parent") 
+            
+
+            // TODO REFACTORING
+            if ($(e.target).parent().parent().parent().attr('id') != undefined){
+                row_id = $(e.target).parent().parent().attr('id')
+                console.log("parent id of input -> "+$(e.target).parent().parent().attr('id'))
+            } else {
+                console.log("parent id of input -> "+$(e.target).parent().parent().attr('id'))
+                var row_id = $(e.target).parent().parent().attr('id')
+            }
+            
+            console.log("row_id : "+row_id)
+            console.log("target_id : "+target_id)
+            console.log("target_value : "+target_value)
+            // array.indexOf(newItem) === -1 ? array.push(newItem) : console.log("This item already exists");
+            // datas.input_data.indexOf(target_id) === -1 ? datas.input_data.push({ target_id : target_value,}) : console.log("This item already exists");
+            // array.indexOf(target_value) === -1 ? array.push(target_value) : console.log("This item already exists"); // OK!
+
+            console.log(dictionary)
+            if (target_id in dictionary){
+                console.log("pair key-value already added...just update the value!")
+                // update:
+                dictionary[target_id] = target_value;
+                console.log(dictionary)
+                logic(dictionary, row_id)
+            } else {
+                console.log("pair key-value to add")
+                // add:
+                dictionary[target_id] = target_value;
+                console.log(dictionary)
+                logic(dictionary, row_id)
+            }
+            
+        }));   
+        
+        function getValueFromDict(my_key) {
+            return dictionary[my_key];
+        }
+
+        function logic(dictionary, row_id){
+            var id = row_id.substring(7);
+            console.log("substring of row_id -> "+id)
+
+            //calculation of mL/100g
+            var sw = "sw_"+id
+            console.log("sw "+ sw)
+            if (("myInput" in dictionary) && (sw in dictionary)){
+                console.log("mL/100g = %w/w / sw")
+                var ml100g = getValueFromDict(sw)/getValueFromDict("myInput")
+                console.log(getValueFromDict(sw)/getValueFromDict("myInput"))
+                var list = document.getElementsByClassName("base1");
+                console.log(list[7])
+                list[7].innerHTML = ml100g
+            }
+        }
+        // $( document ).ready(function() {
+        //     console.log( "page HTML ready!" );   
+        // });
     </script>
 {% endblock %}
