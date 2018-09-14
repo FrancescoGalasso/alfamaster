@@ -1,5 +1,17 @@
 {% extends 'product/base.html' %}
 
 {% block content %}
+{% load staticfiles %}
 
+<div class="grid_generator">
+    <div>Insert number of raw materials<input type="text" id="input_grid" placeholder="Insert number"></div>
+    <div>Insert number of bases<input type="text" id="input_grid2" placeholder="Insert number"></div>
+</div>
+
+<button type="button" class="btn btn-xs" onclick=generateTable()>Generate table</button>
+
+<hr>
+<input type="text" name="firstname" placeholder="Type product's name"><br>
+
+<script src="{% static 'js/grid.js' %}"></script>  
 {% endblock %}

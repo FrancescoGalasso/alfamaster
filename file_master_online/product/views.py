@@ -38,4 +38,4 @@ def product_list(request):
 
 def product_new(request):
     form = ProductForm()
-    return render(request, 'product/product_edit2.html', {'form': form})
+    return render(request, 'product/product_edit3.html', {'form': form})
