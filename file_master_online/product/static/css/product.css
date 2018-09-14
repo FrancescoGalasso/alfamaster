@@ -7,7 +7,7 @@ body {
 }
 
 /* 
-* css inside <div class="grid_generator">
+*   css inside <div class="grid_generator">
 */
 #input_grid { 
     background-color: yellow;
@@ -22,4 +22,16 @@ body {
 /* select first 2 div inside class grid_generator*/
 .grid_generator div:nth-child(-n+3){
     font-weight: bold;
+}
+
+/*
+*   css table generated
+*/
+
+.header::after {
+    font-weight: bold;
+}
+
+td {
+    min-width: 80px;
 }

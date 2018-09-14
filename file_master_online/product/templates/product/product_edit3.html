@@ -4,14 +4,18 @@
 {% load staticfiles %}
 
 <div class="grid_generator">
-    <div>Insert number of raw materials<input type="text" id="input_grid" placeholder="Insert number"></div>
-    <div>Insert number of bases<input type="text" id="input_grid2" placeholder="Insert number"></div>
+    <div>Insert number of raw materials<input type="number" id="input_grid" placeholder="Insert number"></div>
+    <div>Insert number of bases<input type="number" id="input_grid2" placeholder="Insert number"></div>
 </div>
 
 <button type="button" class="btn btn-xs" onclick=generateTable()>Generate table</button>
 
 <hr>
+<p id="info-test"></p>
 <input type="text" name="firstname" placeholder="Type product's name"><br>
+<br>
 
+
+<div id="myGeneratedTable"></div>
 <script src="{% static 'js/grid.js' %}"></script>  
 {% endblock %}
