@@ -54,6 +54,7 @@
         var tbody_input = ['<input type="text" id="myInput" name="firstname" placeholder="Type %w/w">', '','','','']
         var list_bases_availble = []
         var list_index_bases = []
+        var dictionary = {}
 
 
         function getRowId() {
@@ -68,14 +69,11 @@
 
             // old method
             // rowsCounter++;
-            // var table = document.getElementById("display");
-            var table2 = document.getElementById("body");
-            // console.log(table)
-            console.log(table2)
-            // var row = table.insertRow(-1);
-            var row = table2.insertRow();
-            // var row = table.insertRow(rowsCounter)
-            row.id = 'delete_row' + getRowId();
+            var table = document.getElementById("body");
+            console.log(table)
+            var row = table.insertRow();
+            var id = getRowId()
+            row.id = 'delete_row' + id;
             console.log("row id -> "+row.id);
             var cell1 = row.insertCell(0);
             cell1.innerHTML = ` 
@@ -83,37 +81,16 @@
                     <button style="position:absolute;margin-top: 13px;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button>
                     <input type="text" placeholder="Type raw material name" style= "position:absolute; margin-top: 13px; margin-left: 33;">
                     <button type="button" class="btn btn-xs" onclick="addColumn(this.parentNode.parentNode.parentNode)" style=" position:relative; margin-top: 43px;">Add new base</button>
-                </div>` 
+                </div>`
+            cell1.id = "rw_row"+ id
             var cell2 = row.insertCell(1);
             cell2.innerHTML = '<input type="text" name="firstname" placeholder="Type Specific weight">';
+            cell2.id = "sw_row"+ id
             var cell3 = row.insertCell(2);
             cell3.innerHTML = '<input type="text" name="firstname" placeholder="Type RM cost">';
-            // EOL old method
+            cell3.id = "rm_row"+ id
 
-            //jquery method
-            // row_id = 'delete_row' + getRowId();
-            // console.log("row id -> "+row_id);
-            // // var newRowContent = "<tr><td>newcontent</td><td>newcontent2</td></tr>"
-            // var newRowContent = `
-            //         <td>
-            //             <div style="min-width: 230px;">
-            //                 <button style="position:absolute;margin-top: 13px;" onclick="deleteRow(this.parentNode.parentNode.parentNode.id)">X</button>
-            //                 <input type="text" placeholder="Type raw material name" style= "position:absolute; margin-top: 13px; margin-left: 33;">
-            //                 <button type="button" class="btn btn-xs" onclick="addColumn(this.parentNode.parentNode.parentNode)" style=" position:relative; margin-top: 43px;">Add new base</button>
-            //             </div>
-            //         </td>
-            //         <td>
-            //             <input type="text" name="firstname" placeholder="Type Specific weight">
-            //         </td>
-            //         <td>
-            //             <div style="min-width: 230px;">
-            //                 <input type="text" name="firstname" placeholder="Type RM cost">
-            //             </div>
-            //         </td>
-            // `
-            // var newRow = "<tr id="+row_id+">"+newRowContent+"</tr>"
-            // console.log(newRow)
-            // $("#display tbody").append(newRowContent)
+            // EOL old method
             
             console.log("bases added Counter -> "+basesCounter);
 
@@ -126,6 +103,13 @@
                     var newCell = tblBodyObj.rows[lastRow].insertCell(-1); //create new cell
                     newCell.innerHTML = tbody_input[i]; //append th content to th
                     newCell.className = "base"+z; //base1 , base2 ...
+                    console.log("try to stamp newCell")
+                    console.log(newCell)
+                    //TODO refactoring
+                    if (i == 0){
+                        console.log(newCell)
+                        newCell.id = "myInput"+id
+                    }
                 }
             }
         }
@@ -142,7 +126,7 @@
             console.log("RowId -> "+ parentNode);
             console.log("RowId index -> "+ parentNode.rowIndex);
             basesCounter++;
-            avoidDuplicationCounter()
+            // avoidDuplicationCounter()
             console.log("basesCounter ->"+basesCounter);
             
             // populate table tbody
@@ -168,7 +152,22 @@
                 newTH.innerHTML = thead_col[i]; //append th content to th
                 newTH.className = "base"+basesCounter;
             }
+            
+            // populate table tfoot
+            var tblFootObj = document.getElementById('display').tFoot; //table foot
+            console.log("tfoot ")
+            console.log(tblFootObj)
+            var tfoot_col_id = ["tot_ww", "tot_mL100g", "tot_vv", "tot_mL1000g", "tot_fc"]
 
+            for (var i=0; i< 5; i++) {
+                var newTH = document.createElement('th');
+                tblFootObj.rows[0].appendChild(newTH); //append ne th to table
+                newTH.innerHTML = ''; //append th content to th
+                newTH.className = "base"+basesCounter;
+                newTH.id = tfoot_col_id[i]
+            }
+
+            // stuffs
             var tbl = document.getElementById("display").rows[parentNode.rowIndex].cells.length;
             console.log("number of column -> "+tbl);
         }
@@ -305,20 +304,13 @@
             };
         }
 
-        var dictionary = {}
-
         $('#display').keyup(throttle(function(e){
             console.log("end of input")
             var target_id = e.target.id
             var target_value = e.target.value
 
-            // var row_id = $(e.target).parent().parent().parent().attr('id') ; //TODO working only with the raw material name
             var row_id = ''
-            // console.log("parent id of input -> "+$(e.target).parent().parent().attr('id'))
-            // if ($(e.target).parent().parent().parent().attr('id') == '')
-            // var row_id = $(e.target).parent().parent().parent().attr('id') == undefined ?  console.log("parent id founded!") : console.log("parent id undefined. search for above parent") 
             
-
             // TODO REFACTORING
             if ($(e.target).parent().parent().parent().attr('id') != undefined){
                 row_id = $(e.target).parent().parent().attr('id')
@@ -331,9 +323,6 @@
             console.log("row_id : "+row_id)
             console.log("target_id : "+target_id)
             console.log("target_value : "+target_value)
-            // array.indexOf(newItem) === -1 ? array.push(newItem) : console.log("This item already exists");
-            // datas.input_data.indexOf(target_id) === -1 ? datas.input_data.push({ target_id : target_value,}) : console.log("This item already exists");
-            // array.indexOf(target_value) === -1 ? array.push(target_value) : console.log("This item already exists"); // OK!
 
             console.log(dictionary)
             if (target_id in dictionary){
@@ -359,16 +348,19 @@
         function logic(dictionary, row_id){
             var id = row_id.substring(7);
             console.log("substring of row_id -> "+id)
+            
+            //adding total to <th class="base1" id="tot_ww"></th>
+            var tblFootObj = document.getElementById('tot_ww')
+            tblFootObj.innerHTML = getValueFromDict("myInput")
 
             //calculation of mL/100g
             var sw = "sw_"+id
             console.log("sw "+ sw)
             if (("myInput" in dictionary) && (sw in dictionary)){
-                console.log("mL/100g = %w/w / sw")
                 var ml100g = getValueFromDict(sw)/getValueFromDict("myInput")
-                console.log(getValueFromDict(sw)/getValueFromDict("myInput"))
+                console.log("mL/100g = %w/w / sw = "+ml100g)
                 var list = document.getElementsByClassName("base1");
-                console.log(list[7])
+                console.log(list[7]) //TODO change it
                 list[7].innerHTML = ml100g
             }
         }
