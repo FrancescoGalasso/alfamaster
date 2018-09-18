@@ -115,19 +115,27 @@ function setClassesForCalculation(){
     // class for Master
     var cells = document.querySelectorAll('td:nth-child(9)');
     for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('fcost')
+        cells[i].classList.add('ti')
     }
+
     var cells = document.querySelectorAll('td:nth-child(10)');
     for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('fcost')
+        cells[i].classList.add('ti_vv')
     }
+
     var cells = document.querySelectorAll('td:nth-child(11)');
     for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('fcost')
+        cells[i].classList.add('ti_g100ml')
     }
+
     var cells = document.querySelectorAll('td:nth-child(12)');
     for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('fcost')
+        cells[i].classList.add('ti_ww')
+    }
+
+    var cells = document.querySelectorAll('td:nth-child(13)');
+    for(var i = 1 ; i < cells.length ; i++) {
+        cells[i].classList.add('ti_fcost')
     }
 }
 
@@ -190,6 +198,7 @@ function creationTBody(num_raw_material, tableBody){
         td.style.height = "30px"
         if (j < 4){
             td.contentEditable = true
+            td.style.backgroundColor = "#ffff00"
         }
         tr_body.appendChild(td)           
         }
