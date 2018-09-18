@@ -5,8 +5,9 @@ $( document ).ready(function() {
 var td_counter = 0;
 var global_num_raw_material = 0
 
-function generateTable(){
+function generateTable(id){
     console.log("I'm going to generate the table for the customer")
+    console.log("id of clicked btn -> "+id)
     showGenerateBtn()
 
     var num_raw_material = document.getElementById('input_grid').value
@@ -256,7 +257,7 @@ function generateData(){
             var a = ww[i]
             var b = sw[i]
             var division = a/b
-            var op = parseFloat(division).toFixed(2)
+            var op = parseFloat(division).toFixed(3)
             tmp.innerHTML = op
             sum_ml100g += parseFloat(op)
         }
@@ -265,7 +266,7 @@ function generateData(){
         tmp = document.getElementsByClassName('totalml100g_b1')[0]
         console.log(tmp)
         console.log(sum_ml100g)
-        tmp.innerHTML = sum_ml100g
+        tmp.innerHTML = parseFloat(sum_ml100g).toFixed(2)
 
             // insert single data for the cell %v/v
         for (var i = 0; i < global_num_raw_material; i++){
@@ -279,7 +280,7 @@ function generateData(){
             var _op = parseFloat(op).toFixed(2)
             console.log(_op)
             tmp.innerHTML = _op
-            sum_vv += parseFloat(_op)
+            sum_vv += parseFloat(_op).toFixed(2)
         }
 
             // insert sum of data for cell Total %v/v
