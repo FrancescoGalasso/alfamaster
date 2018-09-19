@@ -509,4 +509,6 @@ function showGenerateBtn(){
     var btn = document.getElementById("btn_calculate")
     btn.style.display = "block";
 
+    var btn_prodName = document.getElementById("nameProduct")
+    btn_prodName.style.display = "block"
 }

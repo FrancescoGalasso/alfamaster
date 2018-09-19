@@ -6,6 +6,10 @@ body {
     padding-left: 15px;
 }
 
+#nameProduct{
+    display:none;
+}
+
 /* 
 *   css inside <div class="grid_generator">
 */
