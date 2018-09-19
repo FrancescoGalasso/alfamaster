@@ -128,35 +128,17 @@ function creationTFoot(tableFoot, tr_foot){
     var baseClassName = generate_baseClassName()
     var list_totName = ["totalww", "totalml100g", "totalvv", "totalml1000g", "totalfcost"]
     var list = returnListClassName(baseClassName, list_totName)
-    console.log("test "+list)
-    console.log("test2 "+list.length)
 
     for (var i=3; i < td_counter; i++){
         var th = document.createElement('th')
         th.className = list[i-3]
-        //     // adding className for Base1 
-        // if (i == 3){
-        //     th.className = "totalww_b1"
-        // } else if (i == 4){
-        //     th.className = "totalml100g_b1"
-        // } else if (i == 5){
-        //     th.className = "totalvv_b1"
-        // } else if (i == 6){
-        //     th.className = "totalml1000g_b1"
-        // } else if (i == 7){
-        //     th.className = "totalfcost_b1"
-        // }
-        //     // adding className for Master
-        // else if (i == 8){
-        //     th.className
-        // }
         tr_foot.appendChild(th)
     }
 }
 
 /*
 *
-*   Logic about generatio the data into the generated table
+*               Logic concerning data generations into the table
 *
 */
 
@@ -404,7 +386,7 @@ function generateData(){
 
 /*
 *
-*   Supporting functions
+*               Supporting functions
 *
 */
 
@@ -528,9 +510,3 @@ function showGenerateBtn(){
     btn.style.display = "block";
 
 }
-
-// $('tbody').on('focus', '[contenteditable]', function() {
-//     const $this = $(this);
-//     $this.data('before', $this.html());
-//     console.log("test")
-// });
