@@ -53,6 +53,11 @@ function generateTable(id){
     tableFoot.style.borderColor = "black"
 
         // creation of thead for the table
+    var tr_head2 = document.createElement('tr')
+    tableHead.appendChild(tr_head2)
+    var thead_bases = ["", "", "", "BASE1 (pastel)", "TiO<sub>2</sub> slurry"]
+    console.log("addTheadBases")
+    addTheadBases(tr_head2, thead_bases)
     var tr_head = document.createElement('tr')
     tableHead.appendChild(tr_head)
     var list_of_thead = [thead_col,thead_col_base,thead_col_master]
@@ -60,8 +65,8 @@ function generateTable(id){
     console.log(td_counter)
 
         // creation of tbody for the table
-    var tr_body = document.createElement('tr')
-    tableBody.appendChild(tr_body)
+    // var tr_body = document.createElement('tr')
+    // tableBody.appendChild(tr_body)
     creationTBody(num_raw_material, tableBody)
 
         // creation of tfoot for the table
@@ -77,24 +82,24 @@ function setClassesForCalculation(){
     console.log("prepare cells with class for calculation")
 
     var cells = document.querySelectorAll('td:nth-child(2)');
-    for(var i = 1 ; i < cells.length ; i++) {
+    for(var i = 2 ; i < cells.length ; i++) {
         // console.log(cells[i])
         cells[i].classList.add('sw')
     }
 
     var cells = document.querySelectorAll('td:nth-child(3)');
-    for(var i = 1 ; i < cells.length ; i++) {
+    for(var i = 2 ; i < cells.length ; i++) {
         cells[i].classList.add('rm_cost')
     }
 
         // class for Base1
     var cells = document.querySelectorAll('td:nth-child(4)');
-    for(var i = 1 ; i < cells.length ; i++) {
+    for(var i = 2 ; i < cells.length ; i++) {
         cells[i].classList.add('ww')
     }
 
     var cells = document.querySelectorAll('td:nth-child(5)');
-    for(var i = 1 ; i < cells.length ; i++) {
+    for(var i = 2 ; i < cells.length ; i++) {
         cells[i].classList.add('ml100g')
     }
 
@@ -140,35 +145,27 @@ function setClassesForCalculation(){
     }
 }
 
-function creationTFoot(tableFoot, tr_foot){
-    console.log("td_counter -> "+td_counter)
-    var th = document.createElement('th')
-    // th.style.columnSpan = 3
-    th.colSpan =  3
-    th.innerHTML = 'Total'
-    th.style.fontWeight = "bold"
-    tr_foot.appendChild(th)
-    for (var i=3; i < td_counter; i++){
-        var th = document.createElement('th')
-
-            // adding className for Base1 
-        if (i == 3){
-            th.className = "totalww_b1"
-        } else if (i == 4){
-            th.className = "totalml100g_b1"
-        } else if (i == 5){
-            th.className = "totalvv_b1"
-        } else if (i == 6){
-            th.className = "totalml1000g_b1"
-        } else if (i == 7){
-            th.className = "totalfcost_b1"
-        }
-            // adding className for Master
-        else if (i == 8){
-            th.className
-        }
-        tr_foot.appendChild(th)
+function addTheadBases(tr_head, thead_bases){
+    // var tblHeadObj = document.getElementById('generatedTable'); //table head
+    for (var j=0; j < thead_bases.length; j++){
+            var td = document.createElement('TD')
+            // td.appendChild(document.createTextNode(thead_col_master[i]))
+            if(j < 3){
+                td.style.visibility = "hidden"
+                console.log("here "+j)
+                tr_head.appendChild(td)
+            } else {
+                td.innerHTML = thead_bases[j]
+                td.style.fontWeight = "bold"
+                td.style.minWidth = "80px"
+                td.style.textAlign = "center"
+                if(j==3 || j==4){
+                    td.colSpan = 5; 
+                }
+                tr_head.appendChild(td)
+            }
     }
+
 }
 
 function creationTHead(tr_head, list_of_thead){
@@ -206,6 +203,37 @@ function creationTBody(num_raw_material, tableBody){
     }
 }
 
+function creationTFoot(tableFoot, tr_foot){
+    console.log("td_counter -> "+td_counter)
+    var th = document.createElement('th')
+    // th.style.columnSpan = 3
+    th.colSpan =  3
+    th.innerHTML = 'Total'
+    th.style.fontWeight = "bold"
+    tr_foot.appendChild(th)
+    for (var i=3; i < td_counter; i++){
+        var th = document.createElement('th')
+
+            // adding className for Base1 
+        if (i == 3){
+            th.className = "totalww_b1"
+        } else if (i == 4){
+            th.className = "totalml100g_b1"
+        } else if (i == 5){
+            th.className = "totalvv_b1"
+        } else if (i == 6){
+            th.className = "totalml1000g_b1"
+        } else if (i == 7){
+            th.className = "totalfcost_b1"
+        }
+            // adding className for Master
+        else if (i == 8){
+            th.className
+        }
+        tr_foot.appendChild(th)
+    }
+}
+
 function showGenerateBtn(){
     console.log("I'm going to show the generateBtn")
     var btn = document.getElementById("btn_calculate")
@@ -227,26 +255,36 @@ function generateData(){
 
     $('.ww').each(function()
     {
-        sum_ww += parseFloat($(this).text());
-        ww.push(parseFloat($(this).text()));
+        var input = $(this).text()
+        if (!isNaN(input)){
+            sum_ww += parseFloat($(this).text());
+            ww.push(parseFloat($(this).text()));
+        }
     });
 
     $('.rm_cost').each(function()
     {
-        sum_rmcost += parseFloat($(this).text());
+        var input = $(this).text()
+        if (!isNaN(input)){
+            sum_rmcost += parseFloat($(this).text());
+        }
     });
 
     $('.sw').each(function()
     {
-        sum_sw += parseFloat($(this).text());
-        sw.push(parseFloat($(this).text()))
+        var input = $(this).text()
+        if (!isNaN(input)){
+            sum_sw += parseFloat($(this).text());
+            sw.push(parseFloat($(this).text()))
+        }
     });
 
     if (isNaN(sum_ww) || isNaN(sum_rmcost) || isNaN(sum_sw)){
         alert("fill all the empty fields")
     } else {
-
+        //
         //here the logic to populate the table
+        //
         tmp = document.getElementsByClassName('totalww_b1')[0]
         var ww_sum = parseFloat(sum_ww).toFixed(2)
         tmp.innerHTML = ww_sum
@@ -280,13 +318,13 @@ function generateData(){
             var _op = parseFloat(op).toFixed(2)
             console.log(_op)
             tmp.innerHTML = _op
-            sum_vv += parseFloat(_op).toFixed(2)
+            sum_vv += parseFloat(_op)
         }
 
             // insert sum of data for cell Total %v/v
         tmp = document.getElementsByClassName('totalvv_b1')[0]
         console.log(sum_vv)
-        tmp.innerHTML = sum_vv
+        tmp.innerHTML = parseFloat(sum_vv).toFixed(2)
 
             // insert single data for the cell mL/1000g
         for (var i = 0; i < global_num_raw_material; i++){
@@ -321,7 +359,7 @@ function generateData(){
             var elem_rmcost = elems_rmcost[i].innerText
 
             var op1 = elem_sw*elem_rmcost
-            var _op = (parseFloat(op1).toFixed(2)/1000)*elem_vv
+            var _op = (parseFloat(op1)/1000)*elem_vv
             tmp.innerHTML = parseFloat(_op).toFixed(2)
             sum_fcost += parseFloat(_op)
         }
