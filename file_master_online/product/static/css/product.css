@@ -19,6 +19,10 @@ body {
     margin-left: 65px;
 }
 
+input[type="number"] {
+    width: 200px;
+}
+
 /* select first 2 div inside class grid_generator*/
 .grid_generator div:nth-child(-n+3){
     font-weight: bold;
@@ -37,5 +41,9 @@ td {
 }
 
 #btn_calculate {
+    display:none;
+}
+
+#slurry-div {
     display:none;
 }
