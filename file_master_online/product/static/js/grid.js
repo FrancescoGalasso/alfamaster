@@ -167,76 +167,32 @@ function generateData(){
     var sw = []
 
     var inputClassNameWeight = '.ww'
-    var inputClassNames = ['.rm_cost', '.ww']
+    var inputClassNames = ['.rm_cost', '.sw']
     var return_classNames = returnInputWeightClassNames(inputClassNameWeight, baseClassName)
     inputClassNames.push(...return_classNames)
-    // list.push('.ww', '.rm_cost')
-    // var newItems = ['.ww', '.rm_cost'];
-    // inputClassNames.push(...newItems);
 
     console.log("print inputClassNames")
     console.log(inputClassNames)
     
-    var tmp_classNameList = ['.rm_cost', '.sw', '.ww_b1', '.ww_ti']
-    for (var i = 0; i < tmp_classNameList.length; i++){
+    // var tmp_classNameList = ['.rm_cost', '.sw', '.ww_b1', '.ww_ti']
+    for (var i = 0; i < inputClassNames.length; i++){
         var tmp = 0;
         var sum = 0;
-        console.log("tmp_classNameList[i] -> "+tmp_classNameList[i])
-        $(tmp_classNameList[i]).each(function(){
+        console.log("inputClassNames[i] -> "+inputClassNames[i])
+        $(inputClassNames[i]).each(function(){
             var input = $(this).text()
-            if (tmp_classNameList[i] == '.sw'){
-                sw.push(parseFloat($(this).text()))
-            }else if (tmp_classNameList[i] == '.ww_b1'){
-                ww.push(parseFloat($(this).text()));
+            if (inputClassNames[i] == '.sw'){
+                sw.push(parseFloat(input))
+            }else if (inputClassNames[i] == '.ww_b1'){
+                ww.push(parseFloat(input))
                 sum += parseFloat(input)
-            }else if ((tmp_classNameList[i] != '.sw') && (tmp_classNameList[i] != '.rm_cost')){
+            }else if ((inputClassNames[i] != '.sw') && (inputClassNames[i] != '.rm_cost')){
                 sum += parseFloat(input)
             }
         });
         console.log("tot sum -> "+sum)
         list_sum.push(sum)
     }
-    console.log(list_sum)
-
-    
-    // $('.ww_B1').each(function()
-    // {
-    //     var input = $(this).text()
-    //     if (!isNaN(input)){
-    //         sum_ww += parseFloat($(this).text());
-    //         ww.push(parseFloat($(this).text()));
-    //         console.log("sum_ww : "+sum_ww)
-    //     }
-    // });
-
-    // $('.rm_cost').each(function()
-    // {
-    //     var input = $(this).text()
-    //     if (!isNaN(input)){
-    //         sum_rmcost += parseFloat($(this).text());
-    //         console.log("sum_rmcost : "+sum_rmcost)
-    //     }
-    // });
-
-    // $('.sw').each(function()
-    // {
-    //     var input = $(this).text()
-    //     if (!isNaN(input)){
-    //         sum_sw += parseFloat($(this).text());
-    //         sw.push(parseFloat($(this).text()))
-    //         console.log("sum_sw : "+sum_sw)
-
-    //     }
-    // });
-
-    // $('.ww_TI').each(function()
-    // {
-    //     var input = $(this).text()
-    //     if (!isNaN(input)){
-    //         sum_ww_ti += parseFloat($(this).text());
-    //         console.log("somma sum_ww_ti ->" +sum_ww_ti)
-    //     }
-    // });
 
     if (isNaN(sum_ww) || isNaN(sum_rmcost) || isNaN(sum_sw) || isNaN(sum_ww_ti)){
         alert("fill all the empty fields")
@@ -282,8 +238,11 @@ function generateData(){
                 tmp = document.getElementsByClassName('ml100g'+baseClassName[q])[i]
                 console.log(tmp)
                 var a = ww[i]
+                console.log(a)
                 var b = sw[i]
+                console.log(b)
                 var division = a/b
+                console.log(division)
                 var op = parseFloat(division).toFixed(3)
                 tmp.innerHTML = op
                 sum_ml100g += parseFloat(op)
