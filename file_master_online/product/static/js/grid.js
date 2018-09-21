@@ -157,6 +157,13 @@ async function generateTableFillLvl(){
     table.appendChild(tableHead)
     table.appendChild(tableBody)
 
+            // creation of caption for the table
+    var tableCaption = document.createElement('CAPTION')
+    tableCaption.innerHTML = "<b>Fill level calculation</b>"
+    tableCaption.style.textAlign = "center"
+    table.appendChild(tableCaption)
+
+
             // creation of thead for the table
     var tr_head = document.createElement('tr')
     tableHead.appendChild(tr_head)
@@ -182,11 +189,14 @@ async function generateTableFillLvl(){
     for (var i = 0; i<op_listì.length; i++){
         var td = document.createElement('TD')
         td.innerHTML = op_listì[i]
+        td.style.textAlign = "center"
         tr_body.appendChild(td)  
     }
          
     myTableDiv.appendChild(table)
 }
+
+
 /*
 *
 *               Logic concerning data generations into the table
