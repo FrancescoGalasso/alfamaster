@@ -143,8 +143,16 @@ function creationTFoot(tableFoot, tr_foot){
 }
 
 async function generateTableFillLvl(){
-    await sleep(500);    // sleep 0.5 sec
+
+    var el = document.getElementById('generatedTableFillLvl')
+    console.log(el)
+    if(el){
+        el.remove(); // Removes elem with the 'generatedTableFillLvl' id
+        console.log(el)
+    }
+    await sleep(200);    // sleep 0.2 sec
     console.log('generateTableFillLvl')
+
     // generate the table
     var thead_col = ["Volume TiO<sub>2</sub> Slurry (%<sub>v/v</sub>)", "Fill level (%<sub>v/v</sub>)", "Definitive fill level"]
     var myTableDiv = document.getElementById("tableFillCalculation")
@@ -194,8 +202,35 @@ async function generateTableFillLvl(){
     }
          
     myTableDiv.appendChild(table)
+    console.log(table)
+    generateTableMaster()
 }
 
+async function generateTableMaster(){
+
+
+    await sleep(200);    // sleep 0.2 sec
+    console.log('generateTableMaster')
+
+    var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost"]
+    var myTableDiv = document.getElementById("tableMaster")
+
+
+    var table = document.createElement('TABLE')
+    table.id = "generatedTableMaster"
+    var tableHead = document.createElement('THEAD')
+    var tableBody = document.createElement('TBODY')
+    table.appendChild(tableHead)
+    table.appendChild(tableBody)
+
+            // creation of thead for the table
+    var tr_head = document.createElement('tr')
+    tableHead.appendChild(tr_head)
+    var list_of_thead = [thead_col_base]
+    creationTHead(tr_head, list_of_thead)
+
+    myTableDiv.appendChild(table)
+}
 
 /*
 *
