@@ -168,13 +168,12 @@ function generateData(){
 
     var inputClassNameWeight = '.ww'
     var inputClassNames = ['.rm_cost', '.sw']
-    var return_classNames = returnInputWeightClassNames(inputClassNameWeight, baseClassName)
-    inputClassNames.push(...return_classNames)
+    var return_weightClassNames = returnInputWeightClassNames(inputClassNameWeight, baseClassName) // example [".ww_b1", ".ww_ti"]
+    inputClassNames.push(...return_weightClassNames)
 
-    console.log("print inputClassNames")
-    console.log(inputClassNames)
-    
-    // var tmp_classNameList = ['.rm_cost', '.sw', '.ww_b1', '.ww_ti']
+    var matrixWeightInput = x(returnInputWeightClassNames)
+
+    // inputClassNames example -> [".rm_cost", ".sw", ".ww_b1", ".ww_ti"]
     for (var i = 0; i < inputClassNames.length; i++){
         var tmp = 0;
         var sum = 0;
@@ -183,30 +182,44 @@ function generateData(){
             var input = $(this).text()
             if (inputClassNames[i] == '.sw'){
                 sw.push(parseFloat(input))
-            }else if (inputClassNames[i] == '.ww_b1'){
-                ww.push(parseFloat(input))
-                sum += parseFloat(input)
-            }else if ((inputClassNames[i] != '.sw') && (inputClassNames[i] != '.rm_cost')){
-                sum += parseFloat(input)
+            } else if (inputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
+                for (var j=0; j< return_weightClassNames.length; j++ ){
+                    if(inputClassNames[i] == return_weightClassNames[j]){
+                        // ww.push(parseFloat(input))
+                        matrixWeightInput[j].push(parseFloat(input))
+                        sum += parseFloat(input)
+                    }
+                }
             }
+            // else if (inputClassNames[i] == '.ww_b1'){
+            //     ww.push(parseFloat(input))
+            //     sum += parseFloat(input)
+            // }
+            // else if ((inputClassNames[i] != '.sw') && (inputClassNames[i] != '.rm_cost')){ //.ww_ti
+            //     console.log("test")
+            //     console.log(inputClassNames[i])
+            //     sum += parseFloat(input)
+            // }
         });
         console.log("tot sum -> "+sum)
         list_sum.push(sum)
     }
 
+    console.log("ww")
+    console.log(ww)
+
     if (isNaN(sum_ww) || isNaN(sum_rmcost) || isNaN(sum_sw) || isNaN(sum_ww_ti)){
         alert("fill all the empty fields")
     } else {
         //
-        //here the logic to populate the table
+        //  here the logic to populate the table
         //
-
-        // var baseClassName = ["_b1", "_ti"]
 
         var baseClassName = generate_baseClassName()
         console.log("######")
-        console.log(baseClassName)
+        console.log(matrixWeightInput)
         console.log("######")
+        // baseClassName -> ["_b1", "_ti" ...]
         for(var q=0; q< baseClassName.length; q++){
 
             tmp = document.getElementsByClassName('totalww'+baseClassName[q])[0]
@@ -237,12 +250,10 @@ function generateData(){
             for (var i = 0; i < global_num_raw_material; i++){
                 tmp = document.getElementsByClassName('ml100g'+baseClassName[q])[i]
                 console.log(tmp)
-                var a = ww[i]
-                console.log(a)
+                // var a = ww[i]
+                var a = matrixWeightInput[q][i]
                 var b = sw[i]
-                console.log(b)
                 var division = a/b
-                console.log(division)
                 var op = parseFloat(division).toFixed(3)
                 tmp.innerHTML = op
                 sum_ml100g += parseFloat(op)
@@ -325,6 +336,17 @@ function generateData(){
 *               Supporting functions
 *
 */
+
+function x(returnInputWeightClassNames) {
+    var _length = returnInputWeightClassNames.length
+    var list = []
+    for (var i=0; i< _length; i++){
+        var list2 = []
+        list.push(list2)
+    }
+    console.log(list)
+    return list
+}
 
 function addTheadBases(tr_head, thead_bases){
     // var tblHeadObj = document.getElementById('generatedTable'); //table head
