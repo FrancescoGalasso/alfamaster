@@ -191,15 +191,6 @@ function generateData(){
                     }
                 }
             }
-            // else if (inputClassNames[i] == '.ww_b1'){
-            //     ww.push(parseFloat(input))
-            //     sum += parseFloat(input)
-            // }
-            // else if ((inputClassNames[i] != '.sw') && (inputClassNames[i] != '.rm_cost')){ //.ww_ti
-            //     console.log("test")
-            //     console.log(inputClassNames[i])
-            //     sum += parseFloat(input)
-            // }
         });
         console.log("tot sum -> "+sum)
         list_sum.push(sum)
@@ -221,23 +212,19 @@ function generateData(){
         console.log("######")
         // baseClassName -> ["_b1", "_ti" ...]
         for(var q=0; q< baseClassName.length; q++){
+            sum_ml100g = 0
+            sum_vv = 0
+            sum_ml1000g = 0
+            sum_fcost = 0
 
             tmp = document.getElementsByClassName('totalww'+baseClassName[q])[0]
             if(q == 0){
-                // var ww_sum = parseFloat(sum_ww).toFixed(2)
-                // console.log(tmp)
-                // tmp.innerHTML = ww_sum
-                // console.log(tmp)
                 var tmp_value = list_sum[2]
                 var value = parseFloat(tmp_value).toFixed(2)
                 console.log(value)
                 tmp.innerHTML = value
                 console.log(tmp)
             } else if (q == 1){
-                // var ww_sum = parseFloat(sum_ww_ti).toFixed(2)
-                // console.log(tmp)
-                // tmp.innerHTML = ww_sum
-                // console.log(tmp)
                 var tmp_value = list_sum[3]
                 var value = parseFloat(tmp_value).toFixed(2)
                 console.log(value)
@@ -250,7 +237,6 @@ function generateData(){
             for (var i = 0; i < global_num_raw_material; i++){
                 tmp = document.getElementsByClassName('ml100g'+baseClassName[q])[i]
                 console.log(tmp)
-                // var a = ww[i]
                 var a = matrixWeightInput[q][i]
                 var b = sw[i]
                 var division = a/b
@@ -274,7 +260,6 @@ function generateData(){
                 console.log(elem)
                 var op = (100*elem)/sum_ml100g
                 var _op = parseFloat(op).toFixed(2)
-                console.log(_op)
                 tmp.innerHTML = _op
                 sum_vv += parseFloat(_op)
             }
