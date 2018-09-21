@@ -24,10 +24,11 @@ function generateTable(id){
         alert("OPS! The value you added in a field contains a dot or a minus..")
         return;
     }
-    if (num_bases < 2 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
-        alert("OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases")
-        return;
-    }
+    //  TODO - remove the following comment. Added to speedup the tests
+    // if (num_bases < 2 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
+    //     alert("OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases")
+    //     return;
+    // }
 
 
     // info-test used in development
@@ -150,52 +151,92 @@ function creationTFoot(tableFoot, tr_foot){
 */
 
 function generateData(){
-    var sum_ww = 0;
-    var sum_rmcost = 0
     var sum_sw = 0
+    var sum_rmcost = 0
+    var sum_ww = 0;
     var sum_ml100g = 0
     var sum_vv = 0
     var sum_ml1000g = 0
     var sum_fcost = 0
     var sum_ww_ti = 0
 
+    var list_classNameSum = ['sum_ww', 'sum_ml100g', 'sum_vv', 'sum_ml1000g', 'sum_fcost']
+    var baseClassName = generate_baseClassName() //[_b1, _ti, _b2 ...]
+    var list_sum = []
     var ww = []
     var sw = []
 
-    $('.ww_B1').each(function()
-    {
-        var input = $(this).text()
-        if (!isNaN(input)){
-            sum_ww += parseFloat($(this).text());
-            ww.push(parseFloat($(this).text()));
-        }
-    });
+    var inputClassNameWeight = '.ww'
+    var inputClassNames = ['.rm_cost', '.ww']
+    var return_classNames = returnInputWeightClassNames(inputClassNameWeight, baseClassName)
+    inputClassNames.push(...return_classNames)
+    // list.push('.ww', '.rm_cost')
+    // var newItems = ['.ww', '.rm_cost'];
+    // inputClassNames.push(...newItems);
 
-    $('.rm_cost').each(function()
-    {
-        var input = $(this).text()
-        if (!isNaN(input)){
-            sum_rmcost += parseFloat($(this).text());
-        }
-    });
+    console.log("print inputClassNames")
+    console.log(inputClassNames)
+    
+    var tmp_classNameList = ['.rm_cost', '.sw', '.ww_b1', '.ww_ti']
+    for (var i = 0; i < tmp_classNameList.length; i++){
+        var tmp = 0;
+        var sum = 0;
+        console.log("tmp_classNameList[i] -> "+tmp_classNameList[i])
+        $(tmp_classNameList[i]).each(function(){
+            var input = $(this).text()
+            if (tmp_classNameList[i] == '.sw'){
+                sw.push(parseFloat($(this).text()))
+            }else if (tmp_classNameList[i] == '.ww_b1'){
+                ww.push(parseFloat($(this).text()));
+                sum += parseFloat(input)
+            }else if ((tmp_classNameList[i] != '.sw') && (tmp_classNameList[i] != '.rm_cost')){
+                sum += parseFloat(input)
+            }
+        });
+        console.log("tot sum -> "+sum)
+        list_sum.push(sum)
+    }
+    console.log(list_sum)
 
-    $('.sw').each(function()
-    {
-        var input = $(this).text()
-        if (!isNaN(input)){
-            sum_sw += parseFloat($(this).text());
-            sw.push(parseFloat($(this).text()))
-        }
-    });
+    
+    // $('.ww_B1').each(function()
+    // {
+    //     var input = $(this).text()
+    //     if (!isNaN(input)){
+    //         sum_ww += parseFloat($(this).text());
+    //         ww.push(parseFloat($(this).text()));
+    //         console.log("sum_ww : "+sum_ww)
+    //     }
+    // });
 
-    $('.ww_TI').each(function()
-    {
-        var input = $(this).text()
-        if (!isNaN(input)){
-            sum_ww_ti += parseFloat($(this).text());
-            console.log("somma sum_ww_ti ->" +sum_ww_ti)
-        }
-    });
+    // $('.rm_cost').each(function()
+    // {
+    //     var input = $(this).text()
+    //     if (!isNaN(input)){
+    //         sum_rmcost += parseFloat($(this).text());
+    //         console.log("sum_rmcost : "+sum_rmcost)
+    //     }
+    // });
+
+    // $('.sw').each(function()
+    // {
+    //     var input = $(this).text()
+    //     if (!isNaN(input)){
+    //         sum_sw += parseFloat($(this).text());
+    //         sw.push(parseFloat($(this).text()))
+    //         console.log("sum_sw : "+sum_sw)
+
+    //     }
+    // });
+
+    // $('.ww_TI').each(function()
+    // {
+    //     var input = $(this).text()
+    //     if (!isNaN(input)){
+    //         sum_ww_ti += parseFloat($(this).text());
+    //         console.log("somma sum_ww_ti ->" +sum_ww_ti)
+    //     }
+    // });
 
     if (isNaN(sum_ww) || isNaN(sum_rmcost) || isNaN(sum_sw) || isNaN(sum_ww_ti)){
         alert("fill all the empty fields")
@@ -213,10 +254,27 @@ function generateData(){
         for(var q=0; q< baseClassName.length; q++){
 
             tmp = document.getElementsByClassName('totalww'+baseClassName[q])[0]
-            var ww_sum = parseFloat(sum_ww).toFixed(2)
-            console.log(tmp)
-            tmp.innerHTML = ww_sum
-            console.log(tmp)
+            if(q == 0){
+                // var ww_sum = parseFloat(sum_ww).toFixed(2)
+                // console.log(tmp)
+                // tmp.innerHTML = ww_sum
+                // console.log(tmp)
+                var tmp_value = list_sum[2]
+                var value = parseFloat(tmp_value).toFixed(2)
+                console.log(value)
+                tmp.innerHTML = value
+                console.log(tmp)
+            } else if (q == 1){
+                // var ww_sum = parseFloat(sum_ww_ti).toFixed(2)
+                // console.log(tmp)
+                // tmp.innerHTML = ww_sum
+                // console.log(tmp)
+                var tmp_value = list_sum[3]
+                var value = parseFloat(tmp_value).toFixed(2)
+                console.log(value)
+                tmp.innerHTML = value
+                console.log(tmp)
+            }
 
 
                 // insert single data for the cell mL/100g
@@ -274,7 +332,7 @@ function generateData(){
                 // insert sum of data for cell Total mL/1000g
             tmp = document.getElementsByClassName('totalml1000g'+baseClassName[q])[0]
             console.log(sum_ml1000g)
-            tmp.innerHTML = sum_ml1000g
+            tmp.innerHTML = parseFloat(sum_ml1000g).toFixed(0)
 
                 // insert single data for the cell Formula Cost
             for (var i = 0; i < global_num_raw_material; i++){
@@ -291,103 +349,15 @@ function generateData(){
 
                 var op1 = elem_sw*elem_rmcost
                 var _op = (parseFloat(op1)/1000)*elem_vv
-                tmp.innerHTML = parseFloat(_op).toFixed(2)
+                tmp.innerHTML = parseFloat(_op).toFixed(4)
                 sum_fcost += parseFloat(_op)
             }
 
                 // insert sum of data for cell Total Formula Cost
             tmp = document.getElementsByClassName('totalfcost'+baseClassName[q])[0]
             console.log(sum_fcost)
-            tmp.innerHTML = parseFloat(sum_fcost).toFixed(2)
+            tmp.innerHTML = parseFloat(sum_fcost).toFixed(4)
         }
-        
-
-                // tmp = document.getElementsByClassName('totalww_B1')[0]
-                // var ww_sum = parseFloat(sum_ww).toFixed(2)
-                // console.log(tmp)
-                // tmp.innerHTML = ww_sum
-                // console.log(tmp)
-
-
-                //     // insert single data for the cell mL/100g
-                // for (var i = 0; i < global_num_raw_material; i++){
-                //     tmp = document.getElementsByClassName('ml100g_B1')[i]
-                //     var a = ww[i]
-                //     var b = sw[i]
-                //     var division = a/b
-                //     var op = parseFloat(division).toFixed(3)
-                //     tmp.innerHTML = op
-                //     sum_ml100g += parseFloat(op)
-                // }
-
-        //     // insert sum of data for cell Total mL/100g
-        // tmp = document.getElementsByClassName('totalml100g_b1')[0]
-        // console.log(sum_ml100g)
-        // tmp.innerHTML = parseFloat(sum_ml100g).toFixed(2)
-
-        //     // insert single data for the cell %v/v
-        // for (var i = 0; i < global_num_raw_material; i++){
-        //     var tmp = document.getElementsByClassName('vv_B1')[i]
-
-        //     var elems = document.getElementsByClassName("ml100g_B1");
-
-        //     var elem = elems[i].innerText
-        //     console.log(elem)
-        //     var op = (100*elem)/sum_ml100g
-        //     var _op = parseFloat(op).toFixed(2)
-        //     console.log(_op)
-        //     tmp.innerHTML = _op
-        //     sum_vv += parseFloat(_op)
-        // }
-
-        //     // insert sum of data for cell Total %v/v
-        // tmp = document.getElementsByClassName('totalvv_b1')[0]
-        // console.log(sum_vv)
-        // tmp.innerHTML = parseFloat(sum_vv).toFixed(2)
-
-        //     // insert single data for the cell mL/1000g
-        // for (var i = 0; i < global_num_raw_material; i++){
-        //     var tmp = document.getElementsByClassName('ml1000g_B1')[i]
-
-        //     var elems = document.getElementsByClassName("vv_B1");
-
-        //     var elem = elems[i].innerText
-        //     console.log(elem)
-        //     var op = (10*elem)
-        //     var _op = parseFloat(op).toFixed(2)
-        //     console.log(_op)
-        //     tmp.innerHTML = _op
-        //     sum_ml1000g += parseFloat(_op)
-        // }
-
-        //     // insert sum of data for cell Total mL/1000g
-        // tmp = document.getElementsByClassName('totalml1000g_b1')[0]
-        // console.log(sum_ml1000g)
-        // tmp.innerHTML = sum_ml1000g
-
-        //     // insert single data for the cell Formula Cost
-        // for (var i = 0; i < global_num_raw_material; i++){
-        //     var tmp = document.getElementsByClassName('fcost_B1')[i]
-
-        //     var elems_sw = document.getElementsByClassName("sw")
-        //     var elems_rmcost = document.getElementsByClassName("rm_cost")
-        //     var elems_vv = document.getElementsByClassName("vv_B1")
-
-
-        //     var elem_vv = elems_vv[i].innerText
-        //     var elem_sw = elems_sw[i].innerText
-        //     var elem_rmcost = elems_rmcost[i].innerText
-
-        //     var op1 = elem_sw*elem_rmcost
-        //     var _op = (parseFloat(op1)/1000)*elem_vv
-        //     tmp.innerHTML = parseFloat(_op).toFixed(2)
-        //     sum_fcost += parseFloat(_op)
-        // }
-
-        //     // insert sum of data for cell Total Formula Cost
-        // tmp = document.getElementsByClassName('totalfcost_b1')[0]
-        // console.log(sum_fcost)
-        // tmp.innerHTML = parseFloat(sum_fcost).toFixed(2)
     }
 }
 
@@ -431,6 +401,16 @@ function generate_baseClassName(){
         }
         return baseClassName
     }
+}
+
+function returnInputWeightClassNames(inputClassNameWeight, baseClassName){
+    var list = []
+    var tmp = ''
+    for (var i = 0; i <baseClassName.length; i++ ){
+        tmp = inputClassNameWeight + baseClassName[i]
+        list.push(tmp)
+    }
+    return list
 }
 
 function setClassesForCalculation(){
