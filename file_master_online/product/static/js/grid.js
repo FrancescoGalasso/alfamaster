@@ -83,8 +83,6 @@ function generateTable(id){
 }
 
 function creationTHead(tr_head, list_of_thead){
-    console.log(list_of_thead)
-    console.log(tr_head)
     for (var j=0; j < list_of_thead.length; j++){
         for (var i=0; i< list_of_thead[j].length; i++) {
             var td = document.createElement('TD')
@@ -144,6 +142,51 @@ function creationTFoot(tableFoot, tr_foot){
     }
 }
 
+async function generateTableFillLvl(){
+    await sleep(500);    // sleep 0.5 sec
+    console.log('generateTableFillLvl')
+    // generate the table
+    var thead_col = ["Volume TiO<sub>2</sub> Slurry (%<sub>v/v</sub>)", "Fill level (%<sub>v/v</sub>)", "Definitive fill level"]
+    var myTableDiv = document.getElementById("tableFillCalculation")
+
+
+    var table = document.createElement('TABLE')
+    table.id = "generatedTableFillLvl"
+    var tableHead = document.createElement('THEAD')
+    var tableBody = document.createElement('TBODY')
+    table.appendChild(tableHead)
+    table.appendChild(tableBody)
+
+            // creation of thead for the table
+    var tr_head = document.createElement('tr')
+    tableHead.appendChild(tr_head)
+    var list_of_thead = [thead_col]
+    creationTHead(tr_head, list_of_thead)
+
+            // creation of tbody for the table
+    var tr_body = document.createElement('tr')
+    tableBody.appendChild(tr_body)
+    var cells_b1 = document.querySelectorAll('.vv_b1');
+    var cells_ti = document.querySelectorAll('.vv_ti');
+    var vb1 = cells_b1[2].textContent
+    var vti = cells_ti[2].textContent
+
+    var _op1 = parseFloat(vb1)
+    var _op2 = parseFloat(vti)
+    var _op = (100*_op1)/_op2
+    var op = parseFloat(_op).toFixed(0)
+    var op2 = 100 - op
+    var op3 = op2
+
+    var op_listì = [op, op2, op3]
+    for (var i = 0; i<op_listì.length; i++){
+        var td = document.createElement('TD')
+        td.innerHTML = op_listì[i]
+        tr_body.appendChild(td)  
+    }
+         
+    myTableDiv.appendChild(table)
+}
 /*
 *
 *               Logic concerning data generations into the table
@@ -171,8 +214,7 @@ function generateData(){
     var return_weightClassNames = returnInputWeightClassNames(inputClassNameWeight, baseClassName) // example [".ww_b1", ".ww_ti"]
     inputClassNames.push(...return_weightClassNames)
 
-    var matrixWeightInput = x(returnInputWeightClassNames)
-
+    var matrixWeightInput = createMatrixInputValue(returnInputWeightClassNames)
     // inputClassNames example -> [".rm_cost", ".sw", ".ww_b1", ".ww_ti"]
     for (var i = 0; i < inputClassNames.length; i++){
         var tmp = 0;
@@ -314,6 +356,8 @@ function generateData(){
             tmp.innerHTML = parseFloat(sum_fcost).toFixed(4)
         }
     }
+    generateTableFillLvl()
+
 }
 
 /*
@@ -322,7 +366,7 @@ function generateData(){
 *
 */
 
-function x(returnInputWeightClassNames) {
+function createMatrixInputValue(returnInputWeightClassNames) {
     var _length = returnInputWeightClassNames.length
     var list = []
     for (var i=0; i< _length; i++){
@@ -465,3 +509,8 @@ function showGenerateBtn(){
     var btn_prodName = document.getElementById("nameProduct")
     btn_prodName.style.display = "block"
 }
+
+// https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
