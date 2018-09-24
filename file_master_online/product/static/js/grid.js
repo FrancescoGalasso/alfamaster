@@ -6,6 +6,7 @@ var td_counter = 0;
 var global_num_raw_material = 0
 var global_num_bases = 0
 var global_baseClassName = []
+var global_sw = []
 
 function generateTable(id){
     console.log("I'm going to generate the table for the customer")
@@ -145,10 +146,8 @@ function creationTFoot(tableFoot, tr_foot){
 async function generateTableFillLvl(){
 
     var el = document.getElementById('generatedTableFillLvl')
-    console.log(el)
     if(el){
         el.remove(); // Removes elem with the 'generatedTableFillLvl' id
-        console.log(el)
     }
     await sleep(200);    // sleep 0.2 sec
     console.log('generateTableFillLvl')
@@ -208,6 +207,10 @@ async function generateTableFillLvl(){
 
 async function generateTableMaster(){
 
+    var el = document.getElementById('generatedTableMaster')
+    if(el){
+        el.remove(); // Removes elem with the 'generateTableMaster' id
+    }
 
     await sleep(200);    // sleep 0.2 sec
     console.log('generateTableMaster')
@@ -220,8 +223,16 @@ async function generateTableMaster(){
     table.id = "generatedTableMaster"
     var tableHead = document.createElement('THEAD')
     var tableBody = document.createElement('TBODY')
+    var tableFoot = document.createElement('TFOOT')
     table.appendChild(tableHead)
     table.appendChild(tableBody)
+    table.appendChild(tableFoot)
+
+            // creation of caption for the table
+    var tableCaption = document.createElement('CAPTION')
+    tableCaption.innerHTML = "<b>MASTER</b>"
+    tableCaption.style.textAlign = "center"
+    table.appendChild(tableCaption)
 
             // creation of thead for the table
     var tr_head = document.createElement('tr')
@@ -229,13 +240,23 @@ async function generateTableMaster(){
     var list_of_thead = [thead_col_base]
     creationTHead(tr_head, list_of_thead)
 
-        // creation of tbody for the table
+            // creation of tbody for the table
     creationTBodyMaster(global_num_raw_material, tableBody)
+
+            // creation of tfoot for the table
+    var tr_foot = document.createElement('tr')
+    tableFoot.appendChild(tr_foot)
+    tableFoot.style.borderStyle = "solid" // css 
+    tableFoot.style.borderColor = "black" // css
+    creationTFootMaster(tableFoot, tr_foot)
 
     myTableDiv.appendChild(table)
 
-        // add className
+            // add className
     setClassesForCalculationMaster()
+
+            // populate table with data
+    generateDataMaster()
 }
 
 function creationTBodyMaster(global_num_raw_material, tableBody){
@@ -254,6 +275,21 @@ function creationTBodyMaster(global_num_raw_material, tableBody){
             }
             tr_body.appendChild(td)           
         }
+    }
+}
+
+function creationTFootMaster(tableFoot, tr_foot){
+    var th = document.createElement('th')
+    th.innerHTML = 'Total'
+    th.style.fontWeight = "bold"
+    tr_foot.appendChild(th)
+
+    var list_totName = ["totalrem", "totalvv", "totalg100ml", "totalww", "totalfcost"]
+
+    for (var i=0; i < 5; i++){
+        var th = document.createElement('th')
+        th.className = list_totName[i]
+        tr_foot.appendChild(th)
     }
 }
 
@@ -422,16 +458,122 @@ function generateData(){
 
                 // insert sum of data for cell Total Formula Cost
             tmp = document.getElementsByClassName('totalfcost'+baseClassName[q])[0]
-            console.log(sum_fcost)
             tmp.innerHTML = parseFloat(sum_fcost).toFixed(4)
         }
     }
+    global_sw = sw
     generateTableFillLvl()
 
 }
 
 function generateDataMaster(){
+    var tableInput = document.getElementById("generatedTable")
+    var tableFillLvl = document.getElementById("generatedTableFillLvl")
+    var list_vv_ti = []
+    var list_vv_b1 = []
+    var list_tiRemoving = []
+    var sum_tiRemoving = 0
+    var sum_vv_m = 0
+    var sum_g100ml_m = 0
+    var sum_test = 0
+    var sum_ww = 0
+    var sum_fcost = 0
 
+    for (var j=4; j < 12; j++){
+        var cells = tableInput.querySelectorAll('td:nth-child('+j+')')
+        for(var i = 1 ; i < cells.length ; i++) {
+            if(j == 5){
+                list_vv_b1.push(cells[i].innerText)
+            } else if(j==10) {
+                list_vv_ti.push(cells[i].innerText)
+            }
+        }
+    }
+
+    var cell = tableFillLvl.querySelectorAll('td:nth-child(3)')
+    var defLvl = cell[1].innerHTML
+
+    for(var i=0; i < global_num_raw_material; i++){
+        var res = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+        list_tiRemoving.push(res)
+        sum_tiRemoving += res
+    }
+
+        // insert single datum for cell with className 'tirem_m'
+    for (var i = 0; i < global_num_raw_material; i++){
+        tmp = document.getElementsByClassName('tirem_m')[i+1]
+        var _op = list_tiRemoving[i]
+        var op = parseFloat(_op).toFixed(3)
+        tmp.innerHTML = op
+    }
+
+        // insert sum of data for cell Total TiO2 removing
+    tmp = document.getElementsByClassName('totalrem')[0]
+    tmp.innerHTML = parseFloat(sum_tiRemoving).toFixed(3)
+
+        // insert single datum for cell with className 'vv_m'
+    for (var i = 0; i < global_num_raw_material; i++){
+        tmp = document.getElementsByClassName('vv_m')[i+1] //list cell with classname 'vv_m'
+        tmp2 = document.getElementsByClassName('tirem_m')[i+1]
+        var _tmp2 = parseFloat(tmp2.innerText).toFixed(3)
+
+        var _op = (100*_tmp2)/sum_tiRemoving
+        var op = parseFloat(_op).toFixed(3)
+        tmp.innerHTML = op
+        sum_vv_m += op
+    }
+
+        // insert sum of data for cell Total %v/v
+    tmp = document.getElementsByClassName('totalvv')[0]
+    tmp.innerHTML = parseFloat(sum_vv_m).toFixed(3)
+
+        // insert single datum for cell with className 'g100ml_m'
+    for (var i = 0; i < global_num_raw_material; i++){
+        tmp = document.getElementsByClassName('g100ml_m')[i+1]
+        tmp2 = document.getElementsByClassName('vv_m')[i+1]
+        var _tmp2 = parseFloat(tmp2.innerText).toFixed(3)
+        var _op = (tmp2.innerText*global_sw[i])
+        var op = parseFloat(_op).toFixed(3)
+        tmp.innerHTML = op
+
+        sum_test =  parseFloat(sum_test) + parseFloat(op)
+    }
+
+        // insert sum of data for cell Total g/100mL
+    tmp = document.getElementsByClassName('totalg100ml')[0]
+    tmp.innerHTML = parseFloat(sum_test).toFixed(3)
+
+    // insert single datum for cell with className 'ww_m'
+    for (var i = 0; i < global_num_raw_material; i++){
+        var tmp = document.getElementsByClassName('ww_m')[i+1]
+        var tmp2 = document.getElementsByClassName('g100ml_m')[i+1]
+        var _op = (tmp2.innerText*global_sw[i]*100)/(sum_test)
+        var op = parseFloat(_op).toFixed(3)
+        tmp.innerHTML = op
+
+        sum_ww =  parseFloat(sum_ww) + parseFloat(op)        
+        console.log(sum_ww)
+    }
+
+        // insert sum of data for cell Total %w/w
+    tmp = document.getElementsByClassName('totalww')[0]
+    tmp.innerHTML = parseFloat(sum_ww).toFixed(3)
+
+        // insert single datum for cell with className 'fc_m'
+    for (var i = 0; i < global_num_raw_material; i++){
+        var tmp = document.getElementsByClassName('fc_m')[i+1]
+        var tmp2 = document.getElementsByClassName('vv_m')[i+1]
+        var tmp3 = document.getElementsByClassName('rm_cost')
+        var _op = ((global_sw[i]*tmp3[i].innerText)/1000)*tmp2.innerText
+        var op = parseFloat(_op).toFixed(3)
+        tmp.innerHTML = op
+
+        sum_fcost =  parseFloat(sum_fcost) + parseFloat(op)        
+    }
+
+        // insert sum of data for cell Total Formula Cost
+    tmp = document.getElementsByClassName('totalfcost')[0]
+    tmp.innerHTML = parseFloat(sum_fcost).toFixed(3)
 }
 
 /*
