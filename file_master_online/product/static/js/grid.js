@@ -212,7 +212,7 @@ async function generateTableMaster(){
     await sleep(200);    // sleep 0.2 sec
     console.log('generateTableMaster')
 
-    var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost"]
+    var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", "Formula Cost"]
     var myTableDiv = document.getElementById("tableMaster")
 
 
@@ -229,7 +229,32 @@ async function generateTableMaster(){
     var list_of_thead = [thead_col_base]
     creationTHead(tr_head, list_of_thead)
 
+        // creation of tbody for the table
+    creationTBodyMaster(global_num_raw_material, tableBody)
+
     myTableDiv.appendChild(table)
+
+        // add className
+    setClassesForCalculationMaster()
+}
+
+function creationTBodyMaster(global_num_raw_material, tableBody){
+    var defaultRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>']
+
+    for (var i = 0; i< global_num_raw_material; i ++){
+        var tr_body = document.createElement('tr')
+        tableBody.appendChild(tr_body)
+
+        for (var j=0; j< 6; j++){
+            var td = document.createElement('TD')
+            // td.appendChild(document.createTextNode("Cell " + i + "," + j))
+            td.style.height = "30px"
+            if (j == 0 && i < 3){
+                td.innerHTML = defaultRawMaterial[i]
+            }
+            tr_body.appendChild(td)           
+        }
+    }
 }
 
 /*
@@ -405,6 +430,10 @@ function generateData(){
 
 }
 
+function generateDataMaster(){
+
+}
+
 /*
 *
 *               Supporting functions
@@ -532,6 +561,23 @@ function setClassesForCalculation(){
     var cells = document.querySelectorAll('td:nth-child(13)');
     for(var i = 1 ; i < cells.length ; i++) {
         cells[i].classList.add('fcost_TI')
+    }
+}
+
+    // class name for #generatedTableMaster
+function setClassesForCalculationMaster(){
+
+    var list_class = ["tirem_m", "vv_m", "g100ml_m", "ww_m", "fc_m"]
+    var t = 0;
+    var table = document.getElementById("generatedTableMaster")
+
+    for (var j=2; j < 7; j++){
+        var cells = table.querySelectorAll('td:nth-child('+j+')')
+        for(var i = 0 ; i < cells.length ; i++) {
+            var _class = list_class[t]
+            cells[i].classList.add(_class)
+        }
+        t++
     }
 }
 
