@@ -1,0 +1,10 @@
+Django==1.11
+django-debug-toolbar==1.7
+django-extensions==1.7.8
+django-pdb==0.5.1
+docutils==0.13.1
+psycopg2==2.7.5
+pytz==2018.5
+six==1.11.0
+sqlparse==0.2.4
+
