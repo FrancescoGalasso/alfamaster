@@ -747,3 +747,92 @@ function showGenerateBtn(){
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
+
+  function test() {
+    console.log("clicked!")
+
+        // get the table -> return a map
+    var tbl = $('#generatedTable tr').get().map(function(row) {
+        return $(row).find('td').get().map(function(cell) {
+          return $(cell).html();
+        });
+      });
+
+    raw_m = []
+    specific_w = []
+    rm_cost = []
+    bases=[]
+
+    var base = tbl[2].length -3
+    console.log(base)
+
+    //                  https://lodash.com/docs/4.17.10#chunk
+
+    var t = 3
+    var tmp2 = _.drop(tbl[2],t) // array con tutti valori delle basi presenti
+    var length_tmp2 = tmp2.length
+    var num_cycle = length_tmp2/5
+    var __base = ["name", "g_100g", "ml_100g", "v_100v", "ml_1000ml", "formula_cost"]
+    var test = []
+
+      // create matrix of base values
+      // [Array(5), Array(5), Array(5), Array(5), Array(5), Array(5)]
+      //     ⮡ [""g_100g":"25"", ""ml_100g":"25.000"", ""v_100v":"67.37"", ""ml_1000ml":"673.70"", ""formula_cost":"0.0000""]
+    for (var j = 2; j <tbl.length -1; j++ ){
+        var t = 3
+        var tmp2 = _.drop(tbl[j],t)
+        console.log(tmp2)
+        for(var i=0; i<num_cycle; i++){
+            var end = (i*5)+5
+            var sliced = tmp2.slice(i*5, end)
+            console.log(sliced)
+            var x = []
+            for(var k=0; k < sliced.length; k++){
+                console.log(__base[k+1] + " : " + sliced[k])
+                x.push('"'+__base[k+1]+'"' +':'+'"'+sliced[k]+'"')
+            }
+            test.push(x)
+        }
+    }
+
+    console.log("test")
+    console.log(test)
+    console.log("")
+
+    raw_m.push(tbl[2][0])
+    specific_w.push(tbl[2][1])
+    rm_cost.push(tbl[2][2])
+
+    var data_init = '{ "data":['
+    var data_end = ']}'
+
+    var x1 = `
+        {
+            "raw_material": "`+ raw_m[0]+`",
+            "specific_weight": "`+ specific_w[0]+`",
+            "RM_cost": "`+ rm_cost[0]+`",
+            "bases": [`
+
+    var _temp = ""
+    for (var i=0; i< global_num_bases; i++){
+        var tmp = '{'+test[i]+'}'
+        if(global_num_bases > 1 && i != global_num_bases-1){
+            tmp += ',' 
+            _temp += tmp
+        }
+        else{
+            _temp += tmp
+        }
+    }
+
+    console.log("")
+    console.log(_temp)
+    console.log("")
+
+    var x2 = `]}
+    `
+
+    console.log(data_init+x1+_temp+x2+data_end)
+
+}
