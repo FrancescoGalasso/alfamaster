@@ -796,13 +796,11 @@ function sleep(ms) {
         }
     }
 
-    console.log("test")
-    console.log(test)
-    console.log("")
-
-    raw_m.push(tbl[2][0])
-    specific_w.push(tbl[2][1])
-    rm_cost.push(tbl[2][2])
+    for(var i=2; i < tbl.length -1; i++){
+        raw_m.push(tbl[i][0])
+        specific_w.push(tbl[i][1])
+        rm_cost.push(tbl[i][2])
+    }
 
     var data_init = '{ "data":['
     var data_end = ']}'
@@ -826,13 +824,68 @@ function sleep(ms) {
         }
     }
 
-    console.log("")
-    console.log(_temp)
-    console.log("")
-
     var x2 = `]}
     `
 
-    console.log(data_init+x1+_temp+x2+data_end)
+    // console.log(data_init+x1+_temp+x2+data_end)
 
+        // EOL
+    var _temp = ""
+    var i = 0
+    while (i < test.length) {
+
+        for (var j = i; j< i+2; j++){
+            var tmp = '{'+test[j]+'}'
+            console.log(tmp)
+            if(j > 1 && j != i-1){
+                tmp += ',' 
+                _temp += tmp
+            }
+            else{
+                _temp += tmp
+            }
+        }
+        console.log("end tmp")
+        // console.log(_temp)
+        i+=2;
+    }
+    // EOL
+
+    // working correct test
+    var _q = ""
+    var counter = 0
+    var val = 0
+    for(var i=0; i < global_num_raw_material; i++){
+        var q = `
+        {
+            "raw_material": "`+ raw_m[i]+`",
+            "specific_weight": "`+ specific_w[i]+`",
+            "RM_cost": "`+ rm_cost[i]+`",
+            "bases":[`
+        var _temp = ""
+        var max = val+1
+        for (var j = val; j< val+2; j++){
+            var tmp = '{'+test[j]+'}'
+            if(j != max){
+                tmp += ',' 
+                _temp += tmp
+            } else {
+                _temp += tmp
+            }
+        }
+        q += _temp
+        q += `]
+            }`  
+        if(global_num_raw_material > 1 && i != global_num_raw_material-1){
+            q += ',' 
+            _q += q
+        }
+        else{
+            _q += q
+        }
+        val += 2
+    }
+
+    console.log("created json")
+    console.log('{"data":['+_q+']}')
 }
