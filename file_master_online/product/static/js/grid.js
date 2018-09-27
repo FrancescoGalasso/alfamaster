@@ -749,15 +749,15 @@ function sleep(ms) {
   }
 
 
-  function test() {
+function test() {
     console.log("clicked!")
 
         // get the table -> return a map
     var tbl = $('#generatedTable tr').get().map(function(row) {
         return $(row).find('td').get().map(function(cell) {
-          return $(cell).html();
+        return $(cell).html();
         });
-      });
+    });
 
     raw_m = []
     specific_w = []
@@ -765,7 +765,6 @@ function sleep(ms) {
     bases=[]
 
     var base = tbl[2].length -3
-    console.log(base)
 
     //                  https://lodash.com/docs/4.17.10#chunk
 
@@ -776,84 +775,32 @@ function sleep(ms) {
     var __base = ["name", "g_100g", "ml_100g", "v_100v", "ml_1000ml", "formula_cost"]
     var test = []
 
-      // create matrix of base values
-      // [Array(5), Array(5), Array(5), Array(5), Array(5), Array(5)]
-      //     ⮡ [""g_100g":"25"", ""ml_100g":"25.000"", ""v_100v":"67.37"", ""ml_1000ml":"673.70"", ""formula_cost":"0.0000""]
+    // create matrix of base values
+    // [Array(5), Array(5), Array(5), Array(5), Array(5), Array(5)]
+    //     ⮡ [""g_100g":"25"", ""ml_100g":"25.000"", ""v_100v":"67.37"", ""ml_1000ml":"673.70"", ""formula_cost":"0.0000""]
     for (var j = 2; j <tbl.length -1; j++ ){
         var t = 3
         var tmp2 = _.drop(tbl[j],t)
-        console.log(tmp2)
         for(var i=0; i<num_cycle; i++){
             var end = (i*5)+5
             var sliced = tmp2.slice(i*5, end)
-            console.log(sliced)
             var x = []
             for(var k=0; k < sliced.length; k++){
-                console.log(__base[k+1] + " : " + sliced[k])
                 x.push('"'+__base[k+1]+'"' +':'+'"'+sliced[k]+'"')
             }
             test.push(x)
         }
     }
 
+        // create specific array for each value of raw material, specific weight and rm cost
     for(var i=2; i < tbl.length -1; i++){
         raw_m.push(tbl[i][0])
         specific_w.push(tbl[i][1])
         rm_cost.push(tbl[i][2])
     }
 
-    var data_init = '{ "data":['
-    var data_end = ']}'
-
-    var x1 = `
-        {
-            "raw_material": "`+ raw_m[0]+`",
-            "specific_weight": "`+ specific_w[0]+`",
-            "RM_cost": "`+ rm_cost[0]+`",
-            "bases": [`
-
-    var _temp = ""
-    for (var i=0; i< global_num_bases; i++){
-        var tmp = '{'+test[i]+'}'
-        if(global_num_bases > 1 && i != global_num_bases-1){
-            tmp += ',' 
-            _temp += tmp
-        }
-        else{
-            _temp += tmp
-        }
-    }
-
-    var x2 = `]}
-    `
-
-    // console.log(data_init+x1+_temp+x2+data_end)
-
-        // EOL
-    var _temp = ""
-    var i = 0
-    while (i < test.length) {
-
-        for (var j = i; j< i+2; j++){
-            var tmp = '{'+test[j]+'}'
-            console.log(tmp)
-            if(j > 1 && j != i-1){
-                tmp += ',' 
-                _temp += tmp
-            }
-            else{
-                _temp += tmp
-            }
-        }
-        console.log("end tmp")
-        // console.log(_temp)
-        i+=2;
-    }
-    // EOL
-
-    // working correct test
+        // loop for the creation of the JSON
     var _q = ""
-    var counter = 0
     var val = 0
     for(var i=0; i < global_num_raw_material; i++){
         var q = `
