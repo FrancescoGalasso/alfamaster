@@ -754,8 +754,7 @@ function test2(jsonData) {
     input_test.value = "My js test value"
 
     var input_test2 = document.getElementsByName("data")[0]
-    // var test = '{"data":"pluto"}'
-    input_test2.value = JSON.stringify(jsonData)
+    input_test2.value = jsonData
 }
 
 
