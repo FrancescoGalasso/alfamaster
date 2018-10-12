@@ -1,47 +1,13 @@
 {% extends 'product/base.html' %} 
 {% block content %}
 
-<hr/>
-
-{% comment %}
-Loop through the dictionary's items to get the keys and values:
-  for key, value in test.items
-{% endcomment %}
-{% comment %}
-<h2>{{prod_name}}</h2>
-{% for itemlists in list %}
-<ul>
-  {% for k,v in itemlists.items %}
-  <li>
-    {% if k != "bases" %}
-    <a href="#">{{ k }} : {{v}}</a>
-    {% else %}
-    {%for element in v%}
-    <p>base name: {{ element.name}}</p>
-    <p>base %w/w: {{ element.g_100g}}</p>
-    {% endfor %}
-    {% endif %}
-  </li>
-  {% endfor %}
-</ul>
-{% endfor %}
-{% endcomment %}
-
-<!-- <style>
-
-  table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-</style> -->
-
 <!-- script -->
 <script type="text/javascript">
   var foo = [];
   var foo2 = [];
-  var element_name = [];
+  var element_name = ['Base 1 (Pastel)', 'TiO2 Slurry', 'Base 2'];
   var max_of_array = 0;
+  var num = 0
 </script>
 
 <h2>{{prod_name}}</h2>
@@ -56,17 +22,14 @@ Loop through the dictionary's items to get the keys and values:
             {% for itemlists in list %} 
               {% for k,v in itemlists.items %}
                 {% if k == "bases" %}
-                  {%for element in v%}
-                        <!-- script -->
-                    <script type="text/javascript">
-                        a = "{{element.name}}";
-                        if(!foo.includes(a)){
-                          foo.push(a);
-                          console.log(a);
-                          $("tr:nth-child(1)").first().append("<th colspan='5'>{{element.name}}</th>");
-                        }
-                    </script>
-                  {% endfor %} 
+                <script type="text/javascript">
+                  b = "{{v|length}}"
+                  console.log("number of bases founded -> "+b)
+                  if(num <= b.length){
+                    $("tr:nth-child(1)").first().append("<th colspan='5'>"+element_name[num]+"</th>");
+                    num++
+                  }
+                  </script>
                 {% endif %}
               {% endfor %}
             {% endfor %}
@@ -145,79 +108,5 @@ Loop through the dictionary's items to get the keys and values:
 </table>
 
 <hr/>
-
-{% comment %}
-<h2>{{prod_name}}</h2>
-  
-      <table class="table table-condensed table-bordered table-hover">
-          <thead>
-            <tr>
-              <th class="col-md-1">Raw material</th>
-              <th class="col-md-1">Specific weight [g/mL]</th>
-              <th class="col-md-1">RM cost [$/L]</th>
-              {% for itemlists in list %}
-                {% for k,v in itemlists.items %}
-                  {% if k == "bases" %}
-                    {%for element in v%}
-                    <!-- <p>{{ forloop.counter }}: {{ element }}</p> -->
-                    <th>%w/w</th>
-                    <th>mL/100g</th>
-                    <th>%v/v</th>
-                    <th>mL/1000g</th>
-                    <th>Formula Cost [$/L]</th>
-                    {% endfor %}
-                  {% endif %}
-                {% endfor %}
-              {% endfor %} 
-            </tr>
-          </thead>
-          <tbody>
-
-                {% for itemlists in list %} 
-                <!-- <script type="text/javascript"> 
-                  var a = "{{itemlists|safe}}";
-                  console.log(a);
-               </script> -->
-                <tr>
-                {% for k,v in itemlists.items %}
-                {% if k != "bases" %}
-                <td>{{v}}</td>
-                <!-- <script type="text/javascript"> 
-                  var a = "{{v}}";
-                  console.log(a);
-               </script> -->
-                {% endif %}
-                {% endfor %}
-                {% for k,v in itemlists.items %}
-                {% if k == "bases" %}
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>%w/w</th>
-                          <th>mL/100g</th>
-                          <th>%v/v</th>
-                          <th>mL/1000g</th>
-                          <th>Formula Cost [$/L]</th>
-                        </tr>
-                      </thead>
-                {% endif %}
-                {% endfor %}
-              <!-- </tr> -->
-                {% endfor %}
-              </tr>
-          </tbody>
-        </table>
-
-        <!-- <script>
-        $(document).ready(function() {
-          $('#example').DataTable( {
-              scrollY:        '50vh',
-              scrollCollapse: true,
-              paging:         false
-          } );
-      } );
-        </script> -->
-
-{% endcomment %}
 
 {% endblock %}
