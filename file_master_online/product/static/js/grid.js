@@ -7,6 +7,7 @@ var global_num_raw_material = 0
 var global_num_bases = 0
 var global_baseClassName = []
 var global_sw = []
+var global_data = ''
 
 function generateTable(id){
     console.log("I'm going to generate the table for the customer")
@@ -748,6 +749,15 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+function test2(jsonData) {
+    var input_test = document.getElementsByName("name")[0]
+    input_test.value = "My js test value"
+
+    var input_test2 = document.getElementsByName("data")[0]
+    // var test = '{"data":"pluto"}'
+    input_test2.value = JSON.stringify(jsonData)
+}
+
 
 function test() {
     console.log("clicked!")
@@ -834,5 +844,13 @@ function test() {
     }
 
     console.log("created json")
-    console.log('{"data":['+_q+']}')
+    var jsonData = '{"data":['+_q+']}'
+    console.log(jsonData)
+    test2(jsonData)
 }
+
+
+// notes
+// https://www.youtube.com/watch?v=sYNDXrLu57k
+// https://rk.edu.pl/en/making-django-and-javascript-work-nicely-together/
+// https://stackoverflow.com/questions/37104604/adding-a-django-model-instance-without-a-form-button-only

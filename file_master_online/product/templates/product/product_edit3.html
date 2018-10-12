@@ -3,6 +3,8 @@
 {% block content %}
 {% load staticfiles %}
 
+<script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; console.log(window.CSRF_TOKEN)</script> 
+
 <div class="grid_generator">
     <div>Insert number of raw materials<input type="number" id="input_grid" placeholder="Insert number - min num 3"></div>
     <div>Insert number of bases<input type="number" id="input_grid2" placeholder="Insert number - min num 2"></div>
@@ -27,6 +29,23 @@
 <div id="tableMaster"></div>
 <br>
 
-<button id="run" type="button" class="btn btn-xs" onclick=test()>Test</button>
+<!-- <form method="POST" class="post-form" id="productForm">{% csrf_token %} -->
+
+    <!-- <button type="submit" class="save btn btn-default">Save</button> -->
+    <!-- <button id="run" type="button" class="btn btn-xs" onclick=test()>Test</button> -->
+    <!-- <button type="submit" class="save btn btn-default">Save</button> -->
+
+    <!-- <button type="submit" class="save btn btn-default" onclick=test()>Save</button>
+
+
+</form> -->
+
+<form action='.' method='POST'> {% csrf_token %}
+    <input type='hidden' name='name' />
+    <input type='hidden' name='data' />
+    <input type='submit' onclick=test() value='Save' />
+</form>
+
+<!-- <button id="run" type="button" class="btn btn-xs" onclick=test()>Test</button> -->
 <br>
 {% endblock %}

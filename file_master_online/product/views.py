@@ -4,6 +4,10 @@ from .models import Product
 from django.shortcuts import render, get_object_or_404
 import json
 from .forms import ProductForm
+from django.http import HttpResponse
+
+from django.http import HttpResponse, HttpResponseNotFound, Http404,  HttpResponseRedirect
+from django.shortcuts import redirect
 
 
 # Python logging package
@@ -19,7 +23,7 @@ def product_detail(request, pk):
     data =product.data
     prod_name = product.name
     stdlogger.debug("       *** [debug] product name: "+ prod_name)
-
+    
     try:
         lista = data['data']
         stdlogger.debug("       *** [debug] product data: {}".format(lista))
@@ -36,6 +40,58 @@ def product_list(request):
     return render(request, 'product/product_list.html', {'products': products})
 
 
+# def product_new(request):
+#     # form = ProductForm()
+#     # form = ProductForm(request.POST)
+#     import pdb; pdb.set_trace()
+
+#     if request.method == "POST":
+#         form = ProductForm(request.POST)
+#         if form.is_valid():
+#             post = form.save(commit=False)
+#             post.published_date = timezone.now()
+#             post.save()
+#             return redirect('product_detail', pk=post.pk) # redirect al dettaglio del prodotto creato
+#         else:
+#             stdlogger.debug("       *** [debug] errors: {}".format(form.errors))
+#             print(request.body)
+#     else:
+#         form = ProductForm()
+#     return render(request, 'product/product_edit3.html', {'form': form})
+
+
+#
+#   test by youtube code
+# 
+
 def product_new(request):
-    form = ProductForm()
-    return render(request, 'product/product_edit3.html', {'form': form})
+    print(request.GET)
+    print(request.POST)
+    if request.method == "POST":
+        my_name = request.POST.get('name')
+        print(my_name)
+        my_data = request.POST.get('data')
+        print(my_data)
+        Product.objects.create(name=my_name, data=my_data)
+    context={}
+    return render(request, "product/product_edit3.html", context)
+#
+#   TEST WORKING CLASSIC FORM
+#
+
+# def product_new(request):
+#     if request.method == "POST":
+#         print(request.body)
+#         print("aaaa")
+#         print(request.POST)
+#         form = ProductForm(request.POST)
+#         if form.is_valid():
+#             post = form.save(commit=False)
+#             post.author = request.user
+#             post.published_date = timezone.now()
+#             post.save()
+#             # return redirect('product_detail', pk=post.pk) # redirect al dettaglio del prodotto creato
+#             return redirect('/') # redirect alla pagina della lista dei prodotti
+#     else:
+#         form = ProductForm()
+#     return render(request, 'product/product_editt.html', {'form': form})
