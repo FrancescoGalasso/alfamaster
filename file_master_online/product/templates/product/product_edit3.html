@@ -29,16 +29,6 @@
 <div id="tableMaster"></div>
 <br>
 
-<!-- <form method="POST" class="post-form" id="productForm">{% csrf_token %} -->
-
-    <!-- <button type="submit" class="save btn btn-default">Save</button> -->
-    <!-- <button id="run" type="button" class="btn btn-xs" onclick=test()>Test</button> -->
-    <!-- <button type="submit" class="save btn btn-default">Save</button> -->
-
-    <!-- <button type="submit" class="save btn btn-default" onclick=test()>Save</button>
-
-
-</form> -->
 
 <form action='.' method='POST'> {% csrf_token %}
     <input type='hidden' name='name' />
@@ -46,6 +36,5 @@
     <input type='submit' onclick=test() value='Save' />
 </form>
 
-<!-- <button id="run" type="button" class="btn btn-xs" onclick=test()>Test</button> -->
 <br>
 {% endblock %}
