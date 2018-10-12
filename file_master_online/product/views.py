@@ -40,30 +40,6 @@ def product_list(request):
     return render(request, 'product/product_list.html', {'products': products})
 
 
-# def product_new(request):
-#     # form = ProductForm()
-#     # form = ProductForm(request.POST)
-#     import pdb; pdb.set_trace()
-
-#     if request.method == "POST":
-#         form = ProductForm(request.POST)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.published_date = timezone.now()
-#             post.save()
-#             return redirect('product_detail', pk=post.pk) # redirect al dettaglio del prodotto creato
-#         else:
-#             stdlogger.debug("       *** [debug] errors: {}".format(form.errors))
-#             print(request.body)
-#     else:
-#         form = ProductForm()
-#     return render(request, 'product/product_edit3.html', {'form': form})
-
-
-#
-#   test by youtube code
-# 
-
 def product_new(request):
     print(request.GET)
     print(request.POST)
@@ -75,23 +51,3 @@ def product_new(request):
         Product.objects.create(name=my_name, data=my_data)
     context={}
     return render(request, "product/product_edit3.html", context)
-#
-#   TEST WORKING CLASSIC FORM
-#
-
-# def product_new(request):
-#     if request.method == "POST":
-#         print(request.body)
-#         print("aaaa")
-#         print(request.POST)
-#         form = ProductForm(request.POST)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.author = request.user
-#             post.published_date = timezone.now()
-#             post.save()
-#             # return redirect('product_detail', pk=post.pk) # redirect al dettaglio del prodotto creato
-#             return redirect('/') # redirect alla pagina della lista dei prodotti
-#     else:
-#         form = ProductForm()
-#     return render(request, 'product/product_editt.html', {'form': form})
