@@ -45,9 +45,7 @@ def product_new(request):
     print(request.POST)
     if request.method == "POST":
         my_name = request.POST.get('name')
-        # print(my_name)
         my_data = request.POST.get('data')
-        # print(my_data)
         d = json.loads(my_data)
         Product.objects.create(name=my_name, data=d)
     context={}
