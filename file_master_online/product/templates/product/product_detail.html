@@ -1,5 +1,6 @@
 {% extends 'product/base.html' %} 
 {% block content %}
+{% load staticfiles %}
 
 <!-- script -->
 <script type="text/javascript">
@@ -12,7 +13,7 @@
 
 <h2>{{prod_name}}</h2>
 
-<table class="display" style="width:100%">
+<table class="display" style="width:100%" id="tdetail">
                   <!-- thead -->
     <thead>
         <tr>
@@ -106,6 +107,8 @@
         {% endfor %}
     </tfoot>
 </table>
+
+<script src="{% static 'js/utils.js' %}"></script>  
 
 <hr/>
 
