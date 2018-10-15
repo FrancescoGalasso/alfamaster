@@ -50,3 +50,12 @@ def product_new(request):
         Product.objects.create(name=my_name, data=d)
     context={}
     return render(request, "product/product_edit3.html", context)
+
+def product_delete(request, pk):
+    product = Product.objects.filter(pk=pk)
+    if product.exists():
+        # Standard Django delete
+        product.delete()
+
+    # redirect to HOME
+    return HttpResponseRedirect("/")

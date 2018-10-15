@@ -749,6 +749,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+// TODO: refactor test & test2
 function test2(jsonData) {
     var input_test = document.getElementsByName("name")[0]
     input_test.value = "My js test value"
