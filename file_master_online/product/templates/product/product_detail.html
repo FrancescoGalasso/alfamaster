@@ -9,6 +9,8 @@
   var element_name = ['Base 1 (Pastel)', 'TiO2 Slurry', 'Base 2'];
   var max_of_array = 0;
   var num = 0
+  var pk = '{{prod_pk}}'
+  console.log(pk)
 </script>
 
 <h2>{{prod_name}}</h2>
@@ -111,5 +113,10 @@
 <script src="{% static 'js/utils.js' %}"></script>  
 
 <hr/>
+
+<form action="{% url 'product_delete' pk=prod_pk %}" method="post">
+    {% csrf_token %}
+    <input class="btn btn-danger" type="submit" value="Delete">
+</form>
 
 {% endblock %}

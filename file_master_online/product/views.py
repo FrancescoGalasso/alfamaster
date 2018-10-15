@@ -22,6 +22,7 @@ def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     data =product.data
     prod_name = product.name
+    prod_pk = pk
     stdlogger.debug("       *** [debug] product name: "+ prod_name)
     
     try:
@@ -31,7 +32,7 @@ def product_detail(request, pk):
         import traceback
         print traceback.format_exc()
         lista = { }
-    return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name})    
+    return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk})    
     # return render(request, 'product/product_detail.html')
 
 
@@ -59,3 +60,4 @@ def product_delete(request, pk):
 
     # redirect to HOME
     return HttpResponseRedirect("/")
+
