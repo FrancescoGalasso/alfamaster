@@ -52,3 +52,11 @@ td {
 #slurry-div {
     display:none;
 }
+
+/*
+*   css modal
+*/
+
+div.modal-footer form {
+    float: left;
+}

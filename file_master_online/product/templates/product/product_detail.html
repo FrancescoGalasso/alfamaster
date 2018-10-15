@@ -3,6 +3,8 @@
 {% load staticfiles %}
 
 <!-- script -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
   var foo = [];
   var foo2 = [];
@@ -114,9 +116,32 @@
 
 <hr/>
 
-<form action="{% url 'product_delete' pk=prod_pk %}" method="post">
-    {% csrf_token %}
-    <input class="btn btn-danger" type="submit" value="Delete">
-</form>
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">DELETE {{prod_name}}</h4>
+        </div>
+        <div class="modal-body">
+          <p>Delete this product?</p>
+        </div>
+        <div class="modal-footer">
+            <form action="{% url 'product_delete' pk=prod_pk %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Delete</button>
 
 {% endblock %}
