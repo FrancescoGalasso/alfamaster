@@ -355,11 +355,15 @@ function generateData(){
         //  here the logic to populate the table
         //
 
-        var baseClassName = generate_baseClassName()
-        console.log("######")
-        console.log(matrixWeightInput)
-        console.log("######")
-        // baseClassName -> ["_b1", "_ti" ...]
+        var baseClassName = generate_baseClassName()                // baseClassName -> ["_b1", "_ti" ...]
+
+        var table = document.getElementById('tdetail')              // table from product/update/pk
+        if(table){
+            var rowCount = $('#tdetail >tbody >tr').length;
+            console.log("num row from tdetail table ~> "+rowCount-1)
+            global_num_raw_material = rowCount-1                    // override for update action
+        }
+
         for(var q=0; q< baseClassName.length; q++){
             sum_ml100g = 0
             sum_vv = 0
@@ -370,15 +374,11 @@ function generateData(){
             if(q == 0){
                 var tmp_value = list_sum[2]
                 var value = parseFloat(tmp_value).toFixed(2)
-                console.log(value)
                 tmp.innerHTML = value
-                console.log(tmp)
             } else if (q == 1){
                 var tmp_value = list_sum[3]
                 var value = parseFloat(tmp_value).toFixed(2)
-                console.log(value)
                 tmp.innerHTML = value
-                console.log(tmp)
             }
 
 
@@ -396,7 +396,6 @@ function generateData(){
 
                 // insert sum of data for cell Total mL/100g
             tmp = document.getElementsByClassName('totalml100g'+baseClassName[q])[0]
-            console.log(sum_ml100g)
             tmp.innerHTML = parseFloat(sum_ml100g).toFixed(2)
 
                 // insert single data for the cell %v/v
@@ -406,7 +405,6 @@ function generateData(){
                 var elems = document.getElementsByClassName("ml100g"+baseClassName[q]);
 
                 var elem = elems[i].innerText
-                console.log(elem)
                 var op = (100*elem)/sum_ml100g
                 var _op = parseFloat(op).toFixed(2)
                 tmp.innerHTML = _op
@@ -415,7 +413,6 @@ function generateData(){
 
                 // insert sum of data for cell Total %v/v
             tmp = document.getElementsByClassName('totalvv'+baseClassName[q])[0]
-            console.log(sum_vv)
             tmp.innerHTML = parseFloat(sum_vv).toFixed(2)
 
                 // insert single data for the cell mL/1000g
@@ -425,17 +422,14 @@ function generateData(){
                 var elems = document.getElementsByClassName("vv"+baseClassName[q]);
 
                 var elem = elems[i].innerText
-                console.log(elem)
                 var op = (10*elem)
                 var _op = parseFloat(op).toFixed(2)
-                console.log(_op)
                 tmp.innerHTML = _op
                 sum_ml1000g += parseFloat(_op)
             }
 
                 // insert sum of data for cell Total mL/1000g
             tmp = document.getElementsByClassName('totalml1000g'+baseClassName[q])[0]
-            console.log(sum_ml1000g)
             tmp.innerHTML = parseFloat(sum_ml1000g).toFixed(0)
 
                 // insert single data for the cell Formula Cost
@@ -468,7 +462,19 @@ function generateData(){
 }
 
 function generateDataMaster(){
-    var tableInput = document.getElementById("generatedTable")
+
+    var table_new = document.getElementById("generatedTable")
+    var table_update = document.getElementById("tdetail")
+    var tableInput = ''
+    var index = ''
+    if(table_new){
+        tableInput = table_new
+        index = 1
+    } else if (table_update){
+        tableInput = table_update
+        index = 0
+    }
+    // var tableInput = document.getElementById("generatedTable")
     var tableFillLvl = document.getElementById("generatedTableFillLvl")
     var list_vv_ti = []
     var list_vv_b1 = []
@@ -482,7 +488,7 @@ function generateDataMaster(){
 
     for (var j=4; j < 12; j++){
         var cells = tableInput.querySelectorAll('td:nth-child('+j+')')
-        for(var i = 1 ; i < cells.length ; i++) {
+        for(var i = index ; i < cells.length ; i++) {
             if(j == 5){
                 list_vv_b1.push(cells[i].innerText)
             } else if(j==10) {
@@ -495,7 +501,12 @@ function generateDataMaster(){
     var defLvl = cell[1].innerHTML
 
     for(var i=0; i < global_num_raw_material; i++){
-        var res = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+        var res = ''
+        if(table_new){
+            res = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+        }else if (table_update){
+            res = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+        }
         list_tiRemoving.push(res)
         sum_tiRemoving += res
     }
@@ -506,6 +517,8 @@ function generateDataMaster(){
         var _op = list_tiRemoving[i]
         var op = parseFloat(_op).toFixed(3)
         tmp.innerHTML = op
+        tmp.classList.add("to_update")
+
     }
 
         // insert sum of data for cell Total TiO2 removing
@@ -521,6 +534,8 @@ function generateDataMaster(){
         var _op = (100*_tmp2)/sum_tiRemoving
         var op = parseFloat(_op).toFixed(3)
         tmp.innerHTML = op
+        tmp.classList.add("to_update")
+
         sum_vv_m += op
     }
 
@@ -536,6 +551,7 @@ function generateDataMaster(){
         var _op = (tmp2.innerText*global_sw[i])
         var op = parseFloat(_op).toFixed(3)
         tmp.innerHTML = op
+        tmp.classList.add("to_update")
 
         sum_test =  parseFloat(sum_test) + parseFloat(op)
     }
@@ -551,6 +567,7 @@ function generateDataMaster(){
         var _op = (tmp2.innerText*global_sw[i]*100)/(sum_test)
         var op = parseFloat(_op).toFixed(3)
         tmp.innerHTML = op
+        tmp.classList.add("to_update")
 
         sum_ww =  parseFloat(sum_ww) + parseFloat(op)        
         console.log(sum_ww)
@@ -568,6 +585,7 @@ function generateDataMaster(){
         var _op = ((global_sw[i]*tmp3[i].innerText)/1000)*tmp2.innerText
         var op = parseFloat(_op).toFixed(3)
         tmp.innerHTML = op
+        tmp.classList.add("to_update")
 
         sum_fcost =  parseFloat(sum_fcost) + parseFloat(op)        
     }
@@ -575,6 +593,8 @@ function generateDataMaster(){
         // insert sum of data for cell Total Formula Cost
     tmp = document.getElementsByClassName('totalfcost')[0]
     tmp.innerHTML = parseFloat(sum_fcost).toFixed(3)
+    tmp.classList.add("to_update")
+
 }
 
 /*
@@ -627,6 +647,8 @@ function generate_baseClassName(){
             baseClassName.push(_baseClassName)
         }
         return baseClassName
+    } else{ // used on product update (for testing)
+        return baseClassName
     }
 }
 
@@ -640,6 +662,7 @@ function returnInputWeightClassNames(inputClassNameWeight, baseClassName){
     return list
 }
 
+// TODO: refactor this
 function setClassesForCalculation(){
     console.log("prepare cells with class for calculation")
 
