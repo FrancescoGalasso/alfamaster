@@ -290,6 +290,7 @@ function creationTFootMaster(tableFoot, tr_foot){
     for (var i=0; i < 5; i++){
         var th = document.createElement('th')
         th.className = list_totName[i]
+        th.classList.add("to_update")
         tr_foot.appendChild(th)
     }
 }
