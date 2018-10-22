@@ -16,8 +16,6 @@ function generateTable(id){
 
     var num_raw_material = document.getElementById('input_grid').value
     var num_bases = document.getElementById('input_grid2').value
-    console.log(num_raw_material)
-    console.log(num_bases)
     global_num_raw_material = num_raw_material
     global_num_bases = num_bases
 
@@ -596,6 +594,11 @@ function generateDataMaster(){
     tmp.innerHTML = parseFloat(sum_fcost).toFixed(3)
     tmp.classList.add("to_update")
 
+    var table = document.getElementById('tdetail')              // table from product/update/pk
+    if(table){
+        showGenerateBtn()
+    }
+
 }
 
 /*
@@ -762,10 +765,19 @@ function returnListClassName(baseClassName, list_totName){
 function showGenerateBtn(){
     console.log("I'm going to show the generateBtn")
     var btn = document.getElementById("btn_calculate")
-    btn.style.display = "block";
+    if(btn){
+        btn.style.display = "block";
+    }
 
     var btn_prodName = document.getElementById("nameProduct")
-    btn_prodName.style.display = "block"
+    if(btn_prodName){
+        btn_prodName.style.display = "block"
+    }
+
+    var btn_update_save = document.getElementById("btn_update_save")
+    if(btn_update_save){
+        btn_update_save.style.display = "block"
+    }
 }
 
 // https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
@@ -787,7 +799,14 @@ function test() {
     console.log("clicked!")
 
         // get the table -> return a map
-    var tbl = $('#generatedTable tr').get().map(function(row) {
+
+    var table_tr = ''
+    if(document.getElementById('generatedTable')){
+        table_tr = '#generatedTable tr'
+    } else if (document.getElementById('tdetail')){
+        table_tr = '#tdetail tr'
+    }
+    var tbl = $(table_tr).get().map(function(row) {
         return $(row).find('td').get().map(function(cell) {
         return $(cell).html();
         });

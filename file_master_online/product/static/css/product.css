@@ -60,3 +60,7 @@ td {
 div.modal-footer form {
     float: left;
 }
+
+#btn_update_save {
+    display:none;
+}
