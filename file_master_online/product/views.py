@@ -67,7 +67,7 @@ def product_delete(request, pk):
 
 def product_update(request, pk):
     stdlogger.info("        +++ [info] Call to PRODUCT_UPDATE method")
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     product = get_object_or_404(Product, pk=pk)
     data =product.data
     prod_name = product.name
