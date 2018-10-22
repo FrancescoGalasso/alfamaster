@@ -1,0 +1,130 @@
+{% extends 'product/base.html' %} 
+{% block content %}
+{% load staticfiles %}
+
+<!-- script -->
+<script type="text/javascript">
+  var foo = [];
+  var foo2 = [];
+  var element_name = ['Base 1 (Pastel)', 'TiO2 Slurry', 'Base 2'];
+  var max_of_array = 0;
+  var num = 0
+  var pk = '{{prod_pk}}'
+  console.log(pk)
+</script>
+
+<h2>{{prod_name}}</h2>
+
+<table class="display" style="width:100%" id="tdetail">
+                  <!-- thead -->
+    <thead>
+        <tr>
+            <th style="visibility:hidden;"></th>
+            <th style="visibility:hidden;"></th>
+            <th style="visibility:hidden;"></th>
+            {% for itemlists in list %} 
+              {% for k,v in itemlists.items %}
+                {% if k == "bases" %}
+                <script type="text/javascript">
+                  b = "{{v|length}}"
+                  if(num <= b.length){
+                    $("tr:nth-child(1)").first().append("<th colspan='5'>"+element_name[num]+"</th>");
+                    num++
+                  }
+                  </script>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Raw material</th>
+            <th>Specific weight [g/mL]</th>
+            <th>RM cost [$/L]</th>
+
+            {% for itemlists in list %}
+                {% for k,v in itemlists.items %}
+                  {% if k == "bases" %}
+                    <!-- script -->
+                    <script type="text/javascript"> 
+                      a = "{{v|length}}";
+                      foo2.push(a);
+                      max_of_array = Math.max.apply(Math, foo2);
+                    </script>
+                  {% endif %}
+                {% endfor %}
+              {% endfor %}
+               <!-- script --> 
+              <script>
+                var i;
+                for (i = 0; i < max_of_array; i++) { 
+                  $("tr:nth-child(2)").append("<th>%w/w</th>");
+                  $("tr:nth-child(2)").append(" <th>mL/100g</th>");
+                  $("tr:nth-child(2)").append("<th>%v/v</th>");
+                  $("tr:nth-child(2)").append("<th>mL/1000g</th>");
+                  $("tr:nth-child(2)").append("<th>Formula Cost [$/L]</th>");     
+                }
+              </script>
+        </tr>
+    </thead>
+                  <!-- tbody -->
+    <tbody>
+        {% for itemlists in list %} 
+        <tr>
+          {% for k,v in itemlists.items %}
+            {% if k != "bases" %}
+            <td>{{v}}</td>
+            {% endif %}
+          {% endfor %}
+                  <!-- show the bases -->
+          {% for k,v in itemlists.items %}
+            {% if k == "bases" %}
+              {%for element in v%}
+                <td>{{element.g_100g}}</td>
+                <td>{{element.ml_100g}}</td>
+                <td>{{element.v_100v}}</td>
+                <td>{{element.ml_1000ml}}</td>
+                <td>{{element.formula_cost}}</td>
+              {% endfor %} 
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+        </tr>
+    </tbody>
+                  <!-- footer -->
+    <tfoot>
+        <th style="visibility:hidden;"></th>
+        <th style="visibility:hidden;"></th>
+        <th style="visibility:hidden;"></th>
+        {% for itemlists in list %} 
+          {% for k,v in itemlists.items %}
+            {% if k == "bases" %}
+              {%for element in v%}
+              <th></th>
+              {% endfor %} 
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+    </tfoot>
+</table>
+
+<br>
+<button id="updateCalculateBtn" type="button" class="btn btn-xs" disabled = "true" onclick=generateData()>Calculate</button> 
+
+<br>
+<div id="tableFillCalculation"></div>
+<br>
+<div id="tableMaster"></div>
+<br>
+
+<form action='/product/new/' method='POST'> {% csrf_token %}
+    <input type='hidden' name='name' />
+    <input type='hidden' name='data' />
+    <input id="btn_update_save" type='submit' onclick=test() value='Save' />
+</form>
+
+<hr/>
+<script src="{% static 'js/grid.js' %}"></script>  
+<script src="{% static 'js/utils.js' %}"></script>  
+<script src="{% static 'js/update.js' %}"></script>  
+
+{% endblock %}
