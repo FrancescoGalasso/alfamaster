@@ -37,7 +37,7 @@ def product_detail(request, pk):
 
 
 def product_list(request):
-    products = Product.objects.all()
+    products = Product.objects.order_by('pk')
     return render(request, 'product/product_list.html', {'products': products})
 
 
