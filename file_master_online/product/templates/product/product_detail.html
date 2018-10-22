@@ -4,7 +4,7 @@
 
 <!-- script -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
   var foo = [];
   var foo2 = [];
@@ -141,6 +141,8 @@
       
     </div>
   </div>
+
+  <a class="btn btn-default" href="{% url 'product_update' pk=prod_pk %}">Update</a>
 
   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Delete</button>
 
