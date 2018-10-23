@@ -11,6 +11,9 @@
   var num = 0
   var pk = '{{prod_pk}}'
   console.log(pk)
+  var rev = '{{prod_rev}}'
+  console.log("revision -> "+rev)
+  rev = parseInt(rev)+1
 </script>
 
 <h2>{{prod_name}}</h2>
@@ -119,7 +122,9 @@
 <form action='/product/new/' method='POST'> {% csrf_token %}
     <input type='hidden' name='name' />
     <input type='hidden' name='data' />
-    <input id="btn_update_save" type='submit' onclick=test() value='Save' />
+    <!-- <input type='hidden' name='revision' value=rev/> -->
+    <input type='hidden' name='revision'/>
+    <input id="btn_update_save" type='submit' onclick=test(rev) value='Save' />
 </form>
 
 <hr/>

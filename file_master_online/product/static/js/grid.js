@@ -786,16 +786,22 @@ function sleep(ms) {
   }
 
 // TODO: refactor test & test2
-function test2(jsonData) {
+function test2(jsonData, rev) {
     var input_test = document.getElementsByName("name")[0]
     input_test.value = "My js test value"
 
     var input_test2 = document.getElementsByName("data")[0]
     input_test2.value = jsonData
+
+    console.log("revision -> "+rev)
+    var input_test3 =  document.getElementsByName("revision")[0]
+    if(input_test3){
+        input_test3.value = rev
+    }
 }
 
 
-function test() {
+function test(rev) {
     console.log("clicked!")
 
         // get the table -> return a map
@@ -889,7 +895,7 @@ function test() {
     console.log("created json")
     var jsonData = '{"data":['+_q+']}'
     console.log(jsonData)
-    test2(jsonData)
+    test2(jsonData, rev)
 }
 
 

@@ -44,12 +44,13 @@ def product_list(request):
 def product_new(request):
     print(request.GET)
     print(request.POST)
-    # import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
     if request.method == "POST":
         my_name = request.POST.get('name')
         my_data = request.POST.get('data')
+        my_rev = request.POST.get('revision')
         d = json.loads(my_data)
-        Product.objects.create(name=my_name, data=d)
+        Product.objects.create(name=my_name, data=d, revision=my_rev )
             # redirect to HOME
         return HttpResponseRedirect("/")
 
@@ -72,6 +73,7 @@ def product_update(request, pk):
     data =product.data
     prod_name = product.name
     prod_pk = pk
+    rev = product.revision
     # stdlogger.debug("       *** [debug] product name: "+ prod_name)
     
     try:
@@ -83,6 +85,6 @@ def product_update(request, pk):
         print traceback.format_exc()
         lista = { }
 
-    return render(request, 'product/product_update.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk})   
+    return render(request, 'product/product_update.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':rev})   
     # # redirect to HOME
     # return HttpResponseRedirect("/")
