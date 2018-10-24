@@ -10,7 +10,6 @@ var global_sw = []
 var global_data = ''
 
 function generateTable(id){
-    console.log("I'm going to generate the table for the customer")
     showGenerateBtn()
 
     var num_raw_material = document.getElementById('input_grid').value
@@ -82,7 +81,6 @@ function creationTHead(tr_head, list_of_thead){
     for (var j=0; j < list_of_thead.length; j++){
         for (var i=0; i< list_of_thead[j].length; i++) {
             var td = document.createElement('TD')
-            // td.appendChild(document.createTextNode(thead_col_master[i]))
             td.innerHTML = list_of_thead[j][i]
             td.style.fontWeight = "bold"
             td.style.minWidth = "80px"
@@ -102,7 +100,6 @@ function creationTBody(num_raw_material, tableBody){
 
         for (var j=0; j< td_counter; j++){
             var td = document.createElement('TD')
-            // td.appendChild(document.createTextNode("Cell " + i + "," + j))
             td.style.height = "30px"
             if (j < 4 || j == 8){
                 td.contentEditable = true
@@ -121,7 +118,6 @@ function creationTBody(num_raw_material, tableBody){
 function creationTFoot(tableFoot, tr_foot){
     console.log("td_counter -> "+td_counter)
     var th = document.createElement('th')
-    // th.style.columnSpan = 3
     th.colSpan =  3
     th.innerHTML = 'Total'
     th.style.fontWeight = "bold"

@@ -11,6 +11,9 @@ body {
     display:none;
 }
 
+#generateBtn {
+    margin-top: 10px;
+}
 /* 
 *   css inside <div class="grid_generator">
 */
