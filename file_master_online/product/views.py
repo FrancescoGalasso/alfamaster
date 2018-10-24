@@ -8,7 +8,7 @@ from django.http import HttpResponse
 
 from django.http import HttpResponse, HttpResponseNotFound, Http404,  HttpResponseRedirect
 from django.shortcuts import redirect
-
+from django.db.models import Max
 
 # Python logging package
 import logging
@@ -37,18 +37,34 @@ def product_detail(request, pk):
 
 
 def product_list(request):
-    products = Product.objects.order_by('pk')
+
+    products = Product.objects.raw('''
+        select *
+        from (
+        select id, 
+                name,
+                revision,
+                max(revision) over (partition by name) as max_thing
+        from "product_product"
+        ) t
+        where revision = max_thing
+    ''')
+
+
     return render(request, 'product/product_list.html', {'products': products})
 
 
 def product_new(request):
     print(request.GET)
     print(request.POST)
-    import pdb; pdb.set_trace()
     if request.method == "POST":
         my_name = request.POST.get('name')
         my_data = request.POST.get('data')
         my_rev = request.POST.get('revision')
+        if(my_rev):
+            print("revision -> "+my_rev)
+        else:
+            my_rev = 0
         d = json.loads(my_data)
         Product.objects.create(name=my_name, data=d, revision=my_rev )
             # redirect to HOME
