@@ -21,19 +21,22 @@ function generateTable(id){
 
     // some check before generate the table
     if (num_raw_material.includes(".") || num_raw_material.includes("-") || num_bases.includes(".") || num_bases.includes("-")){
-        alert("OPS! The value you added in a field contains a dot or a minus..")
+        // alert("OPS! The value you added in a field contains a dot or a minus..")
+        var msg = "OPS! The value you added in a field contains a dot or a minus.."
+        $("#msg-modal").html(msg)
+        $("#myModal").modal()
+        clean_after_wrong_input()
         return;
     }
     //  TODO - remove the following comment. Added to speedup the tests
-    // if (num_bases < 2 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
-    //     alert("OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases")
-    //     return;
-    // }
-
-
-    // info-test used in development
-    var test = document.getElementById("info-test")
-    test.innerText = "num_bases added not used for this testing purpose"
+    if (num_bases < 2 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
+        // alert("OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases")
+        var msg = "OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases"
+        $("#msg-modal").html(msg)
+        $("#myModal").modal()
+        clean_after_wrong_input()
+        return;
+    }
 
 
     // generate the table
@@ -606,6 +609,14 @@ function generateDataMaster(){
 *               Supporting functions
 *
 */
+
+function clean_after_wrong_input(){
+    var name_product = document.getElementById('nameProduct')
+    name_product.style.display = "none"
+    var calculate_btn = document.getElementById('btn_calculate')
+    calculate_btn.style.display = "none"
+
+}
 
 function createMatrixInputValue(returnInputWeightClassNames) {
     var _length = returnInputWeightClassNames.length
