@@ -11,7 +11,6 @@ var global_data = ''
 
 function generateTable(id){
     console.log("I'm going to generate the table for the customer")
-    console.log("id of clicked btn -> "+id)
     showGenerateBtn()
 
     var num_raw_material = document.getElementById('input_grid').value
@@ -19,18 +18,17 @@ function generateTable(id){
     global_num_raw_material = num_raw_material
     global_num_bases = num_bases
 
-    // some check before generate the table
+    /*
+    *       some check before generate the table
+    */
     if (num_raw_material.includes(".") || num_raw_material.includes("-") || num_bases.includes(".") || num_bases.includes("-")){
-        // alert("OPS! The value you added in a field contains a dot or a minus..")
         var msg = "OPS! The value you added in a field contains a dot or a minus.."
         $("#msg-modal").html(msg)
         $("#myModal").modal()
         clean_after_wrong_input()
         return;
     }
-    //  TODO - remove the following comment. Added to speedup the tests
     if (num_bases < 2 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
-        // alert("OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases")
         var msg = "OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases"
         $("#msg-modal").html(msg)
         $("#myModal").modal()
@@ -38,8 +36,9 @@ function generateTable(id){
         return;
     }
 
-
-    // generate the table
+    /*
+    *       generate the table
+    */
     var thead_col = ["Raw material", "Specific weight [g/mL]", "RM cost"]
     var thead_col_base = ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost"]
     var thead_col_master = ["TiO<sub>2</sub> removing", "%<sub>v/v</sub>", "g/100mL", "%<sub>w/w</sub>", "Formula Cost"]
@@ -54,8 +53,6 @@ function generateTable(id){
     table.appendChild(tableBody)
     table.appendChild(tableFoot)
 
-        // css style added via js
-        // style="border-top: 4.2px solid black;"
     tableFoot.style.borderStyle = "solid"
     tableFoot.style.borderColor = "black"
 
@@ -63,17 +60,13 @@ function generateTable(id){
     var tr_head2 = document.createElement('tr')
     tableHead.appendChild(tr_head2)
     var thead_bases = ["", "", "", "BASE1 (pastel)", "TiO<sub>2</sub> slurry"]
-    console.log("addTheadBases")
     addTheadBases(tr_head2, thead_bases)
     var tr_head = document.createElement('tr')
     tableHead.appendChild(tr_head)
     var list_of_thead = [thead_col,thead_col_base,thead_col_base]
     creationTHead(tr_head, list_of_thead)
-    console.log(td_counter)
 
         // creation of tbody for the table
-    // var tr_body = document.createElement('tr')
-    // tableBody.appendChild(tr_body)
     creationTBody(num_raw_material, tableBody)
 
         // creation of tfoot for the table
