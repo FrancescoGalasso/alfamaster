@@ -788,7 +788,12 @@ function sleep(ms) {
 // TODO: refactor test & test2
 function test2(jsonData, rev) {
     var input_test = document.getElementsByName("name")[0]
-    input_test.value = "My js test value"
+    // input_test.value = "My js test value"
+    var input_prod_name = document.getElementById("nameProduct")
+    if (input_prod_name){
+        var value = input_prod_name.value
+        input_test.value = value
+    }
 
     var input_test2 = document.getElementsByName("data")[0]
     input_test2.value = jsonData
