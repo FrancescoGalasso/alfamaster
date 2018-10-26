@@ -7,10 +7,10 @@
     <div>Insert number of raw materials<input type="number" id="input_grid" placeholder="Insert number - min num 3"></div>
     <div>Insert number of bases<input type="number" id="input_grid2" placeholder="Insert number - min num 2"></div>
     <button id="generateBtn" type="button" class="btn btn-primary" onclick=generateTable()>Generate table</button>
+    <hr>
 
 </div>
 
-<hr>
 <p id="info-test"></p>
 <input id="nameProduct" type="text" name="firstname" placeholder="Type product's name"><br>
 <br>
@@ -27,12 +27,13 @@
 <div id="tableMaster"></div>
 <br>
 
-
-<form action='.' method='POST'> {% csrf_token %}
-    <input type='hidden' name='name' />
-    <input type='hidden' name='data' />
-    <input type='submit' onclick=test() value='Save' />
-</form>
+<div id="save">
+    <form action='.' method='POST'> {% csrf_token %}
+        <input type='hidden' name='name' />
+        <input type='hidden' name='data' />
+        <input type='submit' onclick=test() value='Save' />
+    </form>
+</div>
 
 
 <!-- Modal -->

@@ -119,7 +119,7 @@
 <div id="tableMaster"></div>
 <br>
 
-<form action='/product/new/' method='POST'> {% csrf_token %}
+<form action='/product/new/' method='POST' id="save"> {% csrf_token %}
     <input type='hidden' name='name' />
     <input type='hidden' name='data' />
     <!-- <input type='hidden' name='revision' value=rev/> -->
