@@ -1,7 +1,3 @@
-$( document ).ready(function() {
-    console.log( "page HTML product_edit3 ready!" );   
-});
-
 var td_counter = 0;
 var global_num_raw_material = 0
 var global_num_bases = 0
@@ -27,13 +23,15 @@ function generateTable(id){
         clean_after_wrong_input()
         return;
     }
-    if (num_bases < 2 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
+    if (num_bases < 1 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
         var msg = "OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases"
         $("#msg-modal").html(msg)
         $("#myModal").modal()
         clean_after_wrong_input()
         return;
     }
+
+    hideGridGenerator()
 
     /*
     *       generate the table
@@ -58,11 +56,13 @@ function generateTable(id){
         // creation of thead for the table
     var tr_head2 = document.createElement('tr')
     tableHead.appendChild(tr_head2)
-    var thead_bases = ["", "", "", "BASE1 (pastel)", "TiO<sub>2</sub> slurry"]
+    var thead_bases = ["", "", "", "BASE1 (pastel)", "TiO<sub>2</sub> slurry"]  
     addTheadBases(tr_head2, thead_bases)
     var tr_head = document.createElement('tr')
     tableHead.appendChild(tr_head)
-    var list_of_thead = [thead_col,thead_col_base,thead_col_base]
+    // insert function that return list_of_thead
+    var list_of_thead = returnTheadList(thead_col, thead_col_base)
+    // var list_of_thead = [thead_col,thead_col_base,thead_col_base]
     creationTHead(tr_head, list_of_thead)
 
         // creation of tbody for the table
@@ -287,11 +287,17 @@ function creationTFootMaster(tableFoot, tr_foot){
 
 /*
 *
-*               Logic concerning data generations into the table
+*               Logic concerning data generations into the table 
 *
 */
 
 function generateData(){
+
+    var form_update_save = document.getElementById("save")
+    if(form_update_save){
+        form_update_save.style.display = "none"
+    }
+
     var sum_sw = 0
     var sum_rmcost = 0
     var sum_ww = 0;
@@ -586,19 +592,56 @@ function generateDataMaster(){
     tmp.innerHTML = parseFloat(sum_fcost).toFixed(3)
     tmp.classList.add("to_update")
 
-    var table = document.getElementById('tdetail')              // table from product/update/pk
-    if(table){
-        showGenerateBtn()
+    var form_update_save = document.getElementById("save")
+    if(form_update_save){
+        form_update_save.style.display = "block"
     }
+    // var table = document.getElementById('tdetail')              // table from product/update/pk
+    // if(table){
+    //     showGenerateBtn()
+    // }
 
 }
 
 /*
 *
-*               Supporting functions
+*               Supporting functions 
 *
 */
 
+/**
+ * 
+ * Check how many bases are passed via input, create Thead for each bases and return a list of THEAD arrays for each section of THEAD
+ * arrays for bases and array for 'Raw Material' 'Specific Weight' 'RM cost'
+ * 
+ * @param {Array<String>} thead_col Array of HTML elems for THead 'Raw Material' 'Specific Weight' 'RM cost'
+ * @param {Array<String>} thead_col_base Array of HTML elements for THead Table Base n (including TiO2 Slurry)
+ * @returns {Array<Array<String>>} listofTheadArrays -> return list containing Thead Arrays
+ */
+function returnTheadList(thead_col, thead_col_base){
+    var listofTheadArrays = []
+    listofTheadArrays.push(thead_col)
+    listofTheadArrays.push(thead_col_base)
+    listofTheadArrays.push(thead_col_base)
+
+    if(global_num_bases > 1){
+        for (var i=1; i<global_num_bases; i++){
+            var last = listofTheadArrays[listofTheadArrays.length-1]
+            listofTheadArrays.push(last)
+        }
+    }
+    return listofTheadArrays
+}
+
+function hideGridGenerator(){
+    var grid = document.getElementsByClassName("grid_generator")[0]
+    grid.style.display = "none"
+}
+
+/**
+ * 
+ * Set display = "none" to input #nameProduct and to button #btn_calculate
+ */
 function clean_after_wrong_input(){
     var name_product = document.getElementById('nameProduct')
     name_product.style.display = "none"
@@ -607,22 +650,47 @@ function clean_after_wrong_input(){
 
 }
 
+/**
+ * 
+ * Type Type
+ * 
+ * @param  
+ * @return  {Array<String>} lista -> list containing lists of classname 
+ */
 function createMatrixInputValue(returnInputWeightClassNames) {
     var _length = returnInputWeightClassNames.length
-    var list = []
+    var lista = []
     for (var i=0; i< _length; i++){
         var list2 = []
-        list.push(list2)
+        lista.push(list2)
     }
-    console.log(list)
-    return list
+
+    return lista
 }
 
+/**
+ * 
+ * Create first <tr> populated of <thead>
+ * Check how many bases should be created and create the correct number of <td> inside the first <tr> of <thead>. 
+ * Additionally it populates each <td> with the corresponding data (some passed by default, 
+ * others generated if the bases' number is > 1)
+ * 
+ * @param  {HTMLTableRowElement} tr_head the first tr inside <thead> of the table with id="generatedTable"
+ * @param  {Array<String>} thead_bases list of texts to insert inside each td of the table
+ */
 function addTheadBases(tr_head, thead_bases){
-    // var tblHeadObj = document.getElementById('generatedTable'); //table head
+
+    if (global_num_bases > 1 ){
+        var i = 0
+        while(i < global_num_bases-1){
+            num = i+2
+            thead_bases.push("BASE "+num);
+            i++
+        }
+    }
+
     for (var j=0; j < thead_bases.length; j++){
         var td = document.createElement('TD')
-        // td.appendChild(document.createTextNode(thead_col_master[i]))
         if(j < 3){
             td.style.visibility = "hidden"
             console.log("here "+j)
@@ -656,6 +724,7 @@ function generate_baseClassName(){
     }
 }
 
+// TODO: possible refactor
 function returnInputWeightClassNames(inputClassNameWeight, baseClassName){
     var list = []
     var tmp = ''
@@ -663,6 +732,8 @@ function returnInputWeightClassNames(inputClassNameWeight, baseClassName){
         tmp = inputClassNameWeight + baseClassName[i]
         list.push(tmp)
     }
+    console.log("list")
+    console.log(list)
     return list
 }
 
