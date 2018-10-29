@@ -92,6 +92,12 @@ function creationTHead(tr_head, list_of_thead){
 function creationTBody(num_raw_material, tableBody){
     var defaultRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>']
 
+    var indexInput=[1,2,3]
+    for(var q = 0; q<global_num_bases; q++){
+        var calcTmpValue = 3+(5*(q+1))    //8, 13, 18 ...
+        indexInput.push(calcTmpValue)
+    }
+
     for (var i = 0; i< num_raw_material; i ++){
         var tr_body = document.createElement('tr')
         tableBody.appendChild(tr_body)
@@ -99,14 +105,15 @@ function creationTBody(num_raw_material, tableBody){
         for (var j=0; j< td_counter; j++){
             var td = document.createElement('TD')
             td.style.height = "30px"
-            if (j < 4 || j == 8){
-                td.contentEditable = true
-                td.style.backgroundColor = "#ffff00"
-            }
+
             if (j == 0 && i < 3){
                 td.innerHTML = defaultRawMaterial[i]
                 td.contentEditable = false
                 td.style.backgroundColor = "transparent";
+            }
+            if (indexInput.indexOf(j) > -1){
+                td.contentEditable = true
+                td.style.backgroundColor = "#ffff00"  
             }
             tr_body.appendChild(td)           
         }
