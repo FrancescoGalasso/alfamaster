@@ -60,9 +60,7 @@ function generateTable(id){
     addTheadBases(tr_head2, thead_bases)
     var tr_head = document.createElement('tr')
     tableHead.appendChild(tr_head)
-    // insert function that return list_of_thead
     var list_of_thead = returnTheadList(thead_col, thead_col_base)
-    // var list_of_thead = [thead_col,thead_col_base,thead_col_base]
     creationTHead(tr_head, list_of_thead)
 
         // creation of tbody for the table
@@ -700,9 +698,7 @@ function addTheadBases(tr_head, thead_bases){
             td.style.fontWeight = "bold"
             td.style.minWidth = "80px"
             td.style.textAlign = "center"
-            if(j==3 || j==4){
-                td.colSpan = 5; 
-            }
+            td.colSpan = 5; 
             tr_head.appendChild(td)
         }
     }
