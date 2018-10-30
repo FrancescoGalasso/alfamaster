@@ -713,12 +713,12 @@ function addTheadBases(tr_head, thead_bases){
 
 function generate_baseClassName(){
     var baseClassName = ["_b1", "_ti"]
-    if(global_num_bases == 2 ){
+    if(global_num_bases == 1 ){
         return baseClassName
-    } else if (global_num_bases > 2){
-        for (var i = 2; i < global_num_bases; i++){
-            var _baseClassName = '_b'+i
-            console.log(_baseClassName)
+    } else if (global_num_bases > 1){
+        for (var i = 1; i < global_num_bases; i++){
+            var value = parseInt(i)+1
+            var _baseClassName = '_b'+value
             baseClassName.push(_baseClassName)
         }
         return baseClassName
@@ -740,9 +740,13 @@ function returnInputWeightClassNames(inputClassNameWeight, baseClassName){
     return list
 }
 
-// TODO: refactor this
+/**
+ * 
+ * Parse each cells of the TBody and TFooter starting from 2nd child and put the correct ClassName to them.
+ * The ClassName basic is ['ww','ml100g', 'vv' , 'ml1000g' , 'fcost']
+ * to it are added the suffixes corresponding to the bases created (e.g. ["_b1", "_ti", "_b2", ...])
+ */
 function setClassesForCalculation(){
-    console.log("prepare cells with class for calculation")
 
     var cells = document.querySelectorAll('td:nth-child(2)');
     for(var i = 2 ; i < cells.length ; i++) {
@@ -755,57 +759,83 @@ function setClassesForCalculation(){
         cells[i].classList.add('rm_cost')
     }
 
-        // class for Base1
-    var cells = document.querySelectorAll('td:nth-child(4)');
-    for(var i = 2 ; i < cells.length ; i++) {
-        cells[i].classList.add('ww_B1')
+    var generatedSuffixByClassesNum = generate_baseClassName()
+    var basicClassName = ['ww','ml100g', 'vv' , 'ml1000g' , 'fcost']
+    var listClassNameFinal = []
+    for (var i=0; i<generatedSuffixByClassesNum.length; i++){
+        for(var k=0; k<basicClassName.length; k++){
+            console.log(basicClassName[k] + generatedSuffixByClassesNum[i])
+            var tmp = basicClassName[k] + generatedSuffixByClassesNum[i]
+            listClassNameFinal.push(tmp)
+        }
     }
 
-    var cells = document.querySelectorAll('td:nth-child(5)');
-    for(var i = 2 ; i < cells.length ; i++) {
-        cells[i].classList.add('ml100g_B1')
+    var table = document.getElementById("generatedTable")
+    var t = 0
+    for (var j=4; j < td_counter; j++){
+        var cells = table.querySelectorAll('td:nth-child('+j+')')
+        var init = 1
+        if(j < 7){
+            init = 2
+        }
+        for(var i = init ; i < cells.length ; i++) {
+            var _class = listClassNameFinal[t]
+            cells[i].classList.add(_class)
+        }
+        t++
     }
 
-    var cells = document.querySelectorAll('td:nth-child(6)');
-    for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('vv_B1')
-    }
+    //     // class for Base1
+    // var cells = document.querySelectorAll('td:nth-child(4)');
+    // for(var i = 2 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('ww_B1')
+    // }
 
-    var cells = document.querySelectorAll('td:nth-child(7)');
-    for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('ml1000g_B1')
-    }
+    // var cells = document.querySelectorAll('td:nth-child(5)');
+    // for(var i = 2 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('ml100g_B1')
+    // }
 
-    var cells = document.querySelectorAll('td:nth-child(8)');
-    for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('fcost_B1')
-    }
+    // var cells = document.querySelectorAll('td:nth-child(6)');
+    // for(var i = 1 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('vv_B1')
+    // }
 
-    // class for Ti Slurry
-    var cells = document.querySelectorAll('td:nth-child(9)');
-    for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('ww_TI')
-    }
+    // var cells = document.querySelectorAll('td:nth-child(7)');
+    // for(var i = 1 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('ml1000g_B1')
+    // }
 
-    var cells = document.querySelectorAll('td:nth-child(10)');
-    for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('ml100g_TI')
-    }
+    // var cells = document.querySelectorAll('td:nth-child(8)');
+    // for(var i = 1 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('fcost_B1')
+    // }
 
-    var cells = document.querySelectorAll('td:nth-child(11)');
-    for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('vv_TI')
-    }
+    // // class for Ti Slurry
+    // var cells = document.querySelectorAll('td:nth-child(9)');
+    // for(var i = 1 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('ww_TI')
+    // }
 
-    var cells = document.querySelectorAll('td:nth-child(12)');
-    for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('ml1000g_TI')
-    }
+    // var cells = document.querySelectorAll('td:nth-child(10)');
+    // for(var i = 1 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('ml100g_TI')
+    // }
 
-    var cells = document.querySelectorAll('td:nth-child(13)');
-    for(var i = 1 ; i < cells.length ; i++) {
-        cells[i].classList.add('fcost_TI')
-    }
+    // var cells = document.querySelectorAll('td:nth-child(11)');
+    // for(var i = 1 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('vv_TI')
+    // }
+
+    // var cells = document.querySelectorAll('td:nth-child(12)');
+    // for(var i = 1 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('ml1000g_TI')
+    // }
+
+    // var cells = document.querySelectorAll('td:nth-child(13)');
+    // for(var i = 1 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('fcost_TI')
+    // }
 }
 
     // class name for #generatedTableMaster
