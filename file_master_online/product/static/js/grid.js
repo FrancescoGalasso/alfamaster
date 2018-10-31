@@ -319,23 +319,23 @@ function generateData(){
     var sw = []
 
     var inputClassNameWeight = '.ww'
-    var inputClassNames = ['.rm_cost', '.sw']
-    var return_weightClassNames = returnInputWeightClassNames(inputClassNameWeight, baseClassName) // example [".ww_b1", ".ww_ti"]
-    inputClassNames.push(...return_weightClassNames)
+    var listofInputClassNames = ['.rm_cost', '.sw']
+    var listofWeightClassNames = returnInputWeightClassNames(inputClassNameWeight, baseClassName) // example [".ww_b1", ".ww_ti", ".ww_b2" ...]
+    listofInputClassNames.push(...listofWeightClassNames)
+    var numofWeightClassNames = listofWeightClassNames.length
 
-    var matrixWeightInput = createMatrixInputValue(returnInputWeightClassNames)
-    // inputClassNames example -> [".rm_cost", ".sw", ".ww_b1", ".ww_ti"]
-    for (var i = 0; i < inputClassNames.length; i++){
+    var matrixWeightInput = createMatrixInputValue(listofWeightClassNames)
+    // inputClassNames example -> [".rm_cost", ".sw", ".ww_b1", ".ww_ti" ...]
+    for (var i = 0; i < listofInputClassNames.length; i++){
         var tmp = 0;
         var sum = 0;
-        console.log("inputClassNames[i] -> "+inputClassNames[i])
-        $(inputClassNames[i]).each(function(){
+        $(listofInputClassNames[i]).each(function(){
             var input = $(this).text()
-            if (inputClassNames[i] == '.sw'){
+            if (listofInputClassNames[i] == '.sw'){
                 sw.push(parseFloat(input))
-            } else if (inputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
-                for (var j=0; j< return_weightClassNames.length; j++ ){
-                    if(inputClassNames[i] == return_weightClassNames[j]){
+            } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
+                for (var j=0; j< listofWeightClassNames.length; j++ ){
+                    if(listofInputClassNames[i] == listofWeightClassNames[j]){
                         // ww.push(parseFloat(input))
                         matrixWeightInput[j].push(parseFloat(input))
                         sum += parseFloat(input)
@@ -347,9 +347,6 @@ function generateData(){
         list_sum.push(sum)
     }
 
-    console.log("ww")
-    console.log(ww)
-
     if (isNaN(sum_ww) || isNaN(sum_rmcost) || isNaN(sum_sw) || isNaN(sum_ww_ti)){
         alert("fill all the empty fields")
     } else {
@@ -358,29 +355,29 @@ function generateData(){
         //
 
         var baseClassName = generate_baseClassName()                // baseClassName -> ["_b1", "_ti" ...]
-
+        console.log("baseClassName")
+        console.log(baseClassName)
         var table = document.getElementById('tdetail')              // table from product/update/pk
         if(table){
             var rowCount = $('#tdetail >tbody >tr').length;
             console.log("num row from tdetail table ~> "+rowCount-1)
             global_num_raw_material = rowCount-1                    // override for update action
         }
-
+        var counterWeightClassName = 2
         for(var q=0; q< baseClassName.length; q++){
             sum_ml100g = 0
             sum_vv = 0
             sum_ml1000g = 0
             sum_fcost = 0
 
+                // insert sum of data for cell Total ww
             tmp = document.getElementsByClassName('totalww'+baseClassName[q])[0]
-            if(q == 0){
-                var tmp_value = list_sum[2]
+            // dynamic refactor
+            if(q < numofWeightClassNames){
+                var tmp_value = list_sum[counterWeightClassName]
                 var value = parseFloat(tmp_value).toFixed(2)
                 tmp.innerHTML = value
-            } else if (q == 1){
-                var tmp_value = list_sum[3]
-                var value = parseFloat(tmp_value).toFixed(2)
-                tmp.innerHTML = value
+                counterWeightClassName ++
             }
 
 
@@ -455,6 +452,8 @@ function generateData(){
 
                 // insert sum of data for cell Total Formula Cost
             tmp = document.getElementsByClassName('totalfcost'+baseClassName[q])[0]
+            console.log(baseClassName[q])
+            console.log(tmp)
             tmp.innerHTML = parseFloat(sum_fcost).toFixed(4)
         }
     }
@@ -657,13 +656,17 @@ function clean_after_wrong_input(){
 
 /**
  * 
- * Type Type
+ * Given in input a list containing classname of the bases, a matrix is generated
  * 
- * @param  
- * @return  {Array<String>} lista -> list containing lists of classname 
+ * e.g.
+ *  [Array(0), Array(0), Array(0)]
+ *  [[8, 8, 8], [8, 8, 8], [8, 8, 8]]
+ * 
+ * @param  {Array<String>} listofWeightClassNames list containing generated classname for each base
+ * @return  {Array<Array<String>>} matrix returned
  */
-function createMatrixInputValue(returnInputWeightClassNames) {
-    var _length = returnInputWeightClassNames.length
+function createMatrixInputValue(listofWeightClassNames) {
+    var _length = listofWeightClassNames.length
     var lista = []
     for (var i=0; i< _length; i++){
         var list2 = []
@@ -698,7 +701,6 @@ function addTheadBases(tr_head, thead_bases){
         var td = document.createElement('TD')
         if(j < 3){
             td.style.visibility = "hidden"
-            console.log("here "+j)
             tr_head.appendChild(td)
         } else {
             td.innerHTML = thead_bases[j]
@@ -727,7 +729,6 @@ function generate_baseClassName(){
     }
 }
 
-// TODO: possible refactor
 function returnInputWeightClassNames(inputClassNameWeight, baseClassName){
     var list = []
     var tmp = ''
@@ -771,10 +772,10 @@ function setClassesForCalculation(){
 
     var table = document.getElementById("generatedTable")
     var t = 0
-    for (var j=4; j < td_counter; j++){
+    for (var j=4; j < td_counter+1; j++){
         var cells = table.querySelectorAll('td:nth-child('+j+')')
         var init = 1
-        if(j < 7){
+        if(j < 7){          // fix for %w/w, mL/100g, %v/v 
             init = 2
         }
         for(var i = init ; i < cells.length ; i++) {
