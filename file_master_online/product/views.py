@@ -70,7 +70,7 @@ def product_new(request):
             # redirect to HOME
         return HttpResponseRedirect("/")
 
-    return render(request, "product/product_edit3.html")
+    return render(request, "product/product_new.html")
 
 def product_delete(request, pk):
     product = Product.objects.filter(pk=pk) 
