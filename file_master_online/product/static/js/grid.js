@@ -347,8 +347,24 @@ function generateData(){
         list_sum.push(sum)
     }
 
-    if (isNaN(sum_ww) || isNaN(sum_rmcost) || isNaN(sum_sw) || isNaN(sum_ww_ti)){
-        alert("fill all the empty fields")
+    var emptyListCheck = checkEmptyData(list_sum)
+    var productInput = document.getElementById('nameProduct').value
+    console.log("prod")
+    console.log(productInput)
+    if (emptyListCheck || productInput==null || productInput==""){
+        
+        var msg = ""
+        if(emptyListCheck && productInput==""){
+            msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
+        }
+        else if(emptyListCheck){
+            msg = "OPS! You must fill all the empty yellow fields.."
+        }else if (productInput==""){
+            msg = "OPS! You must fill the Product name field.."
+        }
+        $("#msg-modal").html(msg)
+        $("#myModal").modal()
+        return
     } else {
         //
         //  here the logic to populate the table
@@ -612,6 +628,24 @@ function generateDataMaster(){
 *               Supporting functions 
 *
 */
+
+
+/**
+ * Parse the array containing the amount of each sum for input %w/w columns. If you find even a single NaN assigned to a generic sum, the function returns False.
+ * 
+ * @param {Array<String>} list_sum list of total sum on each input %w/w columns 
+ * @returns True if a NaN sum value is found; False otherwise
+ */
+function checkEmptyData(list_sum){
+    var emptyData = false
+
+    for (i=0; i < list_sum.length; i++){
+        if (Number.isNaN(list_sum[i])) {
+            emptyData = true
+        }
+      }
+    return emptyData
+}
 
 /**
  * 
