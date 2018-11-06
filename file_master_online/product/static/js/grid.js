@@ -111,7 +111,7 @@ function creationTBody(num_raw_material, tableBody){
                 td.contentEditable = false
                 td.style.backgroundColor = "transparent";
             }
-            if (indexInput.indexOf(j) > -1){
+            if (indexInput.indexOf(j) > -1 || (j == 0 && i >= 3)){
                 td.contentEditable = true
                 td.style.backgroundColor = "#ffff00"  
             }
