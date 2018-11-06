@@ -949,6 +949,16 @@ function test(rev) {
         rm_cost.push(tbl[i][2])
     }
 
+    // TEST: create bases item for each base
+    // var index = 0
+    // for(var i=0; i<=global_num_bases; i++){
+    //     var max = 0+i*3+2
+    //     for(var j=0+i*3; j<=max; j++){
+    //         console.log("num ~> "+j)
+    //         console.log("{"+test[j]+"}")
+    //     }
+    // }
+
         // loop for the creation of the JSON
     var _q = ""
     var val = 0
@@ -960,14 +970,17 @@ function test(rev) {
             "RM_cost": "`+ rm_cost[i]+`",
             "bases":[`
         var _temp = ""
-        var max = val+1
-        for (var j = val; j< val+2; j++){
-            var tmp = '{'+test[j]+'}'
-            if(j != max){
-                tmp += ',' 
-                _temp += tmp
-            } else {
-                _temp += tmp
+        // var max = global_num_bases
+        for (var j = 0; j<= global_num_bases; j++){
+            var max = 0+i*3+2
+            for(var j=0+i*3; j<=max; j++){
+                var tmp = '{'+test[j]+'}'
+                if(j != max){
+                    tmp += ',' 
+                    _temp += tmp
+                } else {
+                    _temp += tmp
+                }
             }
         }
         q += _temp
@@ -980,7 +993,7 @@ function test(rev) {
         else{
             _q += q
         }
-        val += 2
+
     }
 
     console.log("created json")
@@ -994,3 +1007,5 @@ function test(rev) {
 // https://www.youtube.com/watch?v=sYNDXrLu57k
 // https://rk.edu.pl/en/making-django-and-javascript-work-nicely-together/
 // https://stackoverflow.com/questions/37104604/adding-a-django-model-instance-without-a-form-button-only
+// https://stackoverflow.com/questions/14026750/django-model-filtering-by-user-always
+// https://simpleisbetterthancomplex.com/tutorial/2016/06/27/how-to-use-djangos-built-in-login-system.html
