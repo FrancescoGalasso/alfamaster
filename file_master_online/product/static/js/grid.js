@@ -893,7 +893,6 @@ function test2(jsonData, rev) {
 
 
 function test(rev) {
-    console.log("clicked!")
 
         // get the table -> return a map
 
@@ -948,16 +947,6 @@ function test(rev) {
         specific_w.push(tbl[i][1])
         rm_cost.push(tbl[i][2])
     }
-
-    // TEST: create bases item for each base
-    // var index = 0
-    // for(var i=0; i<=global_num_bases; i++){
-    //     var max = 0+i*3+2
-    //     for(var j=0+i*3; j<=max; j++){
-    //         console.log("num ~> "+j)
-    //         console.log("{"+test[j]+"}")
-    //     }
-    // }
 
         // loop for the creation of the JSON
     var _q = ""
