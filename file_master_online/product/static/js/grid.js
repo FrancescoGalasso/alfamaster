@@ -961,8 +961,9 @@ function test(rev) {
         var _temp = ""
         // var max = global_num_bases
         for (var j = 0; j<= global_num_bases; j++){
-            var max = 0+i*3+2
-            for(var j=0+i*3; j<=max; j++){
+            var min = 0+i*(parseInt(global_num_bases)+1)
+            var max = min + parseInt(global_num_bases)
+            for(var j=min; j<=max; j++){
                 var tmp = '{'+test[j]+'}'
                 if(j != max){
                     tmp += ',' 
