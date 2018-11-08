@@ -783,41 +783,48 @@ function returnInputWeightClassNames(inputClassNameWeight, baseClassName){
  */
 function setClassesForCalculation(){
 
-    var cells = document.querySelectorAll('td:nth-child(2)');
-    for(var i = 2 ; i < cells.length ; i++) {
-        cells[i].classList.add('sw')
-    }
-
-    var cells = document.querySelectorAll('td:nth-child(3)');
-    for(var i = 2 ; i < cells.length ; i++) {
-        cells[i].classList.add('rm_cost')
-    }
-
+    var listClassNameBase = ['sw', 'rm_cost']
     var generatedSuffixByClassesNum = generate_baseClassName()
-    var basicClassName = ['ww','ml100g', 'vv' , 'ml1000g' , 'fcost']
+    var basicBaseClassName = ['ww','ml100g', 'vv' , 'ml1000g' , 'fcost']
     var listClassNameFinal = []
     for (var i=0; i<generatedSuffixByClassesNum.length; i++){
-        for(var k=0; k<basicClassName.length; k++){
-            // console.log(basicClassName[k] + generatedSuffixByClassesNum[i])
-            var tmp = basicClassName[k] + generatedSuffixByClassesNum[i]
+        for(var k=0; k<basicBaseClassName.length; k++){
+            var tmp = basicBaseClassName[k] + generatedSuffixByClassesNum[i]
             listClassNameFinal.push(tmp)
         }
     }
 
-    var table = document.getElementById("generatedTable")
-    var t = 0
-    for (var j=4; j < td_counter+1; j++){
-        var cells = table.querySelectorAll('td:nth-child('+j+')')
-        var init = 1
-        if(j < 7){          // fix for %w/w, mL/100g, %v/v 
-            init = 2
-        }
-        for(var i = init ; i < cells.length ; i++) {
-            var _class = listClassNameFinal[t]
-            cells[i].classList.add(_class)
-        }
-        t++
+    listClassNameBase.push(...listClassNameFinal)
+
+    for (var j=2; j < td_counter+1; j++){
+        $('table tbody tr td:nth-child('+j+')').addClass(listClassNameBase[j-2]);
     }
+
+
+    // var cells = document.querySelectorAll('td:nth-child(2)');
+    // for(var i = 2 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('sw')
+    // }
+
+    // var cells = document.querySelectorAll('td:nth-child(3)');
+    // for(var i = 2 ; i < cells.length ; i++) {
+    //     cells[i].classList.add('rm_cost')
+    // }
+
+    // var table = document.getElementById("generatedTable")
+    // var t = 0
+    // for (var j=4; j < td_counter+1; j++){
+    //     var cells = table.querySelectorAll('td:nth-child('+j+')')
+    //     var init = 1
+    //     if(j < 7){          // fix for %w/w, mL/100g, %v/v 
+    //         init = 2
+    //     }
+    //     for(var i = init ; i < cells.length ; i++) {
+    //         var _class = listClassNameFinal[t]
+    //         cells[i].classList.add(_class)
+    //     }
+    //     t++
+    // }
 }
 
     // class name for #generatedTableMaster
@@ -922,7 +929,7 @@ function test(rev) {
     var length_tmp2 = tmp2.length
     var num_cycle = length_tmp2/5
     var __base = ["name", "g_100g", "ml_100g", "v_100v", "ml_1000ml", "formula_cost"]
-    var test = []
+    var listofBasesList = []
 
     // create matrix of base values
     // [Array(5), Array(5), Array(5), Array(5), Array(5), Array(5)]
@@ -933,11 +940,11 @@ function test(rev) {
         for(var i=0; i<num_cycle; i++){
             var end = (i*5)+5
             var sliced = tmp2.slice(i*5, end)
-            var x = []
+            var base = []
             for(var k=0; k < sliced.length; k++){
-                x.push('"'+__base[k+1]+'"' +':'+'"'+sliced[k]+'"')
+                base.push('"'+__base[k+1]+'"' +':'+'"'+sliced[k]+'"')
             }
-            test.push(x)
+            listofBasesList.push(x)
         }
     }
 
@@ -959,12 +966,11 @@ function test(rev) {
             "RM_cost": "`+ rm_cost[i]+`",
             "bases":[`
         var _temp = ""
-        // var max = global_num_bases
         for (var j = 0; j<= global_num_bases; j++){
             var min = 0+i*(parseInt(global_num_bases)+1)
             var max = min + parseInt(global_num_bases)
             for(var j=min; j<=max; j++){
-                var tmp = '{'+test[j]+'}'
+                var tmp = '{'+listofBasesList[j]+'}'
                 if(j != max){
                     tmp += ',' 
                     _temp += tmp
