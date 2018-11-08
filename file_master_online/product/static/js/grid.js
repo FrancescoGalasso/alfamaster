@@ -256,7 +256,15 @@ async function generateTableMaster(){
 }
 
 function creationTBodyMaster(global_num_raw_material, tableBody){
-    var defaultRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>']
+    var listofRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>']
+    var listofRawMaterialTmp = $('table tbody tr td:nth-child(1)').get()
+    listofRawMaterialTmp.splice(-1, 1)
+    listofRawMaterialTmp.splice(0, 3)
+
+    console.log(listofRawMaterialTmp)
+
+    // var listofRawMaterialFinal = []
+    listofRawMaterial.push(...listofRawMaterialTmp)
 
     for (var i = 0; i< global_num_raw_material; i ++){
         var tr_body = document.createElement('tr')
@@ -264,10 +272,16 @@ function creationTBodyMaster(global_num_raw_material, tableBody){
 
         for (var j=0; j< 6; j++){
             var td = document.createElement('TD')
-            // td.appendChild(document.createTextNode("Cell " + i + "," + j))
             td.style.height = "30px"
-            if (j == 0 && i < 3){
-                td.innerHTML = defaultRawMaterial[i]
+            if (j == 0){
+                var value = ""
+                if(listofRawMaterial[i].textContent === undefined){
+                    value = listofRawMaterial[i]
+                } else{
+                    value = listofRawMaterial[i].textContent
+
+                }
+                td.innerHTML = value
             }
             tr_body.appendChild(td)           
         }
@@ -491,7 +505,6 @@ function generateDataMaster(){
         tableInput = table_update
         index = 0
     }
-    // var tableInput = document.getElementById("generatedTable")
     var tableFillLvl = document.getElementById("generatedTableFillLvl")
     var list_vv_ti = []
     var list_vv_b1 = []
@@ -587,7 +600,6 @@ function generateDataMaster(){
         tmp.classList.add("to_update")
 
         sum_ww =  parseFloat(sum_ww) + parseFloat(op)        
-        console.log(sum_ww)
     }
 
         // insert sum of data for cell Total %w/w
@@ -616,10 +628,6 @@ function generateDataMaster(){
     if(form_update_save){
         form_update_save.style.display = "block"
     }
-    // var table = document.getElementById('tdetail')              // table from product/update/pk
-    // if(table){
-    //     showGenerateBtn()
-    // }
 
 }
 
@@ -799,32 +807,6 @@ function setClassesForCalculation(){
     for (var j=2; j < td_counter+1; j++){
         $('table tbody tr td:nth-child('+j+')').addClass(listClassNameBase[j-2]);
     }
-
-
-    // var cells = document.querySelectorAll('td:nth-child(2)');
-    // for(var i = 2 ; i < cells.length ; i++) {
-    //     cells[i].classList.add('sw')
-    // }
-
-    // var cells = document.querySelectorAll('td:nth-child(3)');
-    // for(var i = 2 ; i < cells.length ; i++) {
-    //     cells[i].classList.add('rm_cost')
-    // }
-
-    // var table = document.getElementById("generatedTable")
-    // var t = 0
-    // for (var j=4; j < td_counter+1; j++){
-    //     var cells = table.querySelectorAll('td:nth-child('+j+')')
-    //     var init = 1
-    //     if(j < 7){          // fix for %w/w, mL/100g, %v/v 
-    //         init = 2
-    //     }
-    //     for(var i = init ; i < cells.length ; i++) {
-    //         var _class = listClassNameFinal[t]
-    //         cells[i].classList.add(_class)
-    //     }
-    //     t++
-    // }
 }
 
     // class name for #generatedTableMaster
