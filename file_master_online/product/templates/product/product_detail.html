@@ -8,10 +8,11 @@
 <script type="text/javascript">
   var foo = [];
   var foo2 = [];
-  var element_name = ['Base 1 (Pastel)', 'TiO2 Slurry', 'Base 2'];
+  var element_name = ['Base 1 (Pastel)', 'TiO2 Slurry', 'Base 3', 'Base4', 'Base5', 'Base6', 'Base7', 'Base8', 'Base9'];
   var max_of_array = 0;
   var num = 0
   var pk = '{{prod_pk}}'
+  var bases_num = 0
   console.log(pk)
 </script>
 
@@ -27,13 +28,8 @@
             {% for itemlists in list %} 
               {% for k,v in itemlists.items %}
                 {% if k == "bases" %}
-                <script type="text/javascript">
-                  b = "{{v|length}}"
-                  console.log("number of bases founded -> "+b)
-                  if(num <= b.length){
-                    $("tr:nth-child(1)").first().append("<th colspan='5'>"+element_name[num]+"</th>");
-                    num++
-                  }
+                  <script type="text/javascript">
+                    bases_num = "{{v|length}}"
                   </script>
                 {% endif %}
               {% endfor %}
@@ -51,9 +47,9 @@
                     <script type="text/javascript"> 
                       a = "{{v|length}}";
                       foo2.push(a);
-                      console.log(foo2);
+                      console.log("foo2 "+foo2);
                       max_of_array = Math.max.apply(Math, foo2);
-                      console.log(max_of_array);
+                      console.log("max_of_array "+max_of_array);
                     </script>
                   {% endif %}
                 {% endfor %}
@@ -85,10 +81,10 @@
             {% if k == "bases" %}
               {%for element in v%}
                 <td>{{element.g_100g}}</td>
-                <td>{{element.ml_100g}}</td>
-                <td>{{element.v_100v}}</td>
-                <td>{{element.ml_1000ml}}</td>
-                <td>{{element.formula_cost}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
               {% endfor %} 
             {% endif %}
           {% endfor %}
@@ -112,8 +108,13 @@
     </tfoot>
 </table>
 
-<script src="{% static 'js/utils.js' %}"></script>  
-
+<script src="{% static 'js/grid.js' %}"></script>  
+<script src="{% static 'js/utils.js' %}"></script>
+<script>  
+  for(var i=0; i<bases_num; i++){
+    $("tr:nth-child(1)").first().append("<th colspan='5'>"+element_name[i]+"</th>");
+  }
+</script>
 <hr/>
 
 <!-- Modal -->
