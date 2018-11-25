@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# LOGGING PATH
+#LOG_PATH = '/home/galasso/Desktop/django_dev2.log'
+LOG_PATH = './django_dev2.log'
 
 # Application definition
 
@@ -173,7 +176,7 @@ LOGGING = {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
-            'filename': '/home/galasso/Desktop/django_dev2.log',
+            'filename': LOG_PATH,
             'formatter': 'verbose'
         }
     },
