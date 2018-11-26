@@ -1,4 +1,4 @@
-#!/Users/franky/Documents/sites/file_master_online/myenv/bin/python2.7
+#!/home/galasso/Documents/sites/_master_online/file_master_online/myenv/bin/python
 # -*- coding: utf8 -*-
 # :Copyright: © 2015 Günter Milde.
 # :License: Released under the terms of the `2-Clause BSD license`_, in short:

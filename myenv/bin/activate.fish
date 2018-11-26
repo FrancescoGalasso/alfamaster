@@ -36,7 +36,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/franky/Documents/sites/file_master_online/myenv"
+set -gx VIRTUAL_ENV "/home/galasso/Documents/sites/_master_online/file_master_online/myenv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

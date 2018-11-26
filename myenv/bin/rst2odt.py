@@ -1,4 +1,4 @@
-#!/Users/franky/Documents/sites/file_master_online/myenv/bin/python2.7
+#!/home/galasso/Documents/sites/_master_online/file_master_online/myenv/bin/python
 
 # $Id: rst2odt.py 5839 2009-01-07 19:09:28Z dkuhlman $
 # Author: Dave Kuhlman <dkuhlman@rexx.com>

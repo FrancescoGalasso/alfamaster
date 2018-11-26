@@ -1,4 +1,4 @@
-#!/Users/franky/Documents/sites/file_master_online/myenv/bin/python2.7
+#!/home/galasso/Documents/sites/_master_online/file_master_online/myenv/bin/python
 
 # Author: 
 # Contact: grubert@users.sf.net

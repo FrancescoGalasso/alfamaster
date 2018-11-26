@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/franky/Documents/sites/file_master_online/myenv"
+VIRTUAL_ENV="/home/galasso/Documents/sites/_master_online/file_master_online/myenv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
