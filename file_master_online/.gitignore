@@ -6,6 +6,10 @@ __pycache__
 db.sqlite3
 # ignore log file
 *.log
+# ignore logs folder
+logs/
+# ignore dumps folder
+dumps/
 
 node_modules/
 package-lock.json
