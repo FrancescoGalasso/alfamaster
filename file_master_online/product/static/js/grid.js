@@ -132,11 +132,29 @@ function creationTFoot(tableFoot, tr_foot){
     var list_totName = ["totalww", "totalml100g", "totalvv", "totalml1000g", "totalfcost"]
     var list = returnListClassName(baseClassName, list_totName)
 
-    for (var i=3; i < td_counter; i++){
-        var th = document.createElement('th')
-        th.className = list[i-3]
-        tr_foot.appendChild(th)
+    var table = document.getElementById("tdetail")
+    var counter = 0
+    if(table){
+        counter = document.getElementById('tdetail').rows[1].cells.length -3
+        for (var i=0; i < counter; i++){
+            var th = document.createElement('th')
+            th.className = list[i]
+            tr_foot.appendChild(th)
+        }
+    }else{
+        counter = td_counter
+        for (var i=3; i < counter; i++){
+            var th = document.createElement('th')
+            th.className = list[i-3]
+            tr_foot.appendChild(th)
+        }
     }
+
+    // for (var i=3; i < counter; i++){
+    //     var th = document.createElement('th')
+    //     th.className = list[i-3]
+    //     tr_foot.appendChild(th)
+    // }
 }
 
 async function generateTableFillLvl(){
@@ -362,131 +380,134 @@ function generateData(){
     }
 
     var emptyListCheck = checkEmptyData(list_sum)
-    var productInput = document.getElementById('nameProduct').value
-    console.log("prod")
-    console.log(productInput)
-    if (emptyListCheck || productInput==null || productInput==""){
-        
-        var msg = ""
-        if(emptyListCheck && productInput==""){
-            msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
-        }
-        else if(emptyListCheck){
-            msg = "OPS! You must fill all the empty yellow fields.."
-        }else if (productInput==""){
-            msg = "OPS! You must fill the Product name field.."
-        }
-        $("#msg-modal").html(msg)
-        $("#myModal").modal()
-        return
-    } else {
-        //
-        //  here the logic to populate the table
-        //
+    var productInput = document.getElementById('nameProduct')
 
-        var baseClassName = generate_baseClassName()                // baseClassName -> ["_b1", "_ti" ...]
-        console.log("baseClassName")
-        console.log(baseClassName)
-        var table = document.getElementById('tdetail')              // table from product/update/pk
-        if(table){
-            var rowCount = $('#tdetail >tbody >tr').length;
-            console.log("num row from tdetail table ~> "+rowCount-1)
-            global_num_raw_material = rowCount-1                    // override for update action
-        }
-        var counterWeightClassName = 2
-        for(var q=0; q< baseClassName.length; q++){
-            sum_ml100g = 0
-            sum_vv = 0
-            sum_ml1000g = 0
-            sum_fcost = 0
-
-                // insert sum of data for cell Total ww
-            tmp = document.getElementsByClassName('totalww'+baseClassName[q])[0]
-            // dynamic refactor
-            if(q < numofWeightClassNames){
-                var tmp_value = list_sum[counterWeightClassName]
-                var value = parseFloat(tmp_value).toFixed(2)
-                tmp.innerHTML = value
-                counterWeightClassName ++
+    if(productInput){
+        productInputValue = productInput.value
+        if (emptyListCheck || productInput==null || productInputValue==""){
+            
+            var msg = ""
+            if(emptyListCheck && productInputValue==""){
+                msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
             }
-
-
-                // insert single data for the cell mL/100g
-            for (var i = 0; i < global_num_raw_material; i++){
-                tmp = document.getElementsByClassName('ml100g'+baseClassName[q])[i]
-                console.log(tmp)
-                var a = matrixWeightInput[q][i]
-                var b = sw[i]
-                var division = a/b
-                var op = parseFloat(division).toFixed(3)
-                tmp.innerHTML = op
-                sum_ml100g += parseFloat(op)
+            else if(emptyListCheck){
+                msg = "OPS! You must fill all the empty yellow fields.."
+            }else if (productInputValue==""){
+                msg = "OPS! You must fill the Product name field.."
             }
-
-                // insert sum of data for cell Total mL/100g
-            tmp = document.getElementsByClassName('totalml100g'+baseClassName[q])[0]
-            tmp.innerHTML = parseFloat(sum_ml100g).toFixed(2)
-
-                // insert single data for the cell %v/v
-            for (var i = 0; i < global_num_raw_material; i++){
-                var tmp = document.getElementsByClassName('vv'+baseClassName[q])[i]
-
-                var elems = document.getElementsByClassName("ml100g"+baseClassName[q]);
-
-                var elem = elems[i].innerText
-                var op = (100*elem)/sum_ml100g
-                var _op = parseFloat(op).toFixed(2)
-                tmp.innerHTML = _op
-                sum_vv += parseFloat(_op)
-            }
-
-                // insert sum of data for cell Total %v/v
-            tmp = document.getElementsByClassName('totalvv'+baseClassName[q])[0]
-            tmp.innerHTML = parseFloat(sum_vv).toFixed(2)
-
-                // insert single data for the cell mL/1000g
-            for (var i = 0; i < global_num_raw_material; i++){
-                var tmp = document.getElementsByClassName('ml1000g'+baseClassName[q])[i]
-
-                var elems = document.getElementsByClassName("vv"+baseClassName[q]);
-
-                var elem = elems[i].innerText
-                var op = (10*elem)
-                var _op = parseFloat(op).toFixed(2)
-                tmp.innerHTML = _op
-                sum_ml1000g += parseFloat(_op)
-            }
-
-                // insert sum of data for cell Total mL/1000g
-            tmp = document.getElementsByClassName('totalml1000g'+baseClassName[q])[0]
-            tmp.innerHTML = parseFloat(sum_ml1000g).toFixed(0)
-
-                // insert single data for the cell Formula Cost
-            for (var i = 0; i < global_num_raw_material; i++){
-                var tmp = document.getElementsByClassName('fcost'+baseClassName[q])[i]
-
-                var elems_sw = document.getElementsByClassName("sw")
-                var elems_rmcost = document.getElementsByClassName("rm_cost")
-                var elems_vv = document.getElementsByClassName("vv"+baseClassName[q])
-
-
-                var elem_vv = elems_vv[i].innerText
-                var elem_sw = elems_sw[i].innerText
-                var elem_rmcost = elems_rmcost[i].innerText 
-
-                var op1 = elem_sw*elem_rmcost
-                var _op = (parseFloat(op1)/1000)*elem_vv
-                tmp.innerHTML = parseFloat(_op).toFixed(4)
-                sum_fcost += parseFloat(_op)
-            }
-
-                // insert sum of data for cell Total Formula Cost
-            tmp = document.getElementsByClassName('totalfcost'+baseClassName[q])[0]
-            console.log(baseClassName[q])
-            console.log(tmp)
-            tmp.innerHTML = parseFloat(sum_fcost).toFixed(4)
+            $("#msg-modal").html(msg)
+            $("#myModal").modal()
+            return
         }
     }
+
+    //
+    //  here the logic to populate the table
+    //
+
+    var baseClassName = generate_baseClassName()                // baseClassName -> ["_b1", "_ti" ...]
+    console.log("baseClassName")
+    console.log(baseClassName)
+    var table = document.getElementById('tdetail')              // table from product/update/pk
+    if(table){
+        var rowCount = $('#tdetail >tbody >tr').length;
+        console.log("num row from tdetail table ~> "+rowCount-1)
+        global_num_raw_material = rowCount                    // override for update action
+    }
+    var counterWeightClassName = 2
+    for(var q=0; q< baseClassName.length; q++){
+        sum_ml100g = 0
+        sum_vv = 0
+        sum_ml1000g = 0
+        sum_fcost = 0
+
+            // insert sum of data for cell Total ww
+        tmp = document.getElementsByClassName('totalww'+baseClassName[q])[0]
+        // dynamic refactor
+        if(q < numofWeightClassNames){
+            var tmp_value = list_sum[counterWeightClassName]
+            var value = parseFloat(tmp_value).toFixed(2)
+            tmp.innerHTML = value
+            counterWeightClassName ++
+        }
+
+
+            // insert single data for the cell mL/100g
+        for (var i = 0; i < global_num_raw_material; i++){
+            tmp = document.getElementsByClassName('ml100g'+baseClassName[q])[i]
+            console.log(tmp)
+            var a = matrixWeightInput[q][i]
+            var b = sw[i]
+            var division = a/b
+            var op = parseFloat(division).toFixed(3)
+            tmp.innerHTML = op
+            sum_ml100g += parseFloat(op)
+        }
+
+            // insert sum of data for cell Total mL/100g
+        tmp = document.getElementsByClassName('totalml100g'+baseClassName[q])[0]
+        tmp.innerHTML = parseFloat(sum_ml100g).toFixed(2)
+
+            // insert single data for the cell %v/v
+        for (var i = 0; i < global_num_raw_material; i++){
+            var tmp = document.getElementsByClassName('vv'+baseClassName[q])[i]
+
+            var elems = document.getElementsByClassName("ml100g"+baseClassName[q]);
+
+            var elem = elems[i].innerText
+            var op = (100*elem)/sum_ml100g
+            var _op = parseFloat(op).toFixed(2)
+            tmp.innerHTML = _op
+            sum_vv += parseFloat(_op)
+        }
+
+            // insert sum of data for cell Total %v/v
+        tmp = document.getElementsByClassName('totalvv'+baseClassName[q])[0]
+        tmp.innerHTML = parseFloat(sum_vv).toFixed(2)
+
+            // insert single data for the cell mL/1000g
+        for (var i = 0; i < global_num_raw_material; i++){
+            var tmp = document.getElementsByClassName('ml1000g'+baseClassName[q])[i]
+
+            var elems = document.getElementsByClassName("vv"+baseClassName[q]);
+
+            var elem = elems[i].innerText
+            var op = (10*elem)
+            var _op = parseFloat(op).toFixed(2)
+            tmp.innerHTML = _op
+            sum_ml1000g += parseFloat(_op)
+        }
+
+            // insert sum of data for cell Total mL/1000g
+        tmp = document.getElementsByClassName('totalml1000g'+baseClassName[q])[0]
+        tmp.innerHTML = parseFloat(sum_ml1000g).toFixed(0)
+
+            // insert single data for the cell Formula Cost
+        for (var i = 0; i < global_num_raw_material; i++){
+            var tmp = document.getElementsByClassName('fcost'+baseClassName[q])[i]
+
+            var elems_sw = document.getElementsByClassName("sw")
+            var elems_rmcost = document.getElementsByClassName("rm_cost")
+            var elems_vv = document.getElementsByClassName("vv"+baseClassName[q])
+
+
+            var elem_vv = elems_vv[i].innerText
+            var elem_sw = elems_sw[i].innerText
+            var elem_rmcost = elems_rmcost[i].innerText 
+
+            var op1 = elem_sw*elem_rmcost
+            var _op = (parseFloat(op1)/1000)*elem_vv
+            tmp.innerHTML = parseFloat(_op).toFixed(4)
+            sum_fcost += parseFloat(_op)
+        }
+
+            // insert sum of data for cell Total Formula Cost
+        tmp = document.getElementsByClassName('totalfcost'+baseClassName[q])[0]
+        console.log(baseClassName[q])
+        console.log(tmp)
+        tmp.innerHTML = parseFloat(sum_fcost).toFixed(4)
+    }
+    
     global_sw = sw
     generateTableFillLvl()
 
@@ -757,10 +778,24 @@ function addTheadBases(tr_head, thead_bases){
 
 function generate_baseClassName(){
     var baseClassName = ["_b1", "_ti"]
+
+    // assign for details
+    var table_detail = document.getElementById("tdetail")
+    if(table_detail){
+        global_num_bases = document.getElementById('tdetail').rows[0].cells.length -3
+    }
+
     if(global_num_bases == 1 ){
         return baseClassName
     } else if (global_num_bases > 1){
-        for (var i = 1; i < global_num_bases; i++){
+        var tableToPopulate = document.getElementById('tdetail')
+        var counter = 0
+        if(tableToPopulate){
+            counter = global_num_bases-1
+        } else {
+            counter = global_num_bases
+        }
+        for (var i = 1; i < counter; i++){
             var value = parseInt(i)+1
             var _baseClassName = '_b'+value
             baseClassName.push(_baseClassName)
@@ -803,6 +838,12 @@ function setClassesForCalculation(){
     }
 
     listClassNameBase.push(...listClassNameFinal)
+
+    // td_counter for details
+    if (td_counter == 0){
+        td_counter = $("table > tbody > tr:first > td").length
+        console.log(td_counter)
+    }
 
     for (var j=2; j < td_counter+1; j++){
         $('table tbody tr td:nth-child('+j+')').addClass(listClassNameBase[j-2]);
