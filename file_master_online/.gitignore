@@ -4,8 +4,8 @@
 __pycache__
 # ignore db sqlite
 db.sqlite3
-#ignore log file
-django_dev2.log
+# ignore log file
+*.log
 
 node_modules/
 package-lock.json
