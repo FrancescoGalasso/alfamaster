@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'product'
+    'product',
+    'accounts',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -195,3 +196,6 @@ LOGGING = {
         },
     }
 }
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'

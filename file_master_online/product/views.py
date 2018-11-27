@@ -3,7 +3,6 @@ from django.utils import timezone
 from .models import Product
 from django.shortcuts import render, get_object_or_404
 import json
-from .forms import ProductForm
 from django.http import HttpResponse
 
 from django.http import HttpResponse, HttpResponseNotFound, Http404,  HttpResponseRedirect

@@ -1,11 +1,16 @@
 {% extends 'product/base.html' %}
 
 {% block content %}
-    {% for product in products %}
-    <div>
-        <!-- <h1><a href="">{{ product.name }}</a></h1> -->
-        <h1><a href="{% url 'product_detail' pk=product.pk %}">{{ product.name }}</a></h1>
-    </div>
 
-    {% endfor %}
+    {% if user.is_authenticated %}
+        {% for product in products %}
+            <div>
+                <!-- <h1><a href="">{{ product.name }}</a></h1> -->
+                <h1><a href="{% url 'product_detail' pk=product.pk %}">{{ product.name }}</a></h1>
+            </div>
+        {% endfor %}
+    {% else %}
+        <a href="{% url 'login' %}">login</a>
+    {% endif %}
+
 {% endblock %}
