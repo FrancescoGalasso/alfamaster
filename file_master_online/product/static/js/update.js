@@ -34,7 +34,8 @@ $( document ).ready(function() {
             cells[i].innerHTML = ""
         }
 
-        setClassesForCalculationUpdate()
+        // setClassesForCalculationUpdate()
+        setClassesForCalculation()
 
         document.getElementById("updateCalculateBtn").disabled = false;
 
@@ -52,74 +53,74 @@ $( document ).ready(function() {
     }); 
 
     // add the foot
-    var code = '<tr><th colspan="3" style="font-weight: bold;">Total</th><th class="totalww_b1 to_update"></th><th class="totalml100g_b1 to_update"></th><th class="totalvv_b1 to_update"></th><th class="totalml1000g_b1 to_update"></th><th class="totalfcost_b1 to_update"></th><th class="totalww_ti to_update"></th><th class="totalml100g_ti to_update"></th><th class="totalvv_ti to_update"></th><th class="totalml1000g_ti to_update"></th><th class="totalfcost_ti to_update"></th></tr>'
-    $( "#tdetail" ).append( code );
-    $('#tdetail tr:last').remove();
+    // var code = '<tr><th colspan="3" style="font-weight: bold;">Total</th><th class="totalww_b1 to_update"></th><th class="totalml100g_b1 to_update"></th><th class="totalvv_b1 to_update"></th><th class="totalml1000g_b1 to_update"></th><th class="totalfcost_b1 to_update"></th><th class="totalww_ti to_update"></th><th class="totalml100g_ti to_update"></th><th class="totalvv_ti to_update"></th><th class="totalml1000g_ti to_update"></th><th class="totalfcost_ti to_update"></th></tr>'
+    // $( "#tdetail" ).append( code );
+    // $('#tdetail tr:last').remove();
 
 });
 
 
-function setClassesForCalculationUpdate(){
+// function setClassesForCalculationUpdate(){
 
-    var cells = document.querySelectorAll('td:nth-child(2)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('sw')
-    }
+//     var cells = document.querySelectorAll('td:nth-child(2)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('sw')
+//     }
 
-    var cells = document.querySelectorAll('td:nth-child(3)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('rm_cost')
-    }
+//     var cells = document.querySelectorAll('td:nth-child(3)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('rm_cost')
+//     }
 
-        // class for Base1
-    var cells = document.querySelectorAll('td:nth-child(4)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('ww_B1')
-    }
+//         // class for Base1
+//     var cells = document.querySelectorAll('td:nth-child(4)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('ww_B1')
+//     }
 
-    var cells = document.querySelectorAll('td:nth-child(5)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('ml100g_B1')
-    }
+//     var cells = document.querySelectorAll('td:nth-child(5)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('ml100g_B1')
+//     }
 
-    var cells = document.querySelectorAll('td:nth-child(6)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('vv_B1')
-    }
+//     var cells = document.querySelectorAll('td:nth-child(6)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('vv_B1')
+//     }
 
-    var cells = document.querySelectorAll('td:nth-child(7)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('ml1000g_B1')
-    }
+//     var cells = document.querySelectorAll('td:nth-child(7)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('ml1000g_B1')
+//     }
 
-    var cells = document.querySelectorAll('td:nth-child(8)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('fcost_B1')
-    }
+//     var cells = document.querySelectorAll('td:nth-child(8)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('fcost_B1')
+//     }
 
-    // class for Ti Slurry
-    var cells = document.querySelectorAll('td:nth-child(9)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('ww_TI')
-    }
+//     // class for Ti Slurry
+//     var cells = document.querySelectorAll('td:nth-child(9)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('ww_TI')
+//     }
 
-    var cells = document.querySelectorAll('td:nth-child(10)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('ml100g_TI')
-    }
+//     var cells = document.querySelectorAll('td:nth-child(10)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('ml100g_TI')
+//     }
 
-    var cells = document.querySelectorAll('td:nth-child(11)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('vv_TI')
-    }
+//     var cells = document.querySelectorAll('td:nth-child(11)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('vv_TI')
+//     }
 
-    var cells = document.querySelectorAll('td:nth-child(12)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('ml1000g_TI')
-    }
+//     var cells = document.querySelectorAll('td:nth-child(12)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('ml1000g_TI')
+//     }
 
-    var cells = document.querySelectorAll('td:nth-child(13)');
-    for(var i = 0 ; i < cells.length ; i++) {
-        cells[i].classList.add('fcost_TI')
-    }
-}
+//     var cells = document.querySelectorAll('td:nth-child(13)');
+//     for(var i = 0 ; i < cells.length ; i++) {
+//         cells[i].classList.add('fcost_TI')
+//     }
+// }

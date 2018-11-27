@@ -67,6 +67,10 @@ function generateTable(id){
     creationTBody(num_raw_material, tableBody)
 
         // creation of tfoot for the table
+    // var table_tfoot = document.getElementsByTagName('tfoot')
+    // if(table_tfoot){
+    //     alert("DAMN IT! esisto già")
+    // }
     var tr_foot = document.createElement('tr')
     tableFoot.appendChild(tr_foot)
     creationTFoot(tableFoot, tr_foot)
@@ -134,7 +138,7 @@ function creationTFoot(tableFoot, tr_foot){
 
     var table = document.getElementById("tdetail")
     var counter = 0
-    if(table){
+    if(table){ // if i am in the detail page, add tfoot
         counter = document.getElementById('tdetail').rows[1].cells.length -3
         for (var i=0; i < counter; i++){
             var th = document.createElement('th')
@@ -215,7 +219,6 @@ async function generateTableFillLvl(){
     }
          
     myTableDiv.appendChild(table)
-    console.log(table)
     generateTableMaster()
 }
 
@@ -278,8 +281,6 @@ function creationTBodyMaster(global_num_raw_material, tableBody){
     var listofRawMaterialTmp = $('table tbody tr td:nth-child(1)').get()
     listofRawMaterialTmp.splice(-1, 1)
     listofRawMaterialTmp.splice(0, 3)
-
-    console.log(listofRawMaterialTmp)
 
     // var listofRawMaterialFinal = []
     listofRawMaterial.push(...listofRawMaterialTmp)
@@ -406,12 +407,9 @@ function generateData(){
     //
 
     var baseClassName = generate_baseClassName()                // baseClassName -> ["_b1", "_ti" ...]
-    console.log("baseClassName")
-    console.log(baseClassName)
     var table = document.getElementById('tdetail')              // table from product/update/pk
     if(table){
         var rowCount = $('#tdetail >tbody >tr').length;
-        console.log("num row from tdetail table ~> "+rowCount-1)
         global_num_raw_material = rowCount                    // override for update action
     }
     var counterWeightClassName = 2
@@ -435,7 +433,6 @@ function generateData(){
             // insert single data for the cell mL/100g
         for (var i = 0; i < global_num_raw_material; i++){
             tmp = document.getElementsByClassName('ml100g'+baseClassName[q])[i]
-            console.log(tmp)
             var a = matrixWeightInput[q][i]
             var b = sw[i]
             var division = a/b
@@ -503,8 +500,6 @@ function generateData(){
 
             // insert sum of data for cell Total Formula Cost
         tmp = document.getElementsByClassName('totalfcost'+baseClassName[q])[0]
-        console.log(baseClassName[q])
-        console.log(tmp)
         tmp.innerHTML = parseFloat(sum_fcost).toFixed(4)
     }
     
@@ -813,8 +808,6 @@ function returnInputWeightClassNames(inputClassNameWeight, baseClassName){
         tmp = inputClassNameWeight + baseClassName[i]
         list.push(tmp)
     }
-    console.log("list")
-    console.log(list)
     return list
 }
 
@@ -842,7 +835,6 @@ function setClassesForCalculation(){
     // td_counter for details
     if (td_counter == 0){
         td_counter = $("table > tbody > tr:first > td").length
-        console.log(td_counter)
     }
 
     for (var j=2; j < td_counter+1; j++){
@@ -871,7 +863,6 @@ function returnListClassName(baseClassName, list_totName){
     var list = []
     for (var i=0; i < baseClassName.length; i++){
         for (var j=0; j < list_totName.length; j++){
-            // console.log(list_totName[j]+baseClassName[i])
             list.push(list_totName[j]+baseClassName[i])
         }
     }
@@ -879,7 +870,6 @@ function returnListClassName(baseClassName, list_totName){
 }
 
 function showGenerateBtn(){
-    console.log("I'm going to show the generateBtn")
     var btn = document.getElementById("btn_calculate")
     if(btn){
         btn.style.display = "block";
@@ -908,6 +898,10 @@ function saveProduct(rev) {
     if (input_prod_name){
         var value = input_prod_name.value
         input_test.value = value
+    } else {
+        var value = $("h2").html()
+        console.log(value)
+        input_test.value = value
     }
 
     var input_test2 = document.getElementsByName("data")[0]
@@ -922,10 +916,22 @@ function saveProduct(rev) {
 
 function createJson(){
 
-    var listofRawMaterialNames = $('#generatedTable tbody tr td:nth-child(1)').get()
+    var update_table = document.getElementById('tdetail')
+    var new_table = document.getElementById('generatedTable')
+    var table_name = ""
+    var numberofBases = 0
+    if(update_table){
+        table_name = "tdetail"
+        numberofBases = document.getElementById('tdetail').rows[0].cells.length -3
+    } else if(new_table){
+        table_name = "generatedTable"
+        numberofBases = global_num_bases
+    }
+    var listofRawMaterialNames = $('#'+table_name+' tbody tr td:nth-child(1)').get()
     var listofIndexInput = [2,3,4,9]
-    if(global_num_bases >1){
-        for(var i=2; i<=global_num_bases; i++){
+    console.log(numberofBases)
+    if(numberofBases >1){
+        for(var i=2; i<=numberofBases; i++){
             var lastIndex = listofIndexInput[listofIndexInput.length-1]
             var newIndex = lastIndex+5
             listofIndexInput.push(newIndex)
@@ -933,8 +939,10 @@ function createJson(){
     }
     var listofImputs = []
     for(var i=0; i<listofIndexInput.length; i++){
-        var listofSingleBaseInput = $('#generatedTable tbody tr td:nth-child('+listofIndexInput[i]+')').get()
-        listofImputs.push(listofSingleBaseInput)
+        if($('#'+table_name+' tbody tr td:nth-child('+listofIndexInput[i]+')').length){ 
+            var listofSingleBaseInput = $('#'+table_name+' tbody tr td:nth-child('+listofIndexInput[i]+')').get()
+            listofImputs.push(listofSingleBaseInput)
+        }
     }
 
     
@@ -948,10 +956,7 @@ function createJson(){
             "RM_cost": "`+ listofImputs[1][i].textContent+`",
             "bases":[`
             for(var j=2; j<listofImputs.length; j++){
-                console.log("print input test")
-                console.log(listofImputs[j][i].textContent)
                 var base = '{"g_100g": "'+listofImputs[j][i].textContent+'"}'
-                console.log(base)
                 if(j != listofImputs.length-1){
                     base += ","
                 }
