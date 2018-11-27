@@ -11,19 +11,7 @@ $( document ).ready(function() {
     // adding classname and content editable for update operation
     var amountOfRows = $("#tdetail  tbody  tr").length
     var amountOfColums = document.getElementById('tdetail').rows[1].cells.length
-    // for(var i=2; i<amountOfRows+2; i++){
-    //     for (var j=1; j < amountOfColums; j++){
-    //         if(i<5 && (j<4 || j==8)){
-    //             body.rows[i].cells[j].contentEditable = true
-    //             body.rows[i].cells[j].style.backgroundColor = "#ffff00"
-    //             body.rows[i].cells[j].className = "update"
-    //         } else {
-    //             body.rows[i].cells[j].className = "to_update"
-    //         }
-    //     }
-    // }
 
-    /// test existing code
     var numberofBases = document.getElementById('tdetail').rows[0].cells.length -3
     var listofIndexInput = [2,3,4,9]
     if(numberofBases >1){
@@ -40,26 +28,7 @@ $( document ).ready(function() {
             body.rows[i].cells[listofIndexInput[j]-1].style.backgroundColor = "#ffff00"
             body.rows[i].cells[listofIndexInput[j]-1].className = "update"
         }
-        // for (var j=1; j < amountOfColums; j++){
-        //     if(body.rows[i].cells[j].contains('update')){
-        //         console.log("CONTENGO")
-        //     }else{
-        //         console.log("NON CONTENGO!")
-        //     }
-        // }
     }
-
-    // for(var i=2; i<amountOfRows+2; i++){
-    //     for (var j=1; j < amountOfColums; j++){
-    //         if(i<5 && (j<4 || j==8)){
-    //             body.rows[i].cells[j].contentEditable = true
-    //             body.rows[i].cells[j].style.backgroundColor = "#ffff00"
-    //             body.rows[i].cells[j].className = "update"
-    //         } else {
-    //             body.rows[i].cells[j].className = "to_update"
-    //         }
-    //     }
-    // }
 
     // function activated with the keyup event on the cells with class update
     $('.update').keyup(function(){
