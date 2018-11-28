@@ -15,23 +15,33 @@ stdlogger = logging.getLogger(__name__)
 
 @login_required
 def product_detail(request, pk):
-    stdlogger.info("        +++ [info] Call to PRODUCT_DETAIL method")
 
-    product = get_object_or_404(Product, pk=pk)
-    data =product.data
-    prod_name = product.name
-    prod_pk = pk
-    stdlogger.debug("       *** [debug] product name: "+ prod_name)
-    
-    try:
-        lista = data['data']
-        stdlogger.debug("       *** [debug] product data: {}".format(lista))
-    except:
-        import traceback
-        print traceback.format_exc()
-        lista = { }
-    return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk})    
-    # return render(request, 'product/product_detail.html')
+    if request.user.is_authenticated():
+
+        stdlogger.info("        +++ [info] Call to PRODUCT_DETAIL method")
+
+        product = get_object_or_404(Product, pk=pk)
+        data =product.data
+        prod_name = product.name
+        prod_pk = pk
+        stdlogger.debug("       *** [debug] product name: "+ prod_name)
+        prod_owner = product.owner
+        stdlogger.debug("       *** [debug] product owner: "+ prod_owner)
+
+        
+        if prod_owner == request.user:
+            try:
+                lista = data['data']
+                stdlogger.debug("       *** [debug] product data: {}".format(lista))
+            except:
+                import traceback
+                print traceback.format_exc()
+                lista = { }
+            return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk})    
+            # return render(request, 'product/product_detail.html')
+        else:
+            stdlogger.debug("       *** [debug] ERROR on detail show")
+            return render(request, 'product/error.html')
 
 # @login_required
 def product_list(request):
