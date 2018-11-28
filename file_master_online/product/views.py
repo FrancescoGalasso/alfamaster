@@ -28,8 +28,7 @@ def product_detail(request, pk):
         prod_owner = product.owner
         stdlogger.debug("       *** [debug] product owner: "+ prod_owner)
 
-        
-        if prod_owner == request.user:
+        if prod_owner == request.user.username:
             try:
                 lista = data['data']
                 stdlogger.debug("       *** [debug] product data: {}".format(lista))
@@ -40,7 +39,7 @@ def product_detail(request, pk):
             return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk})    
             # return render(request, 'product/product_detail.html')
         else:
-            stdlogger.debug("       *** [debug] ERROR on detail show")
+            stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
             return render(request, 'product/error.html')
 
 # @login_required
@@ -121,14 +120,20 @@ def product_update(request, pk):
     prod_pk = pk
     rev = product.revision
     # stdlogger.debug("       *** [debug] product name: "+ prod_name)
-    
-    try:
-        lista = data['data']
-        # stdlogger.debug("       *** [debug] product data: {}".format(lista))
-        
-    except:
-        import traceback
-        print traceback.format_exc()
-        lista = { }
+    prod_owner = product.owner
+    stdlogger.debug("       *** [debug] product owner: "+ prod_owner)
 
-    return render(request, 'product/product_update.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':rev})   
+    if prod_owner == request.user.username:
+        try:
+            lista = data['data']
+            # stdlogger.debug("       *** [debug] product data: {}".format(lista))
+            
+        except:
+            import traceback
+            print traceback.format_exc()
+            lista = { }
+
+        return render(request, 'product/product_update.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':rev})   
+    else:
+        stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
+        return render(request, 'product/error.html')
