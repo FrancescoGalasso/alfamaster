@@ -14,5 +14,5 @@ from django.contrib.auth.views import(
 
 urlpatterns = [
     url(r'^login/$', LoginView.as_view(template_name='accounts/login.html'), name='login'),
-    url(r'^logout/$', LogoutView.as_view(next_page=reverse_lazy('login')), name='logout')
+    url(r'^logout/$', LogoutView.as_view(next_page=reverse_lazy('product_list')), name='logout')
 ]

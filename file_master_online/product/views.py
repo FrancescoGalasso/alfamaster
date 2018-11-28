@@ -3,11 +3,9 @@ from django.utils import timezone
 from .models import Product
 from django.shortcuts import render, get_object_or_404
 import json
-from django.http import HttpResponse
 
 from django.http import HttpResponse, HttpResponseNotFound, Http404,  HttpResponseRedirect
 from django.shortcuts import redirect
-from django.db.models import Max
 from django.contrib.auth.decorators import login_required
 
 # Python logging package
@@ -15,7 +13,7 @@ import logging
 # Standard instance of a logger with __name__
 stdlogger = logging.getLogger(__name__)
 
-
+@login_required
 def product_detail(request, pk):
     stdlogger.info("        +++ [info] Call to PRODUCT_DETAIL method")
 
@@ -35,38 +33,41 @@ def product_detail(request, pk):
     return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk})    
     # return render(request, 'product/product_detail.html')
 
-@login_required
+# @login_required
 def product_list(request):
 
     if request.user.is_authenticated():
         username = request.user.username
 
-    query = '''
-        select *
-        from (
-        select id, 
-                name,
-                revision,
-                owner,
-                max(revision) over (partition by name) as max_thing
-        from "product_product"
-        ) t
-        where revision = max_thing
-    '''
-
-    if(username != "admin"):
-        query += '''
-            AND owner = '''+"'"+username+"'"+ '''
+        query = '''
+            select *
+            from (
+            select id, 
+                    name,
+                    revision,
+                    owner,
+                    max(revision) over (partition by name) as max_thing
+            from "product_product"
+            ) t
+            where revision = max_thing
         '''
 
-    products = Product.objects.raw(query)
+        if(username != "admin"):
+            query += '''
+                AND owner = '''+"'"+username+"'"+ '''
+            '''
 
-    stdlogger.info("        +++ [info] Product.objects.raw")
-    stdlogger.info(products)
+        products = Product.objects.raw(query)
 
-    return render(request, 'product/product_list.html', {'products': products})
+        stdlogger.info("        +++ [info] Product.objects.raw")
+        stdlogger.info(products)
 
+        return render(request, 'product/product_list.html', {'products': products})
 
+    else:
+        return render(request, 'product/product_list.html')
+
+@login_required
 def product_new(request):
     print(request.GET)
     print(request.POST)
@@ -90,6 +91,7 @@ def product_new(request):
 
     return render(request, "product/product_new.html")
 
+@login_required
 def product_delete(request, pk):
     product = Product.objects.filter(pk=pk) 
     # product = get_object_or_404(pk=pk)
@@ -100,6 +102,7 @@ def product_delete(request, pk):
     # redirect to HOME
     return HttpResponseRedirect("/")
 
+@login_required
 def product_update(request, pk):
     stdlogger.info("        +++ [info] Call to PRODUCT_UPDATE method")
     product = get_object_or_404(Product, pk=pk)
