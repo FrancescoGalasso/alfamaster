@@ -148,8 +148,10 @@
     </div>
   </div>
 
-  <a class="btn btn-default" href="{% url 'product_update' pk=prod_pk %}">Update</a>
+  <a class="btn btn-warning" href="{% url 'product_update' pk=prod_pk %}" style="color: black;font-weight: bold;">Update</a>
 
-  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Delete</button>
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" style="font-weight: bold;">Delete</button>
+
+  <a class="btn btn-success" href="{% url 'download_csv'  %}" style="font-weight: bold;">Export as csv</a>
 
 {% endblock %}
