@@ -977,68 +977,87 @@ function createJson(){
     return jsonData
 }
 
-function createMatrix(){
-    console.log("createMatrix")
-    // $('#tdetail > tbody > tr').each(function() {
-    //     $(this).find("td:gt(0)").each(function(){
-    //     //    alert($(this).html());
-    //         console.log($(this).html())
-    //        });
-    // });
+function download_csv(rev){
+    var title = document.getElementsByTagName("h2")
+    var name = title[0].innerText
 
-    // var rows = document.getElementsByTagName("table")[0].rows;
-    // for (var i in rows) {
-    //     console.log(rows[i]);
-    //     for(var j in rows[i]){
-    //         console.log(rows[i].cells)
-    //     }
-    //    }
-
-    var matrix = []
-    var table = document.getElementById("tdetail");
-    for (var i = 0, row; row = table.rows[i]; i++) {
+    // table #tdetail 
+    var body_tbl1 = []
+    var table1 = document.getElementById("tdetail");
+    for (var i = 0, row; row = table1.rows[i]; i++) {
         var lista = []
         for (var j = 0, col; col = row.cells[j]; j++) {
-            // console.log(col.innerHTML)
-            lista.push(col.innerHTML)
+            // innerText
+            // innerHTML
+            lista.push(col.innerText)
+            if(i==0 && j>2){
+                lista.push("")
+                lista.push("")
+                lista.push("")
+                lista.push("")
+            }
+            if(i==table1.rows.length - 1 && j == 0){
+                lista.push("")
+                lista.push("")
+            }
         }
-        matrix.push(lista)
-        // console.log("\n")  
+        body_tbl1.push(lista)
     }
-    return matrix
-    // var value = $('table tr:last td').text();
-    // console.log(value)
 
-    // console.log(rows)
+    // table #generatedTableFillLvl
+    var body_tbl2 = []
+    var table2 = document.getElementById("generatedTableFillLvl");
+    for (var i = 0, row; row = table2.rows[i]; i++) {
+        var lista = []
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            lista.push(col.innerText)
+        }
+        body_tbl2.push(lista)
+    }
+
+    // table #generatedTableMaster
+    var body_tbl3 = []
+    var table3 = document.getElementById("generatedTableMaster");
+    for (var i = 0, row; row = table3.rows[i]; i++) {
+        var lista = []
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            lista.push(col.innerText)
+        }
+        body_tbl3.push(lista)
+    }
+
+        // https://stackoverflow.com/questions/18848860/javascript-array-to-csv
+    var csv = ''
+    csv += name+'\tRevision: '+rev
+    csv +='\n'
+    csv +='\n'
+    csv +='\n'
+    csv += body_tbl1.map(function(d){
+        return d.join();
+    }).join('\n');
+    csv+= '\n'
+    csv +='\n'
+    csv +='\n'
+    csv += 'Fill level calculation\n'
+    csv += body_tbl2.map(function(d){
+        return d.join();
+    }).join('\n');
+    csv +='\n'
+    csv +='\n'
+    csv +='\n'
+    csv += 'MASTER\n'
+    csv += body_tbl3.map(function(d){
+        return d.join();
+    }).join('\n');
+
+    console.log(csv)
+
+
+
+    var hiddenElement = document.createElement('a')
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv)
+    hiddenElement.target = '_blank'
+    hiddenElement.download = name+'.csv'
+    hiddenElement.click()
+
 }
-
-// https://stackoverflow.com/questions/24152420/pass-dynamic-javascript-variable-to-django-python
-// function csv(){
-//     var matrix = []
-//     var table = document.getElementById("tdetail");
-//     for (var i = 0, row; row = table.rows[i]; i++) {
-//         var lista = []
-//         for (var j = 0, col; col = row.cells[j]; j++) {
-//             // console.log(col.innerHTML)
-//             lista.push(col.innerHTML)
-//         }
-//         matrix.push(lista)
-//         // console.log("\n")  
-//     }
-//     // return matrix
-//     var data = {'matrix': matrix};
-//     var URL = "http://127.0.0.1:8000/product/csv/"
-//     console.log(URL)
-//     console.log(data)
-
-//     $.post(URL, data, function(response){
-//         if(response === 'success'){ alert('Yay!'); }
-//         else{ alert('Error! :('); }
-//     });
-// }
-// notes
-// https://www.youtube.com/watch?v=sYNDXrLu57k
-// https://rk.edu.pl/en/making-django-and-javascript-work-nicely-together/
-// https://stackoverflow.com/questions/37104604/adding-a-django-model-instance-without-a-form-button-only
-// https://stackoverflow.com/questions/14026750/django-model-filtering-by-user-always
-// https://simpleisbetterthancomplex.com/tutorial/2016/06/27/how-to-use-djangos-built-in-login-system.html

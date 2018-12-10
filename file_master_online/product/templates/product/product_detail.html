@@ -12,8 +12,11 @@
   var max_of_array = 0;
   var num = 0
   var pk = '{{prod_pk}}'
+  var rev = '{{prod_rev}}'
   var bases_num = 0
-  console.log(pk)
+  // console.log(pk)
+  // console.log(rev)
+  var revv = String(rev)
 </script>
 
 <h2>{{prod_name}}</h2>
@@ -138,7 +141,8 @@
 
   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" style="font-weight: bold;">Delete</button>
 
-  <a class="btn btn-success" href="{% url 'download_csv' %}" style="font-weight: bold;"  onclick=createMatrix()>Export as csv</a>
+  <!-- <a class="btn btn-success" href="{% url 'download_csv' %}" style="font-weight: bold;"  onclick=download_csv()>Export as csv</a> -->
+  <a class="btn btn-success" style="font-weight: bold;"  onclick=download_csv(revv)>Export as csv</a>
 
 
 {% endblock %}
