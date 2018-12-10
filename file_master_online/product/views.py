@@ -32,7 +32,7 @@ def product_detail(request, pk):
         prod_rev = str(product.revision)
         stdlogger.debug("       *** [debug] product revision: "+ prod_rev)
 
-        if prod_owner == request.user.username:
+        if prod_owner == request.user.username or request.user.username == "admin":
             try:
                 lista = data['data']
                 stdlogger.debug("       *** [debug] product data: {}".format(lista))
