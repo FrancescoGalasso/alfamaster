@@ -7,6 +7,7 @@ import json
 from django.http import HttpResponse, HttpResponseNotFound, Http404,  HttpResponseRedirect
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+import csv
 
 # Python logging package
 import logging
@@ -137,3 +138,72 @@ def product_update(request, pk):
     else:
         stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
         return render(request, 'product/error.html')
+
+
+# https://docs.djangoproject.com/en/2.1/howto/outputting-csv/
+def download_csv(request):
+
+    
+    # from bs4 import BeautifulSoup
+    # import mechanize
+    # br = mechanize.Browser()
+    # html = br.response().read()
+    # soup = BeautifulSoup(html)
+    # soup = BeautifulSoup(html)
+    # table = soup.find('table', id="myGeneratedTable")
+    # rows = table.findAll('tr')
+    # print(rows)
+    path = request.META.get('HTTP_REFERER')
+    # url = request.META.HTTP_REFERER
+    # print("url -> "+url)
+
+    import requests
+    html_doc = requests.get(path)
+    
+    import pprint
+    pprint.pprint(path)
+    pprint.pprint(":::::::::::")
+    # import pdb; pdb.set_trace()
+    pprint.pprint(html_doc.content)
+    print("---")
+    pprint.pprint(html_doc.text)
+    print("---")
+
+    # from bs4 import BeautifulSoup
+    # soup = BeautifulSoup(html_doc, 'html.parser')
+
+    # print(soup.prettify())
+
+
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+
+    return response
+
+    # note
+    # https://stackoverflow.com/questions/19591720/python-beautiful-soup-parse-a-table-with-a-specific-id
+    # https://www.dataquest.io/blog/web-scraping-tutorial-python/
+
+def download_csvv(request):
+    import pdb; pdb.set_trace()
+    if request.method == 'POST':
+        if 'matrix' in request.POST:
+            try:
+                pieFact = request.POST['matrix']
+                # doSomething with pieFact here...
+                print("    ----    ")
+                print(pieFact)
+                return HttpResponse('success') # if everything is OK
+            except:
+                import traceback
+                print traceback.format_exc()
+    else:
+        stdlogger.info("        +++ [info] NO POST for download CSV")
+    # nothing went well
+        return HttpResponse('FAIL!!!!!')
+    # return render(request, "product/product_detail.html")

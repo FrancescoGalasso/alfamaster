@@ -977,6 +977,65 @@ function createJson(){
     return jsonData
 }
 
+function createMatrix(){
+    console.log("createMatrix")
+    // $('#tdetail > tbody > tr').each(function() {
+    //     $(this).find("td:gt(0)").each(function(){
+    //     //    alert($(this).html());
+    //         console.log($(this).html())
+    //        });
+    // });
+
+    // var rows = document.getElementsByTagName("table")[0].rows;
+    // for (var i in rows) {
+    //     console.log(rows[i]);
+    //     for(var j in rows[i]){
+    //         console.log(rows[i].cells)
+    //     }
+    //    }
+
+    var matrix = []
+    var table = document.getElementById("tdetail");
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        var lista = []
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            // console.log(col.innerHTML)
+            lista.push(col.innerHTML)
+        }
+        matrix.push(lista)
+        // console.log("\n")  
+    }
+    return matrix
+    // var value = $('table tr:last td').text();
+    // console.log(value)
+
+    // console.log(rows)
+}
+
+// https://stackoverflow.com/questions/24152420/pass-dynamic-javascript-variable-to-django-python
+// function csv(){
+//     var matrix = []
+//     var table = document.getElementById("tdetail");
+//     for (var i = 0, row; row = table.rows[i]; i++) {
+//         var lista = []
+//         for (var j = 0, col; col = row.cells[j]; j++) {
+//             // console.log(col.innerHTML)
+//             lista.push(col.innerHTML)
+//         }
+//         matrix.push(lista)
+//         // console.log("\n")  
+//     }
+//     // return matrix
+//     var data = {'matrix': matrix};
+//     var URL = "http://127.0.0.1:8000/product/csv/"
+//     console.log(URL)
+//     console.log(data)
+
+//     $.post(URL, data, function(response){
+//         if(response === 'success'){ alert('Yay!'); }
+//         else{ alert('Error! :('); }
+//     });
+// }
 // notes
 // https://www.youtube.com/watch?v=sYNDXrLu57k
 // https://rk.edu.pl/en/making-django-and-javascript-work-nicely-together/

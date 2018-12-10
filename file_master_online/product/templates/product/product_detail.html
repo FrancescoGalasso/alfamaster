@@ -92,20 +92,6 @@
         </tr>
     </tbody>
                   <!-- footer -->
-    <tfoot>
-        <th style="visibility:hidden;"></th>
-        <th style="visibility:hidden;"></th>
-        <th style="visibility:hidden;"></th>
-        {% for itemlists in list %} 
-          {% for k,v in itemlists.items %}
-            {% if k == "bases" %}
-              {%for element in v%}
-              <th style="visibility:hidden;"></th>
-              {% endfor %} 
-            {% endif %}
-          {% endfor %}
-        {% endfor %}
-    </tfoot>
 </table>
 
 <div id="myGeneratedTable"></div>
@@ -152,6 +138,7 @@
 
   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" style="font-weight: bold;">Delete</button>
 
-  <a class="btn btn-success" href="{% url 'download_csv'  %}" style="font-weight: bold;">Export as csv</a>
+  <a class="btn btn-success" href="{% url 'download_csv' %}" style="font-weight: bold;"  onclick=createMatrix()>Export as csv</a>
+
 
 {% endblock %}
