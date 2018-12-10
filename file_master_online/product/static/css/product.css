@@ -56,6 +56,14 @@ td {
     display:none;
 }
 
+#money{
+    display:none;
+}
+
+#currencies{
+    margin-left: 65px;
+}
+
 /*
 *   css modal
 */
