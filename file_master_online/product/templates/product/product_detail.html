@@ -17,6 +17,7 @@
   // console.log(pk)
   // console.log(rev)
   var revv = String(rev)
+  var currency = '{{prod_currency}}'
 </script>
 
 <h2>{{prod_name}}</h2>
@@ -41,7 +42,7 @@
         <tr>
             <th>Raw material</th>
             <th>Specific weight [g/mL]</th>
-            <th>RM cost [$/L]</th>
+            <th>RM cost ['{{prod_currency}}'/L]</th>
 
             {% for itemlists in list %}
                 {% for k,v in itemlists.items %}
@@ -50,9 +51,7 @@
                     <script type="text/javascript"> 
                       a = "{{v|length}}";
                       foo2.push(a);
-                      console.log("foo2 "+foo2);
                       max_of_array = Math.max.apply(Math, foo2);
-                      console.log("max_of_array "+max_of_array);
                     </script>
                   {% endif %}
                 {% endfor %}
@@ -65,7 +64,7 @@
                   $("tr:nth-child(2)").append(" <th>mL/100g</th>");
                   $("tr:nth-child(2)").append("<th>%v/v</th>");
                   $("tr:nth-child(2)").append("<th>mL/1000g</th>");
-                  $("tr:nth-child(2)").append("<th>Formula Cost [$/L]</th>");     
+                  $("tr:nth-child(2)").append("<th>Formula Cost ["+currency+"/L]</th>");     
                 }
               </script>
         </tr>

@@ -232,7 +232,7 @@ async function generateTableMaster(){
     await sleep(200);    // sleep 0.2 sec
     console.log('generateTableMaster')
 
-    var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", "Formula Cost"]
+    var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", "Formula Cost "]
     var myTableDiv = document.getElementById("tableMaster")
 
 
@@ -526,7 +526,7 @@ function generateDataMaster(){
     var list_vv_b1 = []
     var list_tiRemoving = []
     var sum_tiRemoving = 0
-    var sum_vv_m = 0
+    var sum_vv_m = 0.0
     var sum_g100ml_m = 0
     var sum_test = 0
     var sum_ww = 0
@@ -535,10 +535,14 @@ function generateDataMaster(){
     for (var j=4; j < 12; j++){
         var cells = tableInput.querySelectorAll('td:nth-child('+j+')')
         for(var i = index ; i < cells.length ; i++) {
-            if(j == 5){
-                list_vv_b1.push(cells[i].innerText)
-            } else if(j==10) {
-                list_vv_ti.push(cells[i].innerText)
+            if(j == 6){
+                if(cells[i].innerText){
+                    list_vv_b1.push(cells[i].innerText)
+                }
+            } else if(j==11) {
+                if(cells[i].innerText){
+                    list_vv_ti.push(cells[i].innerText)
+                }
             }
         }
     }
@@ -549,9 +553,17 @@ function generateDataMaster(){
     for(var i=0; i < global_num_raw_material; i++){
         var res = ''
         if(table_new){
-            res = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+            if(i==2){
+                res = 0
+            } else{
+                res = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+            }
         }else if (table_update){
-            res = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+            if(i == 2){
+                res = 0
+            } else {
+                res = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+            }
         }
         list_tiRemoving.push(res)
         sum_tiRemoving += res
@@ -579,10 +591,52 @@ function generateDataMaster(){
 
         var _op = (100*_tmp2)/sum_tiRemoving
         var op = parseFloat(_op).toFixed(3)
-        tmp.innerHTML = op
-        tmp.classList.add("to_update")
 
-        sum_vv_m += op
+        // check for stuffs 
+
+            // var avg = 0
+            // var index = i+1
+            // $('#tdetail tbody tr:nth-child('+index+')').each(function() {
+            //     for(var i=1; i< global_num_bases; i++){
+            //         var value = $(this).find(".vv_b"+i).html();  
+            //         console.log("testo  vv_b"+i+"    -->     "+value)
+            //         avg = parseFloat(avg) + parseFloat(value)  
+            //         console.log("avg        ->  "+avg)
+            //     }
+            //     });
+
+            // var _avg = avg/(global_num_bases-1)
+            // console.log("_avg -> "+_avg)
+            // var margin = 0
+            // if (op >=0.0001 && op <= 1) {
+            //     margin = 0.1    // margin -> 10%
+            // } else if(op >1.0001 && op <= 10){
+            //     margin = 0.01   // margin -> 1%
+            // }
+
+            // var leftBound = parseFloat(_avg) - parseFloat(_avg*margin)
+            // var rightBound = parseFloat(_avg) + parseFloat(_avg*margin)
+
+            // console.log("`````````")
+            //     console.log(leftBound)
+            //     console.log(rightBound)
+            //     console.log(_avg)
+            //     console.log(op)
+            // console.log("`````````")
+
+            // if(op > leftBound && op < rightBound){
+            //     tmp.innerHTML = op                      // populate the cell
+            // } else {
+            //     tmp.innerHTML = rightBound.toFixed(3)
+            // }
+
+        //      END STUFFs
+
+        tmp.innerHTML = op                      // populate the cell
+        tmp.classList.add("to_update")          
+        // sum_vv_m += op
+        sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
+        // console.log(sum_vv_m)
     }
 
         // insert sum of data for cell Total %v/v
@@ -610,7 +664,8 @@ function generateDataMaster(){
     for (var i = 0; i < global_num_raw_material; i++){
         var tmp = document.getElementsByClassName('ww_m')[i+1]
         var tmp2 = document.getElementsByClassName('g100ml_m')[i+1]
-        var _op = (tmp2.innerText*global_sw[i]*100)/(sum_test)
+        // var _op = (tmp2.innerText*global_sw[i]*100)/(sum_test)
+        var _op = (tmp2.innerText*100)/(sum_test)
         var op = parseFloat(_op).toFixed(3)
         tmp.innerHTML = op
         tmp.classList.add("to_update")
@@ -709,7 +764,8 @@ function clean_after_wrong_input(){
     name_product.style.display = "none"
     var calculate_btn = document.getElementById('btn_calculate')
     calculate_btn.style.display = "none"
-
+    var select_currencies = document.getElementById('money')
+    select_currencies.style.display = "none"
 }
 
 /**
@@ -870,6 +926,12 @@ function returnListClassName(baseClassName, list_totName){
 }
 
 function showGenerateBtn(){
+    var elem = document.getElementById("money")
+    if(elem){
+        elem.style.display = "block";
+    }
+
+
     var btn = document.getElementById("btn_calculate")
     if(btn){
         btn.style.display = "block";
@@ -911,6 +973,16 @@ function saveProduct(rev) {
     var input_test3 =  document.getElementsByName("revision")[0]
     if(input_test3){
         input_test3.value = rev
+    }
+
+    var currency = $( "#currencies option:selected" ).text();
+    console.log("currency -> "+currency)
+    var input_test4 =  document.getElementsByName("currency")[0]
+    if(input_test4){
+        input_test4.value = currency
+    } else if(prod_currency){
+        console.log(prod_currency)
+        input_test4.value = prod_currency
     }
 }
 
@@ -1061,3 +1133,40 @@ function download_csv(rev){
     hiddenElement.click()
 
 }
+
+/*
+*
+*               Document ready 
+*
+*/
+
+$( document ).ready(function() {
+
+    var numbers = [
+        'EUR - €',
+        'NOK - kr',
+        'USD - $',
+        'AUD - $',
+        'CAD - $',
+        'COP - $',        
+        'CLP - $',
+        'MXN - $',
+        'PHP - ₱',
+        'KRW - ₩',
+        'THB - ฿',
+        'MYR - RM',
+        'IDR - Rp',
+        'PLN - zł',
+        'CNY - 元',
+        'JPY - ¥',
+        'RUB - ₽',
+        'ILS - ₪'
+    ];
+
+    var option = '';
+    for (var i=0;i<numbers.length;i++){
+       option += '<option value="'+ numbers[i] + '">' + numbers[i] + '</option>';
+    }
+    $('#currencies').append(option);
+});
+

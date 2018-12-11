@@ -11,8 +11,9 @@
 
 </div>
 
-<p id="info-test"></p>
 <input id="nameProduct" type="text" name="firstname" placeholder="Type product's name"><br>
+<div id = "money">Select your currencies  <select id="currencies">
+    </select></div>
 <br>
 
 
@@ -31,6 +32,7 @@
     <form action='.' method='POST'> {% csrf_token %}
         <input type='hidden' name='name' />
         <input type='hidden' name='data' />
+        <input type='hidden' name='currency' />
         <input type='submit' onclick=saveProduct() value='Save' />
     </form>
 </div>
