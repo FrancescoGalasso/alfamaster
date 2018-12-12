@@ -4,6 +4,8 @@ var global_num_bases = 0
 var global_baseClassName = []
 var global_sw = []
 var global_data = ''
+var _sum_ti = 0.0
+var h2o = 0.0
 
 function generateTable(id){
     showGenerateBtn()
@@ -453,7 +455,7 @@ function generateData(){
 
             var elem = elems[i].innerText
             var op = (100*elem)/sum_ml100g
-            var _op = parseFloat(op).toFixed(2)
+            var _op = parseFloat(op).toFixed(3)
             tmp.innerHTML = _op
             sum_vv += parseFloat(_op)
         }
@@ -493,14 +495,14 @@ function generateData(){
             var elem_rmcost = elems_rmcost[i].innerText 
 
             var op1 = elem_sw*elem_rmcost
-            var _op = (parseFloat(op1)/1000)*elem_vv
-            tmp.innerHTML = parseFloat(_op).toFixed(4)
+            var _op = (parseFloat(op1)/1000)*elem_vv*10
+            tmp.innerHTML = parseFloat(_op).toFixed(2)
             sum_fcost += parseFloat(_op)
         }
 
             // insert sum of data for cell Total Formula Cost
         tmp = document.getElementsByClassName('totalfcost'+baseClassName[q])[0]
-        tmp.innerHTML = parseFloat(sum_fcost).toFixed(4)
+        tmp.innerHTML = parseFloat(sum_fcost).toFixed(2)
     }
     
     global_sw = sw
@@ -514,12 +516,15 @@ function generateDataMaster(){
     var table_update = document.getElementById("tdetail")
     var tableInput = ''
     var index = ''
+    var table_id = ''
     if(table_new){
         tableInput = table_new
         index = 1
+        table_id = "generatedTable"
     } else if (table_update){
         tableInput = table_update
         index = 0
+        table_id = "tdetail"
     }
     var tableFillLvl = document.getElementById("generatedTableFillLvl")
     var list_vv_ti = []
@@ -592,52 +597,125 @@ function generateDataMaster(){
         var _op = (100*_tmp2)/sum_tiRemoving
         var op = parseFloat(_op).toFixed(3)
 
-        // check for stuffs 
+            var avg = 0
+            var index = i+1
+            var _lista = []
+            var result = []
+            console.log("op ->"+op)
+            if(op <= 1){
+                $('#'+table_id+' tbody tr:nth-child('+index+')').each(function() {
+                    // for(var i=1; i< global_num_bases; i++){
+                    var max = 0
+                    if(global_num_bases == 1){
+                        max = global_num_bases+1
+                    }else{
+                        max=global_num_bases
+                    }
+                    for(var i=1; i< global_num_bases; i++){
+                        var value = $(this).find(".vv_b"+i).html();  
+                        console.log("testo  vv_b"+i+"    -->     "+value)
+                        _lista.push(value)
+                    }
+                    });
+                //          [val1, val2, val3, val4, ... , valn]
+                //          |val1 - val2| < 10% di val1
+                //          |val2 - val3| < 10% di val1
+                //          ....
+                //          |valn - val1| < 10% di val1
+                for(var k=0; k< _lista.length; k++){
+                    var p1 = _lista[k]
+                    var p2 = 0
+                    var index2 = k+1
+                    console.log("index2 ---> "+index2)
+                    if(index2 >= _lista.length){
+                        p2 = _lista[0]
+                    }else{
+                        p2 = _lista[index2]
+                    }
 
-            // var avg = 0
-            // var index = i+1
-            // $('#tdetail tbody tr:nth-child('+index+')').each(function() {
-            //     for(var i=1; i< global_num_bases; i++){
-            //         var value = $(this).find(".vv_b"+i).html();  
-            //         console.log("testo  vv_b"+i+"    -->     "+value)
-            //         avg = parseFloat(avg) + parseFloat(value)  
-            //         console.log("avg        ->  "+avg)
-            //     }
-            //     });
+                    var calc = Math.abs(p1-p2)
+                    var margin = 0.1*_lista[0]
+                    if(calc < margin){
+                        result.push(1)          // correct 
+                        console.log("calc < margin")
+                    } else{
+                        result.push(0)          // uncorrect
+                        console.log("calc > margin")
+                    }
+                }
 
-            // var _avg = avg/(global_num_bases-1)
-            // console.log("_avg -> "+_avg)
-            // var margin = 0
-            // if (op >=0.0001 && op <= 1) {
-            //     margin = 0.1    // margin -> 10%
-            // } else if(op >1.0001 && op <= 10){
-            //     margin = 0.01   // margin -> 1%
-            // }
+                var check_correct = $.inArray(1, result)
+                var check_uncorrect = $.inArray(0, result)
 
-            // var leftBound = parseFloat(_avg) - parseFloat(_avg*margin)
-            // var rightBound = parseFloat(_avg) + parseFloat(_avg*margin)
+                if(check_uncorrect == -1){
+                    // tutto è vero result -> [1,1,1,1]; cerco MASTER 'vv_m'
+                    // se  base1-10% < VALUE < base1+10%
+                    // print VALUE
+                    var base1 = _lista[0]
+                    var margin = 0.1
+                    var leftBound = parseFloat(base1) - parseFloat(base1*margin)
+                    var rightBound = parseFloat(base1) + parseFloat(base1*margin)  
+                    
+                    console.log(base1)
+                    console.log(margin)
+                    console.log(leftBound)
+                    console.log(rightBound)
 
-            // console.log("`````````")
-            //     console.log(leftBound)
-            //     console.log(rightBound)
-            //     console.log(_avg)
-            //     console.log(op)
-            // console.log("`````````")
+                    if(op > leftBound && op < rightBound){
+                        console.log("op > leftBound && op < rightBound")
+                        tmp.innerHTML = op                      // populate the cell
+                        tmp.style.backgroundColor = "blue";
+                        sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
+                    }else{
+                        console.log("****   NO **** op > leftBound && op < rightBound")
+                        // mostro contenuto vvB1 al posto del valore calcolato
+                        tmp.innerHTML=_lista[0]
+                        tmp.style.backgroundColor = "yellow";
+                        sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(_lista[0])
+                    }
+                }else{
+                    // result -> [1,1,0,1]
+                    // non rispetto base1-10% < VALUE < base1+10%
+                    tmp.innerHTML= op
+                    tmp.style.backgroundColor = "gray";
+                    sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
+                }
 
-            // if(op > leftBound && op < rightBound){
-            //     tmp.innerHTML = op                      // populate the cell
-            // } else {
-            //     tmp.innerHTML = rightBound.toFixed(3)
-            // }
+            }else{  // se op >1     | op-> valore calcolato
+                tmp.innerHTML= op
+                tmp.style.backgroundColor = "lightblue";
+                sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
+            }
 
-        //      END STUFFs
 
-        tmp.innerHTML = op                      // populate the cell
-        tmp.classList.add("to_update")          
-        // sum_vv_m += op
-        sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
-        // console.log(sum_vv_m)
+        // tmp.innerHTML = op                      // populate the cell
+        tmp.classList.add("to_update") 
+
+
+        $('#generatedTableMaster tbody tr:nth-child('+index+')').each(function() {
+                var value = $(this).find(".vv_m").html();  
+                // alert(value)
+                if(index == 1){
+                    h2o = value
+                    // alert(h2o)
+                } else {
+                    _sum_ti = parseFloat(_sum_ti) + parseFloat(value)
+                    // alert(_sum_ti)
+                }
+            });
+
+        sum_vv_m = _sum_ti
     }
+    // ricalcola 1st row (h2o) sulla base della somma degli altri valori
+    $('#generatedTableMaster tbody tr:nth-child(1)').each(function() {
+            var h2o = 100.00-parseFloat(sum_vv_m)
+            h2o = parseFloat(h2o).toFixed(3)
+            $(this).find(".vv_m").html(h2o); 
+            sum_vv_m = parseFloat(sum_vv_m)+parseFloat(h2o)
+    });
+
+
+    
 
         // insert sum of data for cell Total %v/v
     tmp = document.getElementsByClassName('totalvv')[0]
@@ -666,7 +744,8 @@ function generateDataMaster(){
         var tmp2 = document.getElementsByClassName('g100ml_m')[i+1]
         // var _op = (tmp2.innerText*global_sw[i]*100)/(sum_test)
         var _op = (tmp2.innerText*100)/(sum_test)
-        var op = parseFloat(_op).toFixed(3)
+        var op = parseFloat(_op).toFixed(4)
+        // var op = parseFloat(_op)
         tmp.innerHTML = op
         tmp.classList.add("to_update")
 
@@ -675,14 +754,14 @@ function generateDataMaster(){
 
         // insert sum of data for cell Total %w/w
     tmp = document.getElementsByClassName('totalww')[0]
-    tmp.innerHTML = parseFloat(sum_ww).toFixed(3)
+    tmp.innerHTML = parseFloat(sum_ww).toFixed(4)
 
         // insert single datum for cell with className 'fc_m'
     for (var i = 0; i < global_num_raw_material; i++){
         var tmp = document.getElementsByClassName('fc_m')[i+1]
         var tmp2 = document.getElementsByClassName('vv_m')[i+1]
         var tmp3 = document.getElementsByClassName('rm_cost')
-        var _op = ((global_sw[i]*tmp3[i].innerText)/1000)*tmp2.innerText
+        var _op = ((global_sw[i]*tmp3[i].innerText)/1000)*tmp2.innerText*10
         var op = parseFloat(_op).toFixed(3)
         tmp.innerHTML = op
         tmp.classList.add("to_update")
