@@ -512,6 +512,7 @@ function generateData(){
 
 function generateDataMaster(){
 
+    _sum_ti = 0.0
     var table_new = document.getElementById("generatedTable")
     var table_update = document.getElementById("tdetail")
     var tableInput = ''
@@ -532,7 +533,6 @@ function generateDataMaster(){
     var list_tiRemoving = []
     var sum_tiRemoving = 0
     var sum_vv_m = 0.0
-    var sum_g100ml_m = 0
     var sum_test = 0
     var sum_ww = 0
     var sum_fcost = 0
@@ -558,13 +558,13 @@ function generateDataMaster(){
     for(var i=0; i < global_num_raw_material; i++){
         var res = ''
         if(table_new){
-            if(i==2){
+            if(i==2){   //Ti not calculated for MASTER
                 res = 0
             } else{
                 res = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
             }
         }else if (table_update){
-            if(i == 2){
+            if(i == 2){  //Ti not calculated for MASTER
                 res = 0
             } else {
                 res = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
@@ -656,10 +656,10 @@ function generateDataMaster(){
                     var leftBound = parseFloat(base1) - parseFloat(base1*margin)
                     var rightBound = parseFloat(base1) + parseFloat(base1*margin)  
                     
-                    console.log(base1)
-                    console.log(margin)
-                    console.log(leftBound)
-                    console.log(rightBound)
+                    // console.log(base1)
+                    // console.log(margin)
+                    // console.log(leftBound)
+                    // console.log(rightBound)
 
                     if(op > leftBound && op < rightBound){
                         console.log("op > leftBound && op < rightBound")
@@ -694,24 +694,23 @@ function generateDataMaster(){
 
         $('#generatedTableMaster tbody tr:nth-child('+index+')').each(function() {
                 var value = $(this).find(".vv_m").html();  
-                // alert(value)
                 if(index == 1){
                     h2o = value
-                    // alert(h2o)
                 } else {
                     _sum_ti = parseFloat(_sum_ti) + parseFloat(value)
-                    // alert(_sum_ti)
                 }
+                // update the total sum of %v/v of Master Table
+                sum_vv_m = _sum_ti
+
             });
 
-        sum_vv_m = _sum_ti
     }
     // ricalcola 1st row (h2o) sulla base della somma degli altri valori
     $('#generatedTableMaster tbody tr:nth-child(1)').each(function() {
-            var h2o = 100.00-parseFloat(sum_vv_m)
-            h2o = parseFloat(h2o).toFixed(3)
-            $(this).find(".vv_m").html(h2o); 
-            sum_vv_m = parseFloat(sum_vv_m)+parseFloat(h2o)
+            var _h2o = 100.00-parseFloat(sum_vv_m)
+            _h2o = parseFloat(_h2o).toFixed(3)
+            $(this).find(".vv_m").html(_h2o); 
+            sum_vv_m = parseFloat(sum_vv_m)+parseFloat(_h2o)
     });
 
 
@@ -744,7 +743,7 @@ function generateDataMaster(){
         var tmp2 = document.getElementsByClassName('g100ml_m')[i+1]
         // var _op = (tmp2.innerText*global_sw[i]*100)/(sum_test)
         var _op = (tmp2.innerText*100)/(sum_test)
-        var op = parseFloat(_op).toFixed(4)
+        var op = parseFloat(_op).toFixed(2)
         // var op = parseFloat(_op)
         tmp.innerHTML = op
         tmp.classList.add("to_update")
@@ -754,7 +753,8 @@ function generateDataMaster(){
 
         // insert sum of data for cell Total %w/w
     tmp = document.getElementsByClassName('totalww')[0]
-    tmp.innerHTML = parseFloat(sum_ww).toFixed(4)
+    var somma = parseFloat(sum_ww).toFixed(2)
+    tmp.innerHTML = Math.round(somma).toFixed(2)    // round up
 
         // insert single datum for cell with className 'fc_m'
     for (var i = 0; i < global_num_raw_material; i++){
@@ -762,7 +762,7 @@ function generateDataMaster(){
         var tmp2 = document.getElementsByClassName('vv_m')[i+1]
         var tmp3 = document.getElementsByClassName('rm_cost')
         var _op = ((global_sw[i]*tmp3[i].innerText)/1000)*tmp2.innerText*10
-        var op = parseFloat(_op).toFixed(3)
+        var op = parseFloat(_op).toFixed(2)
         tmp.innerHTML = op
         tmp.classList.add("to_update")
 
@@ -771,7 +771,7 @@ function generateDataMaster(){
 
         // insert sum of data for cell Total Formula Cost
     tmp = document.getElementsByClassName('totalfcost')[0]
-    tmp.innerHTML = parseFloat(sum_fcost).toFixed(3)
+    tmp.innerHTML = parseFloat(sum_fcost).toFixed(2)
     tmp.classList.add("to_update")
 
     var form_update_save = document.getElementById("save")
@@ -1032,7 +1032,8 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-function saveProduct(rev) {
+function saveProduct(rev,currency) {
+    console.log("currency  ->   "   +   currency)
     var jsonData = createJson()
     var input_test = document.getElementsByName("name")[0]
     var input_prod_name = document.getElementById("nameProduct")
@@ -1054,8 +1055,10 @@ function saveProduct(rev) {
         input_test3.value = rev
     }
 
-    var currency = $( "#currencies option:selected" ).text();
-    console.log("currency -> "+currency)
+    if(currency == null || currency == ''){
+        currency = $( "#currencies option:selected" ).text();
+        console.log("currency from save -> "+currency)
+    }
     var input_test4 =  document.getElementsByName("currency")[0]
     if(input_test4){
         input_test4.value = currency

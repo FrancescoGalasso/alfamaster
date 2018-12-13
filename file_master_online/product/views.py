@@ -69,7 +69,7 @@ def product_list(request):
 
         if(username != "admin"):
             query += '''
-                AND owner = '''+"'"+username+"'"+ '''
+            AND owner = '''+"'"+username+"'"+ '''
             '''
 
         products = Product.objects.raw(query)
@@ -84,6 +84,7 @@ def product_list(request):
 
 @login_required
 def product_new(request):
+    import pdb; pdb.set_trace()
     print(request.GET)
     print(request.POST)
     if request.method == "POST":
@@ -93,8 +94,9 @@ def product_new(request):
         my_product_currency= request.POST.get('currency')
 
         if(my_product_rev):
-            print("revision -> "+my_product_rev)
-        else:
+            print("revision -> "+str(my_product_rev))
+            # print("my_product_currency -> "+str(my_product_currency).encode("utf-8"))
+        elif (my_product_rev is None):
             my_product_rev = 0
 
         data = json.loads(my_product_data)
