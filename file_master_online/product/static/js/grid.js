@@ -1141,18 +1141,14 @@ function download_csv(rev){
     for (var i = 0, row; row = table1.rows[i]; i++) {
         var lista = []
         for (var j = 0, col; col = row.cells[j]; j++) {
-            // innerText
-            // innerHTML
             lista.push(col.innerText)
             if(i==0 && j>2){
-                lista.push("")
-                lista.push("")
-                lista.push("")
-                lista.push("")
+                var tmp = Array(4).join("")
+                lista.push(tmp)
             }
             if(i==table1.rows.length - 1 && j == 0){
-                lista.push("")
-                lista.push("")
+                var tmp = Array(2).join("")
+                lista.push(tmp)
             }
         }
         body_tbl1.push(lista)
