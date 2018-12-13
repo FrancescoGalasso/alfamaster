@@ -41,7 +41,6 @@ $( document ).ready(function() {
             cells[i].innerHTML = ""
         }
 
-        // setClassesForCalculationUpdate()
         setClassesForCalculation()
 
         document.getElementById("updateCalculateBtn").disabled = false;
