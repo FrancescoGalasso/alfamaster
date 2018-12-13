@@ -10,12 +10,9 @@
   var max_of_array = 0;
   var num = 0
   var pk = '{{prod_pk}}'
-  console.log(pk)
   var rev = '{{prod_rev}}'
-  console.log("revision -> "+rev)
   rev = parseInt(rev)+1
   var prod_currency = '{{prod_currency}}'
-  console.log(prod_currency)
 </script>
 
 <h2>{{prod_name}}</h2>
@@ -93,21 +90,6 @@
         {% endfor %}
         </tr>
     </tbody>
-                  <!-- footer -->
-    <!-- <tfoot>
-        <th style="visibility:hidden;"></th>
-        <th style="visibility:hidden;"></th>
-        <th style="visibility:hidden;"></th>
-        {% for itemlists in list %} 
-          {% for k,v in itemlists.items %}
-            {% if k == "bases" %}
-              {%for element in v%}
-              <th></th>
-              {% endfor %} 
-            {% endif %}
-          {% endfor %}
-        {% endfor %}
-    </tfoot> -->
 </table>
 
 <br>
@@ -124,7 +106,6 @@
 <form action='/product/new/' method='POST' id="save"> {% csrf_token %}
     <input type='hidden' name='name' />
     <input type='hidden' name='data' />
-    <!-- <input type='hidden' name='revision' value=rev/> -->
     <input type='hidden' name='revision'/>
     <input type='hidden' name='currency' />
     <input id="btn_update_save" type='submit' onclick=saveProduct(rev,prod_currency) value='Save' />

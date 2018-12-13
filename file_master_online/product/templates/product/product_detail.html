@@ -14,8 +14,6 @@
   var pk = '{{prod_pk}}'
   var rev = '{{prod_rev}}'
   var bases_num = 0
-  // console.log(pk)
-  // console.log(rev)
   var revv = String(rev)
   var currency = '{{prod_currency}}'
 </script>
@@ -121,7 +119,7 @@
           <h4 class="modal-title">DELETE {{prod_name}}</h4>
         </div>
         <div class="modal-body">
-          <p>Delete this product?</p>
+          <p>Delete this last revision of this product?</p>
         </div>
         <div class="modal-footer">
             <form action="{% url 'product_delete' pk=prod_pk %}" method="post">
