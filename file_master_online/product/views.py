@@ -3,12 +3,10 @@ from django.utils import timezone
 from .models import Product
 from django.shortcuts import render, get_object_or_404
 import json
-
 from django.http import HttpResponse, HttpResponseNotFound, Http404,  HttpResponseRedirect
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
-import csv
 
 # Python logging package
 import logging
