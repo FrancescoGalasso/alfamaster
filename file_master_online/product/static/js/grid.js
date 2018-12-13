@@ -597,10 +597,14 @@ function generateDataMaster(){
         var _op = (100*_tmp2)/sum_tiRemoving
         var op = parseFloat(_op).toFixed(3)
 
-            var avg = 0
             var index = i+1
             var _lista = []
             var result = []
+            if(i == 2){
+                tmp.innerHTML = parseFloat(0).toFixed(3)
+                tmp.classList.add("to_update") 
+                continue
+            }
             console.log("op ->"+op)
             if(op <= 1){
                 $('#'+table_id+' tbody tr:nth-child('+index+')').each(function() {
@@ -644,9 +648,7 @@ function generateDataMaster(){
                     }
                 }
 
-                var check_correct = $.inArray(1, result)
                 var check_uncorrect = $.inArray(0, result)
-
                 if(check_uncorrect == -1){
                     // tutto è vero result -> [1,1,1,1]; cerco MASTER 'vv_m'
                     // se  base1-10% < VALUE < base1+10%
@@ -655,11 +657,6 @@ function generateDataMaster(){
                     var margin = 0.1
                     var leftBound = parseFloat(base1) - parseFloat(base1*margin)
                     var rightBound = parseFloat(base1) + parseFloat(base1*margin)  
-                    
-                    // console.log(base1)
-                    // console.log(margin)
-                    // console.log(leftBound)
-                    // console.log(rightBound)
 
                     if(op > leftBound && op < rightBound){
                         console.log("op > leftBound && op < rightBound")
@@ -687,10 +684,7 @@ function generateDataMaster(){
                 sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
             }
 
-
-        // tmp.innerHTML = op                      // populate the cell
         tmp.classList.add("to_update") 
-
 
         $('#generatedTableMaster tbody tr:nth-child('+index+')').each(function() {
                 var value = $(this).find(".vv_m").html();  
