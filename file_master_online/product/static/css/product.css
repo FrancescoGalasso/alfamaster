@@ -24,6 +24,11 @@ body {
     margin-left: 15px;
 }
 
+.main {
+    /* display: none; */
+    visibility: hidden;
+}
+
 /* 
 *   css inside <div class="grid_generator">
 */
