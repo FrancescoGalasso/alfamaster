@@ -2,6 +2,8 @@
 {% block content %}
 {% load staticfiles %}
 
+<script src="https://cdn.rawgit.com/katmore/gpu-loading-overlay/master/src/loadingOverlay.js"></script>
+
 <!-- script -->
 <script type="text/javascript">
   var foo = [];
@@ -15,103 +17,104 @@
   var prod_currency = '{{prod_currency}}'
 </script>
 
-<h2>{{prod_name}}</h2>
-<h4>revisione: {{prod_rev}}</h4>
+<div class="main">
+  <h2>{{prod_name}}</h2>
+  <h4>revisione: {{prod_rev}}</h4>
 
-<table class="display" style="width:100%" id="tdetail">
-                  <!-- thead -->
-    <thead>
-        <tr>
-            <th style="visibility:hidden;"></th>
-            <th style="visibility:hidden;"></th>
-            <th style="visibility:hidden;"></th>
-            {% for itemlists in list %} 
-              {% for k,v in itemlists.items %}
-                {% if k == "bases" %}
-                  <script type="text/javascript">
-                    bases_num = "{{v|length}}"
-                  </script>
-                {% endif %}
-              {% endfor %}
-            {% endfor %}
-        </tr>
-        <tr>
-            <th>Raw material</th>
-            <th>Specific weight [g/mL]</th>
-            <th>RM cost [$/L]</th>
-
-            {% for itemlists in list %}
+  <table class="display" style="width:100%" id="tdetail">
+                    <!-- thead -->
+      <thead>
+          <tr>
+              <th style="visibility:hidden;"></th>
+              <th style="visibility:hidden;"></th>
+              <th style="visibility:hidden;"></th>
+              {% for itemlists in list %} 
                 {% for k,v in itemlists.items %}
                   {% if k == "bases" %}
-                    <!-- script -->
-                    <script type="text/javascript"> 
-                      a = "{{v|length}}";
-                      foo2.push(a);
-                      console.log("foo2 "+foo2);
-                      max_of_array = Math.max.apply(Math, foo2);
-                      console.log("max_of_array "+max_of_array);
+                    <script type="text/javascript">
+                      bases_num = "{{v|length}}"
                     </script>
                   {% endif %}
                 {% endfor %}
               {% endfor %}
-               <!-- script --> 
-              <script>
-                var i;
-                for (i = 0; i < max_of_array; i++) { 
-                  $("tr:nth-child(2)").append("<th>%w/w</th>");
-                  $("tr:nth-child(2)").append(" <th>mL/100g</th>");
-                  $("tr:nth-child(2)").append("<th>%v/v</th>");
-                  $("tr:nth-child(2)").append("<th>mL/1000g</th>");
-                  $("tr:nth-child(2)").append("<th>Formula Cost [$/L]</th>");     
-                }
-              </script>
-        </tr>
-    </thead>
-                  <!-- tbody -->
-    <tbody>
-        {% for itemlists in list %} 
-        <tr>
-          {% for k,v in itemlists.items %}
-            {% if k != "bases" %}
-            <td>{{v}}</td>
-            {% endif %}
+          </tr>
+          <tr>
+              <th>Raw material</th>
+              <th>Specific weight [g/mL]</th>
+              <th>RM cost [$/L]</th>
+
+              {% for itemlists in list %}
+                  {% for k,v in itemlists.items %}
+                    {% if k == "bases" %}
+                      <!-- script -->
+                      <script type="text/javascript"> 
+                        a = "{{v|length}}";
+                        foo2.push(a);
+                        console.log("foo2 "+foo2);
+                        max_of_array = Math.max.apply(Math, foo2);
+                        console.log("max_of_array "+max_of_array);
+                      </script>
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
+                <!-- script --> 
+                <script>
+                  var i;
+                  for (i = 0; i < max_of_array; i++) { 
+                    $("tr:nth-child(2)").append("<th>%w/w</th>");
+                    $("tr:nth-child(2)").append(" <th>mL/100g</th>");
+                    $("tr:nth-child(2)").append("<th>%v/v</th>");
+                    $("tr:nth-child(2)").append("<th>mL/1000g</th>");
+                    $("tr:nth-child(2)").append("<th>Formula Cost [$/L]</th>");     
+                  }
+                </script>
+          </tr>
+      </thead>
+                    <!-- tbody -->
+      <tbody>
+          {% for itemlists in list %} 
+          <tr>
+            {% for k,v in itemlists.items %}
+              {% if k != "bases" %}
+              <td>{{v}}</td>
+              {% endif %}
+            {% endfor %}
+                    <!-- show the bases -->
+            {% for k,v in itemlists.items %}
+              {% if k == "bases" %}
+                {%for element in v%}
+                  <td>{{element.g_100g}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                {% endfor %} 
+              {% endif %}
+            {% endfor %}
           {% endfor %}
-                  <!-- show the bases -->
-          {% for k,v in itemlists.items %}
-            {% if k == "bases" %}
-              {%for element in v%}
-                <td>{{element.g_100g}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              {% endfor %} 
-            {% endif %}
-          {% endfor %}
-        {% endfor %}
-        </tr>
-    </tbody>
-</table>
+          </tr>
+      </tbody>
+  </table>
 
-<br>
-<button id="updateCalculateBtn" type="button" class="btn btn-xs" disabled = "true" onclick=generateData()>Calculate</button> 
+  <br>
+  <button id="updateCalculateBtn" type="button" class="btn btn-xs" disabled = "true" onclick=generateData()>Calculate</button> 
 
-<br>
-<div id="tableFillCalculation" style="margin-top: 20;"></div>
-<br>
-<div id="tableMaster"></div>
-<br>
+  <br>
+  <div id="tableFillCalculation" style="margin-top: 20;"></div>
+  <br>
+  <div id="tableMaster"></div>
+  <br>
 
-<hr/>
+  <hr/>
 
-<form action='/product/new/' method='POST' id="save"> {% csrf_token %}
-    <input type='hidden' name='name' />
-    <input type='hidden' name='data' />
-    <input type='hidden' name='revision'/>
-    <input type='hidden' name='currency' />
-    <input id="btn_update_save" type='submit' onclick=saveProduct(rev,prod_currency) value='Save' />
-</form>
-
+  <form action='/product/new/' method='POST' id="save"> {% csrf_token %}
+      <input type='hidden' name='name' />
+      <input type='hidden' name='data' />
+      <input type='hidden' name='revision'/>
+      <input type='hidden' name='currency' />
+      <input id="btn_update_save" type='submit' onclick=saveProduct(rev,prod_currency) value='Save' />
+  </form>
+</div>
 <hr/>
 <script>  
   for(var i=0; i<bases_num; i++){
