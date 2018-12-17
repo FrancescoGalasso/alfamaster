@@ -15,6 +15,9 @@
   var rev = '{{prod_rev}}'
   rev = parseInt(rev)+1
   var prod_currency = '{{prod_currency}}'
+  console.log("prod_currency -> "+prod_currency)
+  var prod_admin = '{{prod_admin}}'
+  console.log("prod_admin -> "+prod_admin)
 </script>
 
 <div class="main">
@@ -50,9 +53,9 @@
                       <script type="text/javascript"> 
                         a = "{{v|length}}";
                         foo2.push(a);
-                        console.log("foo2 "+foo2);
+                        // console.log("foo2 "+foo2);
                         max_of_array = Math.max.apply(Math, foo2);
-                        console.log("max_of_array "+max_of_array);
+                        // console.log("max_of_array "+max_of_array);
                       </script>
                     {% endif %}
                   {% endfor %}

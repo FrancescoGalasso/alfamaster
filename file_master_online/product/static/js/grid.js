@@ -528,7 +528,14 @@ function generateData(){
     generateTableFillLvl()
 
     if(prod_admin == "False"){
-        showLessDetails()
+        var table_update = document.getElementsByClassName("btn btn-warning")[0]
+        var action = ""
+        if(table_update){
+            action = "detail"
+        } else{
+            action = "update"
+        }
+        showLessDetails(action)
     }
     if(!btnDisabled){
         setTimeout(function() {
@@ -1243,8 +1250,9 @@ function download_csv(rev){
  * 
  * If the user authenticated is not an admin user, show less details (hide mL/100g; mL/1000g; g/100mL )
  */
-function showLessDetails(){
+function showLessDetails(action){
   
+    console.log("ACTION -> "+action)
     var listofIndexTHead = [4,5,7,8]
     var listofIndexTotal = [2,3,5,6]
     if(global_num_bases>2){
@@ -1276,11 +1284,19 @@ function showLessDetails(){
                 }
             }else if(i!=global_num_raw_material+2){
                 for(var k=0; k<listofIndexTHead.length;k++){
-                    row.deleteCell(listofIndexTHead[k])
+                    if(action == "detail"){
+                        row.deleteCell(listofIndexTHead[k])
+                    }else{  
+                        row.cells[listofIndexTHead[k]].style.display="none"
+                    }
                 }
             }else if(i == global_num_raw_material+2){
                 for(var k=0; k<listofIndexTotal.length;k++){
-                    row.deleteCell(listofIndexTotal[k])
+                    if(action == "detail"){
+                        row.deleteCell(listofIndexTotal[k])
+                    }else{
+                        row.cells[listofIndexTotal[k]].style.display="none"
+                    }
                 }
             }
         }
@@ -1293,7 +1309,11 @@ function showLessDetailsMaster(){
     if(table2){
         for (var i = 0; i<= global_num_raw_material+2; i ++){
             var row = table2.rows[i]
-            row.deleteCell(3)
+            if(row === undefined){
+                break
+            }else{
+                row.deleteCell(3)
+            }
         }
     }
 }
