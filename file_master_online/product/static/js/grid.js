@@ -365,6 +365,11 @@ function generateData(){
         var tmp = 0;
         var sum = 0;
         $(listofInputClassNames[i]).each(function(){
+            if($(this).hasClass( "tirem_m" )){
+                // alert("wrong!")
+                console.log($(this))
+                return false
+            }
             var input = $(this).text()
             if (listofInputClassNames[i] == '.sw'){
                 sw.push(parseFloat(input))
@@ -372,8 +377,10 @@ function generateData(){
                 for (var j=0; j< listofWeightClassNames.length; j++ ){
                     if(listofInputClassNames[i] == listofWeightClassNames[j]){
                         // ww.push(parseFloat(input))
-                        matrixWeightInput[j].push(parseFloat(input))
-                        sum += parseFloat(input)
+                        if(parseFloat(input) >= 0){
+                            matrixWeightInput[j].push(parseFloat(input))
+                            sum += parseFloat(input)
+                        }
                     }
                 }
             }
@@ -1240,5 +1247,14 @@ $( document ).ready(function() {
        option += '<option value="'+ numbers[i] + '">' + numbers[i] + '</option>';
     }
     $('#currencies').append(option);
+
+    if ( $( "#input_grid2" ).length ){
+        $('#input_grid2').keyup(function(){
+            if($('#input_grid2').val()){
+                alert("Ext TiO2 ask")
+            }
+        });
+    }
+
 });
 

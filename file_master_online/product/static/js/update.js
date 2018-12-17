@@ -27,6 +27,11 @@ $( document ).ready(function() {
             body.rows[i].cells[listofIndexInput[j]-1].contentEditable = true
             body.rows[i].cells[listofIndexInput[j]-1].style.backgroundColor = "#ffff00"
             body.rows[i].cells[listofIndexInput[j]-1].className = "update"
+            if(j == 1){
+                body.rows[i].cells[listofIndexInput[j]-1].className = "rm_cost"
+            }else if(j == 0){
+                body.rows[i].cells[listofIndexInput[j]-1].className = "sw"
+            }
         }
     }
 

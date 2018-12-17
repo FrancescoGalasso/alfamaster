@@ -74,7 +74,8 @@ def product_list(request):
 
         stdlogger.info("        +++ [info] Product.objects.raw")
         stdlogger.info(products)
-
+        stdlogger.info(" - ")
+        stdlogger.warning(Product.objects.filter(owner="simple_user"))
         return render(request, 'product/product_list.html', {'products': products})
 
     else:
