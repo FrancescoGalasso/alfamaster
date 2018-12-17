@@ -366,9 +366,7 @@ function generateData(){
         var sum = 0;
         $(listofInputClassNames[i]).each(function(){
             if($(this).hasClass( "tirem_m" )){
-                // alert("wrong!")
-                console.log($(this))
-                return false
+                return false        // exit from loop
             }
             var input = $(this).text()
             if (listofInputClassNames[i] == '.sw'){
@@ -376,7 +374,6 @@ function generateData(){
             } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
                 for (var j=0; j< listofWeightClassNames.length; j++ ){
                     if(listofInputClassNames[i] == listofWeightClassNames[j]){
-                        // ww.push(parseFloat(input))
                         if(parseFloat(input) >= 0){
                             matrixWeightInput[j].push(parseFloat(input))
                             sum += parseFloat(input)
