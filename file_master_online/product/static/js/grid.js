@@ -1248,7 +1248,7 @@ function download_csv(rev){
 
 /**
  * 
- * If the user authenticated is not an admin user, show less details (hide mL/100g; mL/1000g; g/100mL )
+ * If the user authenticated is not an admin user, show less details (hide mL/100g; mL/1000g) on table #tdetail
  */
 function showLessDetails(action){
   
@@ -1303,6 +1303,10 @@ function showLessDetails(action){
     }
 }
 
+/**
+ * 
+ * If the user authenticated is not an admin user, show less details on table #generatedTableMaster
+ */
 function showLessDetailsMaster(){
     var table2 = document.getElementById("generatedTableMaster")
 
