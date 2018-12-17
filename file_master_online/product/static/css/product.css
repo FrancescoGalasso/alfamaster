@@ -14,6 +14,16 @@ body {
 #generateBtn {
     margin-top: 10px;
 }
+
+#divBtns {
+    margin-bottom: 20px;
+}
+
+#divBtns button{
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
 /* 
 *   css inside <div class="grid_generator">
 */

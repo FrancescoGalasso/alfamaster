@@ -135,11 +135,12 @@
     </div>
   </div>
 
-  <a class="btn btn-warning" href="{% url 'product_update' pk=prod_pk %}" style="color: black;font-weight: bold;">Update</a>
+  <div id="divBtns">
+    <a class="btn btn-warning" href="{% url 'product_update' pk=prod_pk %}" style="color: black;font-weight: bold;">Update</a>
 
-  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" style="font-weight: bold;">Delete</button>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" style="font-weight: bold;">Delete</button>
 
-  <a class="btn btn-success" style="font-weight: bold;"  onclick=download_csv(revv)>Export as csv</a>
-
+    <a class="btn btn-success" style="font-weight: bold;"  onclick=download_csv(revv)>Export as csv</a>
+  </div>
 
 {% endblock %}
