@@ -31,6 +31,7 @@ def product_detail(request, pk):
         stdlogger.debug("       *** [debug] product revision: "+ prod_rev)
         prod_currency = unicode(product.currencies)
         stdlogger.debug("       *** [debug] product currency: "+ prod_currency)
+        prod_admin = ""
 
         if prod_owner == request.user.username or request.user.username == "admin":
             try:
@@ -40,7 +41,13 @@ def product_detail(request, pk):
                 import traceback
                 print traceback.format_exc()
                 lista = { }
-            return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':prod_rev, 'prod_currency':prod_currency})    
+
+            if request.user.username == "admin":
+                prod_admin = True
+            else:
+                prod_admin = False
+
+            return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':prod_rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin})    
             # return render(request, 'product/product_detail.html')
         else:
             stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")

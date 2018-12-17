@@ -333,6 +333,21 @@ function creationTFootMaster(tableFoot, tr_foot){
 
 function generateData(){
 
+    if( $('#updateCalculateBtn').length ){
+        // visibility:hidden
+        // $(".main").css("display", "block");
+        $(".main").css("visibility", "visible");
+    }
+    // test loadingOverlay
+    var btnDisabled = $("#updateCalculateBtn").is(":disabled")
+    console.log("btnDisabled -> " + btnDisabled)
+    if(!btnDisabled){
+        // $(".main").css("display", "none");
+        // $(".main").css("visibility", "hidden"); //correct one
+        $(".main").css("visibility", "visible"); //correct one
+        var spinHandle = loadingOverlay.activate();
+    }
+
     var form_update_save = document.getElementById("save")
     if(form_update_save){
         form_update_save.style.display = "none"
@@ -512,6 +527,16 @@ function generateData(){
     global_sw = sw
     generateTableFillLvl()
 
+    if(prod_admin == "False"){
+        showLessDetails()
+    }
+    if(!btnDisabled){
+        setTimeout(function() {
+            loadingOverlay.cancel(spinHandle);
+            $(".main").css("visibility", "visible");
+            // $(".main").css("display", "block");
+        },1600);
+    }
 }
 
 function generateDataMaster(){
@@ -777,6 +802,10 @@ function generateDataMaster(){
         form_update_save.style.display = "block"
     }
 
+
+    if(prod_admin == "False"){
+        showLessDetailsMaster()
+    }
 }
 
 /*
@@ -1210,6 +1239,64 @@ function download_csv(rev){
 
 }
 
+/**
+ * 
+ * If the user authenticated is not an admin user, show less details (hide mL/100g; mL/1000g; g/100mL )
+ */
+function showLessDetails(){
+  
+    var listofIndexTHead = [4,5,7,8]
+    var listofIndexTotal = [2,3,5,6]
+    if(global_num_bases>2){
+        for(var i=2; i<global_num_bases;i++){
+            var lastHead = listofIndexTHead[listofIndexTHead.length - 1]
+            var newItem1 = parseInt(lastHead)+2         // e.g -> 10
+            var newItem2 = parseInt(newItem1)+1         // e.g -> 11
+            listofIndexTHead.push(newItem1, newItem2)
+
+            var lastTotal = listofIndexTotal[listofIndexTotal.length - 1]
+            var _newItem1 = parseInt(lastTotal)+2           // e.g -> 8
+            var _newItem2 = parseInt(_newItem1)+1           // e.g -> 9
+            listofIndexTotal.push(_newItem1, _newItem2)
+            console.log(listofIndexTotal)
+        }
+    }
+
+    var table = document.getElementById("tdetail")
+
+    if(table){
+        for (var i = 0; i<= global_num_raw_material+2; i ++){
+            var row = table.rows[i]
+
+            if(i==0){
+                // dynamic required!
+                var lenTheadCells = row.cells.length
+                for(var k=3; k<lenTheadCells; k++){
+                    row.cells[k].colSpan = "3"
+                }
+            }else if(i!=global_num_raw_material+2){
+                for(var k=0; k<listofIndexTHead.length;k++){
+                    row.deleteCell(listofIndexTHead[k])
+                }
+            }else if(i == global_num_raw_material+2){
+                for(var k=0; k<listofIndexTotal.length;k++){
+                    row.deleteCell(listofIndexTotal[k])
+                }
+            }
+        }
+    }
+}
+
+function showLessDetailsMaster(){
+    var table2 = document.getElementById("generatedTableMaster")
+
+    if(table2){
+        for (var i = 0; i<= global_num_raw_material+2; i ++){
+            var row = table2.rows[i]
+            row.deleteCell(3)
+        }
+    }
+}
 /*
 *
 *               Document ready 
