@@ -234,7 +234,20 @@ async function generateTableMaster(){
     await sleep(200);    // sleep 0.2 sec
     console.log('generateTableMaster')
 
-    var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", "Formula Cost "]
+    var r = $("#tdetail tr:nth-child(2)")[0]
+    console.log(r)
+    var r1 = r[16]
+    console.log(r1)
+
+    var rr = $("#tdetail").find("thead tr").eq(1).children()
+    var formulaCost = ""
+    if(rr[16] === undefined){
+        formulaCost = rr[9].innerText
+    }else{
+        formulaCost = rr[16].innerText
+    }
+    // var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", "Formula Cost ["+prod_currency+"/L]"]
+    var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", formulaCost]
     var myTableDiv = document.getElementById("tableMaster")
 
 
