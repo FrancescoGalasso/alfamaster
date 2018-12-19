@@ -29,6 +29,20 @@ body {
     visibility: hidden;
 }
 
+.login-adv{
+    font-weight: bold; 
+    padding-bottom:20px; 
+    font-size: large;
+}
+
+.login-frm{
+    padding-left: 15px;
+}
+
+.login-frm input[type="submit"]{
+    margin-top: 10px;
+    margin-left: 135px;
+}
 /* 
 *   css inside <div class="grid_generator">
 */
