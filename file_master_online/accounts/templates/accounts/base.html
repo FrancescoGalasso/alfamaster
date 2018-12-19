@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Alfa Master File</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/product.css' %}">
+
+    </head>
+    <body>
+        <div class="page-header">
+            <h1 align="center"><a href="#">AlfaMaster Online</a></h1>
+        </div>    
+        <p class="login-adv">Authentication is required to continue using this website</p>
+        <div class="login-frm">
+            {% block content %}
+            {% endblock %}   
+        </div> 
+
+    </body>
+</html>
