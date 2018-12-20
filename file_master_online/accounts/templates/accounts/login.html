@@ -1,9 +1,11 @@
 {% extends 'accounts/base.html' %} 
 
 {% block content %}
+<p class="login-adv">Authentication is required to continue using this website</p>
 <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="login" /><br />
+    <a href="{% url 'signup' %}">New to AlfaMaster Online? Sign up</a>
 </form>
 {% endblock %}
