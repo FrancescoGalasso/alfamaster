@@ -25,14 +25,19 @@ def signup(request):
             user.save()
 
             current_site = get_current_site(request)
-            subject = 'Activate Your MySite Account'
+            subject = 'Activate Your AlfaMaster Account'
             message = render_to_string('accounts/account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
             })
-            user.email_user(subject, message)
+            # user.email_user(subject, message)
+            from django.core.mail import send_mail
+            from django.conf import settings
+            email_from = settings.EMAIL_HOST_USER
+            email_to = user.email
+            send_mail(subject, message, email_from, [email_to,])
 
             return redirect('account_activation_sent')
     else:
