@@ -39,7 +39,7 @@ def signup(request):
             email_to = user.email
             send_mail(subject, message, email_from, [email_to,])
 
-            return redirect('accounts/account_activation_sent')
+            return redirect('account_activation_sent')
     else:
         form = SignUpForm()
     return render(request, 'accounts/signup.html', {'form': form})
