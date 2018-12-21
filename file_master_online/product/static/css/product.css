@@ -44,7 +44,7 @@ body {
     margin-left: 135px;
 }
 
-.login-frm a {
+.login-frm a:not(.signin){
     display: block;
     margin-top: 14px;
     margin-left: 43px;
