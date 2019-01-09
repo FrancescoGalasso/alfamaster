@@ -11,12 +11,12 @@ class Product(models.Model):
 #     id=models.IntegerField(primary_key=True)
     name = models.CharField(max_length=25, blank=False)
     owner = models.CharField(max_length=25, default='')
-    data = JSONField(default=list)
+    # data = JSONField(default=list)
     created_date = models.DateTimeField(
             default=timezone.now)
     # published_date = models.DateTimeField(
     #         blank=True, null=True)
-    revision = models.IntegerField(default=1)
+    # revision = models.IntegerField(default=1)
     currencies = models.CharField(max_length=25, default='')
 
 
@@ -26,3 +26,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+class History(models.Model):
+    id=models.IntegerField(primary_key=True)
+    data = JSONField(default=list)
+    revision = models.IntegerField(default=0)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)

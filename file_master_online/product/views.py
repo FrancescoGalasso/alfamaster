@@ -59,25 +59,27 @@ def product_list(request):
     if request.user.is_authenticated():
         username = request.user.username
 
-        query = '''
-            select *
-            from (
-            select id, 
-                    name,
-                    revision,
-                    owner,
-                    max(revision) over (partition by name) as max_thing
-            from "product_product"
-            ) t
-            where revision = max_thing
-        '''
+        # query = '''
+        #     select *
+        #     from (
+        #     select id, 
+        #             name,
+        #             revision,
+        #             owner,
+        #             max(revision) over (partition by name) as max_thing
+        #     from "product_product"
+        #     ) t
+        #     where revision = max_thing
+        # '''
 
-        if(username != "admin"):
-            query += '''
-            AND owner = '''+"'"+username+"'"+ '''
-            '''
+        # if(username != "admin"):
+        #     query += '''
+        #     AND owner = '''+"'"+username+"'"+ '''
+        #     '''
 
-        products = Product.objects.raw(query)
+        # products = Product.objects.raw(query)
+
+        products = Product.objects.all()
 
         stdlogger.info("        +++ [info] Product.objects.raw")
         stdlogger.info(products)

@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'file_master_online.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'alfamaster',
+        'NAME': 'alfamaster2',
         'USER': 'admin',
         'PASSWORD': 'alfaadmin',
         'HOST': 'localhost',
