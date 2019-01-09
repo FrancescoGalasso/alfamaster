@@ -363,7 +363,7 @@ function generateData(){
         // $(".main").css("display", "none");
         // $(".main").css("visibility", "hidden"); //correct one
         $(".main").css("visibility", "visible"); //correct one
-        // var spinHandle = loadingOverlay.activate();
+        var spinHandle = loadingOverlay.activate();
     }
 
     var form_update_save = document.getElementById("save")
@@ -560,7 +560,7 @@ function generateData(){
 
     if(!btnDisabled){
         setTimeout(function() {
-            // loadingOverlay.cancel(spinHandle);
+            loadingOverlay.cancel(spinHandle);
             $(".main").css("visibility", "visible");
             // $(".main").css("display", "block");
         },1600);
