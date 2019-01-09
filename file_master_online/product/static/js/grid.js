@@ -235,16 +235,21 @@ async function generateTableMaster(){
     console.log('generateTableMaster')
 
     var r = $("#tdetail tr:nth-child(2)")[0]
-    console.log(r)
-    var r1 = r[16]
-    console.log(r1)
+    // console.log(r)
+    if(typeof r !== "undefined"){
 
-    var rr = $("#tdetail").find("thead tr").eq(1).children()
-    var formulaCost = ""
-    if(rr[16] === undefined){
-        formulaCost = rr[9].innerText
-    }else{
-        formulaCost = rr[16].innerText
+        var r1 = r[16]
+        console.log(r1)
+
+        var rr = $("#tdetail").find("thead tr").eq(1).children()
+        var formulaCost = ""
+        if(rr[16] === undefined){
+            formulaCost = rr[9].innerText
+        }else{
+            formulaCost = rr[16].innerText
+        }
+    } else {
+        formulaCost = "Formula Cost"
     }
     // var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", "Formula Cost ["+prod_currency+"/L]"]
     var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", formulaCost]
@@ -358,7 +363,7 @@ function generateData(){
         // $(".main").css("display", "none");
         // $(".main").css("visibility", "hidden"); //correct one
         $(".main").css("visibility", "visible"); //correct one
-        var spinHandle = loadingOverlay.activate();
+        // var spinHandle = loadingOverlay.activate();
     }
 
     var form_update_save = document.getElementById("save")
@@ -540,19 +545,22 @@ function generateData(){
     global_sw = sw
     generateTableFillLvl()
 
-    if(prod_admin == "False"){
-        var table_update = document.getElementsByClassName("btn btn-warning")[0]
-        var action = ""
-        if(table_update){
-            action = "detail"
-        } else{
-            action = "update"
+    if(typeof prod_admin !== "undefined"){
+        if(prod_admin == "False"){
+            var table_update = document.getElementsByClassName("btn btn-warning")[0]
+            var action = ""
+            if(table_update){
+                action = "detail"
+            } else{
+                action = "update"
+            }
+            showLessDetails(action)
         }
-        showLessDetails(action)
     }
+
     if(!btnDisabled){
         setTimeout(function() {
-            loadingOverlay.cancel(spinHandle);
+            // loadingOverlay.cancel(spinHandle);
             $(".main").css("visibility", "visible");
             // $(".main").css("display", "block");
         },1600);
@@ -823,8 +831,10 @@ function generateDataMaster(){
     }
 
 
-    if(prod_admin == "False"){
-        showLessDetailsMaster()
+    if(prod_admin !== "undefined"){
+        if(prod_admin == "False"){
+            showLessDetailsMaster()
+        }
     }
 }
 
