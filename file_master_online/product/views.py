@@ -1,7 +1,8 @@
 # from django.shortcuts import render
 from django.utils import timezone
 from .models import Product
-from django.shortcuts import render, get_object_or_404
+from .models import History
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 import json
 from django.http import HttpResponse, HttpResponseNotFound, Http404,  HttpResponseRedirect
 from django.shortcuts import redirect
@@ -17,26 +18,36 @@ stdlogger = logging.getLogger(__name__)
 def product_detail(request, pk):
 
     if request.user.is_authenticated():
-
+        # import pdb; pdb.set_trace()
         stdlogger.info("        +++ [info] Call to PRODUCT_DETAIL method")
-
         product = get_object_or_404(Product, pk=pk)
-        data =product.data
+        # history_list = get_list_or_404(History, product=pk)
+        history= History.objects.filter(product=pk).latest('revision')
+
+        data = history.data
+        if isinstance(data, basestring):
+            _data = json.loads(data)
+        else:
+            _data = data
+
         prod_name = product.name
         prod_pk = pk
-        stdlogger.debug("       *** [debug] product name: "+ prod_name)
+        history_id = history.id 
+        stdlogger.debug("       *** [debug] product history_id: "+ str(history_id))
+
+        stdlogger.debug("       *** [debug] product_name: "+ prod_name)
         prod_owner = product.owner
-        stdlogger.debug("       *** [debug] product owner: "+ prod_owner)
-        prod_rev = str(product.revision)
-        stdlogger.debug("       *** [debug] product revision: "+ prod_rev)
+        stdlogger.debug("       *** [debug] product_owner: "+ prod_owner)
+        prod_rev = str(history.revision)
+        stdlogger.debug("       *** [debug] product history_revision: "+ prod_rev)
         prod_currency = unicode(product.currencies)
-        stdlogger.debug("       *** [debug] product currency: "+ prod_currency)
+        stdlogger.debug("       *** [debug] product_currency: "+ prod_currency)
         prod_admin = ""
 
         if prod_owner == request.user.username or request.user.username == "admin":
             try:
-                lista = data['data']
-                stdlogger.debug("       *** [debug] product data: {}".format(lista))
+                lista = _data['data']
+                stdlogger.debug("       *** [debug] product history_data: {}".format(lista))
             except:
                 import traceback
                 print traceback.format_exc()
@@ -47,7 +58,7 @@ def product_detail(request, pk):
             else:
                 prod_admin = False
 
-            return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':prod_rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin})    
+            return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':prod_rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin, 'history_id':history_id})    
             # return render(request, 'product/product_detail.html')
         else:
             stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
@@ -58,26 +69,6 @@ def product_list(request):
 
     if request.user.is_authenticated():
         username = request.user.username
-
-        # query = '''
-        #     select *
-        #     from (
-        #     select id, 
-        #             name,
-        #             revision,
-        #             owner,
-        #             max(revision) over (partition by name) as max_thing
-        #     from "product_product"
-        #     ) t
-        #     where revision = max_thing
-        # '''
-
-        # if(username != "admin"):
-        #     query += '''
-        #     AND owner = '''+"'"+username+"'"+ '''
-        #     '''
-
-        # products = Product.objects.raw(query)
 
         products = Product.objects.all()
 
@@ -109,19 +100,46 @@ def product_new(request):
         if request.user.is_authenticated():
             username = request.user.username
 
-        Product.objects.create(name=my_product_name, data=data, revision=my_product_rev, owner=username, currencies=my_product_currency)
+        # Product.objects.create(name=my_product_name, data=data, revision=my_product_rev, owner=username, currencies=my_product_currency)
+        my_product = Product.objects.create(name=my_product_name, owner=username, currencies=my_product_currency)
+        # my_product = Product.objects.get(name='my_product_name')
+        # my_product = get_object_or_404(Product, name='my_product_name', owner=username)
+        my_product.save()
+        History.objects.create(data=my_product_data, revision=my_product_rev, product_id=my_product.id)
             # redirect to HOME
         return HttpResponseRedirect("/")
 
     return render(request, "product/product_new.html")
 
 @login_required
+def product_save(request):
+    print(request.GET)
+    print(request.POST)
+    if request.method == "POST":
+        my_product_pk = request.POST.get('pk')
+        my_product_data = request.POST.get('data')
+        my_product_rev = request.POST.get('revision')
+        # my_product_currency= request.POST.get('currency')
+
+        if(my_product_rev):
+            print("revision -> "+str(my_product_rev))
+        elif (my_product_rev is None):
+            my_product_rev = 0
+
+        data = json.loads(my_product_data)
+        # if request.user.is_authenticated():
+        #     username = request.user.username
+        stdlogger.info("        +++ [info] new History object created")
+        History.objects.create(data=data, revision=my_product_rev, product_id=my_product_pk)
+            # redirect to HOME
+        return HttpResponseRedirect("/")
+
+@login_required
 def product_delete(request, pk):
-    product = Product.objects.filter(pk=pk) 
-    # product = get_object_or_404(pk=pk)
-    if product.exists():
+    history = History.objects.filter(pk=pk)
+    if history.exists():
         # Standard Django delete
-        product.delete()
+        history.delete()
 
     # redirect to HOME
     return HttpResponseRedirect("/")
@@ -130,10 +148,15 @@ def product_delete(request, pk):
 def product_update(request, pk):
     stdlogger.info("        +++ [info] Call to PRODUCT_UPDATE method")
     product = get_object_or_404(Product, pk=pk)
-    data =product.data
+    history= History.objects.filter(product=pk).latest('revision')
+    data =history.data
+    if isinstance(data, basestring):
+        _data = json.loads(data)
+    else:
+        _data = data
     prod_name = product.name
     prod_pk = pk
-    rev = product.revision
+    rev = history.revision
     # stdlogger.debug("       *** [debug] product name: "+ prod_name)
     prod_owner = product.owner
     stdlogger.debug("       *** [debug] product owner: "+ prod_owner)
@@ -143,7 +166,7 @@ def product_update(request, pk):
 
     if prod_owner == request.user.username:
         try:
-            lista = data['data']
+            lista = _data['data']
             # stdlogger.debug("       *** [debug] product data: {}".format(lista))
             
         except:
@@ -163,21 +186,21 @@ def product_update(request, pk):
 
 
 
-    import pdb; pdb.set_trace()
-    if request.method == 'POST':
-        if 'matrix' in request.POST:
-            try:
-                pieFact = request.POST['matrix']
-                # doSomething with pieFact here...
-                print("    ----    ")
-                print(pieFact)
-                return HttpResponse('success') # if everything is OK
-            except:
-                import traceback
-                print traceback.format_exc()
-    else:
-        stdlogger.info("        +++ [info] NO POST for download CSV")
-    # nothing went well
-        return HttpResponse('FAIL!!!!!')
-    # return render(request, "product/product_detail.html")
+    # import pdb; pdb.set_trace()
+    # if request.method == 'POST':
+    #     if 'matrix' in request.POST:
+    #         try:
+    #             pieFact = request.POST['matrix']
+    #             # doSomething with pieFact here...
+    #             print("    ----    ")
+    #             print(pieFact)
+    #             return HttpResponse('success') # if everything is OK
+    #         except:
+    #             import traceback
+    #             print traceback.format_exc()
+    # else:
+    #     stdlogger.info("        +++ [info] NO POST for download CSV")
+    # # nothing went well
+    #     return HttpResponse('FAIL!!!!!')
+    # # return render(request, "product/product_detail.html")
 

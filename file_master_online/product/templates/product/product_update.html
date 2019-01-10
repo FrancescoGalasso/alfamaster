@@ -110,8 +110,9 @@
 
   <hr/>
 
-  <form action='/product/new/' method='POST' id="save"> {% csrf_token %}
-      <input type='hidden' name='name' />
+  <form action='/product/save/' method='POST' id="save"> {% csrf_token %}
+      <!-- <input type='hidden' name='name' /> -->
+      <input type='hidden' name='pk' />
       <input type='hidden' name='data' />
       <input type='hidden' name='revision'/>
       <input type='hidden' name='currency' />

@@ -1097,10 +1097,18 @@ function saveProduct(rev,currency) {
     if (input_prod_name){
         var value = input_prod_name.value
         input_test.value = value
-    } else {
-        var value = $("h2").html()
-        console.log(value)
-        input_test.value = value
+    }
+    // } else {
+    //     var value = $("h2").html()
+    //     console.log(value)
+    //     input_test.value = value
+    // }
+
+    var _input_test = document.getElementsByName("pk")[0]
+    if(typeof pk !== "undefined"){
+        if(pk){
+            _input_test.value = pk
+        }
     }
 
     var input_test2 = document.getElementsByName("data")[0]

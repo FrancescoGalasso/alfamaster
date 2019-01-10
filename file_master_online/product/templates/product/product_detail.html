@@ -19,6 +19,8 @@
   var currency = '{{prod_currency}}'
   var prod_admin = '{{prod_admin}}'
   console.log("prod_admin -> "+prod_admin)
+  var history_id = '{{history_id}}'
+  console.log("history_id -> "+history_id)
 </script>
 
 <div class="main">
@@ -128,7 +130,7 @@
           <p>Delete this last revision of this product?</p>
         </div>
         <div class="modal-footer">
-            <form action="{% url 'product_delete' pk=prod_pk %}" method="post">
+            <form action="{% url 'product_delete' pk=history_id %}" method="post">
                 {% csrf_token %}
                 <input class="btn btn-danger" type="submit" value="Delete">
             </form>
