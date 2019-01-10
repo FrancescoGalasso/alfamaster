@@ -28,7 +28,6 @@ class Product(models.Model):
         return self.name
 
 class History(models.Model):
-    id=models.IntegerField(primary_key=True)
     data = JSONField(default=list)
     revision = models.IntegerField(default=0)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
