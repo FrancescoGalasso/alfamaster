@@ -7,6 +7,8 @@ import json
 from django.http import HttpResponse, HttpResponseNotFound, Http404,  HttpResponseRedirect
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+# framework messages
+from django.contrib import messages
 
 
 # Python logging package
@@ -134,15 +136,57 @@ def product_save(request):
             # redirect to HOME
         return HttpResponseRedirect("/")
 
+# delete the history -> the current revision of the product
 @login_required
 def product_delete(request, pk):
-    history = History.objects.filter(pk=pk)
-    if history.exists():
-        # Standard Django delete
-        history.delete()
+
+    if pk:
+        history = History.objects.filter(pk=pk)
+        if history.exists():
+            # Standard Django delete
+            history.delete()
 
     # redirect to HOME
     return HttpResponseRedirect("/")
+
+# erase current product and all his history/revisions
+@login_required
+def product_erase(request, pk):
+
+    # obj = get_object_or_404(Product, pk=int(pk))
+    # # if not request.user.is_superuser and not request.user == obj.owner:
+    # if not request.user == obj.owner:
+    #     from django.core.exceptions import PermissionDenied
+    #     raise PermissionDenied
+    # try:
+    #     obj.delete()
+    #     messages.info(request, "Il prodotto %s e stato cancellato" % pk)
+    # except Exception as e:
+    #     messages.error(request, "ERRORE: " + str(e))
+    # return HttpResponseRedirect("/")
+
+
+
+    # import pdb; pdb.set_trace()
+    product = get_object_or_404(Product, pk=int(pk))
+    history = History.objects.filter(product_id=pk)
+        # if not request.user == product.owner:
+        #     from django.core.exceptions import PermissionDenied
+        #     raise PermissionDenied
+
+    try:
+        stdlogger.info("        +++ [info] Product erased with his history")
+        # Standard Django delete
+        product.delete()
+        history.delete()
+        messages.info(request, "The product %s has been successfully deleted" % product.name)
+    except Exception as e:
+        stdlogger.error("        +++ [error] {}".format(e))
+        messages.error(request, "ERROR: " + str(e))
+
+    # redirect to HOME
+    return HttpResponseRedirect("/")
+
 
 @login_required
 def product_update(request, pk):
@@ -183,24 +227,3 @@ def product_update(request, pk):
     else:
         stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
         return render(request, 'product/error.html')
-
-
-
-    # import pdb; pdb.set_trace()
-    # if request.method == 'POST':
-    #     if 'matrix' in request.POST:
-    #         try:
-    #             pieFact = request.POST['matrix']
-    #             # doSomething with pieFact here...
-    #             print("    ----    ")
-    #             print(pieFact)
-    #             return HttpResponse('success') # if everything is OK
-    #         except:
-    #             import traceback
-    #             print traceback.format_exc()
-    # else:
-    #     stdlogger.info("        +++ [info] NO POST for download CSV")
-    # # nothing went well
-    #     return HttpResponse('FAIL!!!!!')
-    # # return render(request, "product/product_detail.html")
-
