@@ -153,21 +153,6 @@ def product_delete(request, pk):
 @login_required
 def product_erase(request, pk):
 
-    # obj = get_object_or_404(Product, pk=int(pk))
-    # # if not request.user.is_superuser and not request.user == obj.owner:
-    # if not request.user == obj.owner:
-    #     from django.core.exceptions import PermissionDenied
-    #     raise PermissionDenied
-    # try:
-    #     obj.delete()
-    #     messages.info(request, "Il prodotto %s e stato cancellato" % pk)
-    # except Exception as e:
-    #     messages.error(request, "ERRORE: " + str(e))
-    # return HttpResponseRedirect("/")
-
-
-
-    # import pdb; pdb.set_trace()
     product = get_object_or_404(Product, pk=int(pk))
     history = History.objects.filter(product_id=pk)
         # if not request.user == product.owner:
