@@ -72,12 +72,13 @@ def product_list(request):
     if request.user.is_authenticated():
         username = request.user.username
 
-        products = Product.objects.all()
+        if request.user.is_superuser:
+            products = Product.objects.all().order_by('name')
+        else:
+            products = Product.objects.filter(owner = username).order_by('name')
 
         stdlogger.info("        +++ [info] Product.objects.raw")
         stdlogger.info(products)
-        stdlogger.info(" - ")
-        stdlogger.warning(Product.objects.filter(owner="simple_user"))
         return render(request, 'product/product_list.html', {'products': products})
 
     else:
