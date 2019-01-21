@@ -429,11 +429,14 @@ function generateData(){
             var msg = ""
             if(emptyListCheck && productInputValue==""){
                 msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
+                loadingOverlay.cancel(spinHandle);
             }
             else if(emptyListCheck){
                 msg = "OPS! You must fill all the empty yellow fields.."
+                loadingOverlay.cancel(spinHandle);
             }else if (productInputValue==""){
                 msg = "OPS! You must fill the Product name field.."
+                loadingOverlay.cancel(spinHandle);
             }
             $("#msg-modal").html(msg)
             $("#myModal").modal()
@@ -618,7 +621,11 @@ function generateDataMaster(){
             if(i==2){   //Ti not calculated for MASTER
                 res = 0
             } else{
-                res = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+                _op1 = list_vv_b1[i]
+                _op2 = list_vv_ti[i]*((100-defLvl)/100)
+                _op3 = defLvl/100
+                res = (_op1 - _op2)/_op3
+                // res = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
             }
         }else if (table_update){
             if(i == 2){  //Ti not calculated for MASTER
@@ -1352,6 +1359,7 @@ function showLessDetailsMaster(){
         }
     }
 }
+
 /*
 *
 *               Document ready 
@@ -1387,13 +1395,13 @@ $( document ).ready(function() {
     }
     $('#currencies').append(option);
 
-    if ( $( "#input_grid2" ).length ){
-        $('#input_grid2').keyup(function(){
-            if($('#input_grid2').val()){
-                alert("Ext TiO2 ask")
-            }
-        });
-    }
+    // if ( $( "#input_grid2" ).length ){
+    //     $('#input_grid2').keyup(function(){
+    //         if($('#input_grid2').val()){
+    //             alert("Ext TiO2 ask")
+    //         }
+    //     });
+    // }
 
 });
 

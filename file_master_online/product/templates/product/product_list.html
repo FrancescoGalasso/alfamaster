@@ -3,28 +3,78 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-    {% for product in products %}
-    <div>
-        <h1><a id="product" href="{% url 'product_detail' pk=product.pk %}">{{ product.name }}</a></h1>
-        <button type="button" class="btn btn-danger" href= "{% url 'product_erase' pk=product.pk %}" onclick="callModal(event)" style="float: left; margin-top: -42px; margin-left: 550px; ">Delete </button>
+    {% if user.is_superuser %}
+    <div>Filter owner: </div>
+    <div style="display: flex;"id="search"> 
+        <select name="myselect" id="products">
+            <option value="all">all</option>
+        </select>
+            <button class="btn btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-search" aria-hidden="true" onclick="searching()"></span></button>
     </div>
+    {% endif %}
+    <table>
+    {% for product in products %}
+    <tr style="border-bottom: 1px solid gray">
+        <td><h1><a id="product" href="{% url 'product_detail' pk=product.pk %}">{{ product.name }}</a></h1></td>
+        {% if user.is_superuser %}
+            <td style="float: left; margin-top: 25px; margin-left: 350px;" >{{product.owner}}</td>
+        {% endif %}
+        <td><button type="button" class="btn btn-danger" href= "{% url 'product_erase' pk=product.pk %}" onclick="callModal(this)" style="float: left; margin-top: 7px; margin-left: 150px; ">Delete </button></td>
+    </tr>
     {% endfor %}
-    {% else %}
+    </table>
+{% elif not user.is_authenticated %}
     <a href="{% url 'login' %}">login</a>
 {% endif %}
 
 <script>
     var url = ""
-    function callModal(event){
-        var target=$(event.target);
-        url = target.attr("href");
-        var parent = $(target).parent()
+    function callModal(obj){
+        url = obj.getAttribute("href")
+        console.log(url)
+        var parent = $(obj).parent().parent()
         var firstElem = parent[0].firstElementChild
         var children = firstElem.children[0]
         var name_prod = children.innerText 
         $('.modal-title').text('DELETE '+name_prod)
         $('#myModal').modal('show');
     }
+
+    $(window).bind("load", function() {
+    // code here
+        console.log("loaded")
+        var $products = $("#products");
+
+        var objs = $('table tr td:nth-child(2)')
+        var listofTmp = []
+        for (var k=0; k<objs.length; k++){
+            listofTmp.push(objs[k].innerText)
+        }
+        function onlyUnique(value, index, self) { 
+            return self.indexOf(value) === index;
+        }
+        var listofUniqueOwner = listofTmp.filter( onlyUnique ); 
+
+        $.each(listofUniqueOwner, function(val, text) {
+            $('#products').append( $('<option></option>').val(text).html(text) )
+        });
+
+        });
+
+    
+    function searching(){
+        console.log($('#products').val())
+        var value = $('#products').val()
+        if(value != "all"){
+            $("tr:not(:contains('"+value+"'))").hide ();
+            $("tr:contains('"+value+"')").show ();
+        } else{
+            $("tr:not(:contains('"+value+"'))").show ();
+        }
+
+
+    }    
+
 </script>
 
 <!-- Modal -->
