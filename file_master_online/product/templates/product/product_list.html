@@ -9,7 +9,7 @@
         <select name="myselect" id="products">
             <option value="all">all</option>
         </select>
-            <button class="btn btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-search" aria-hidden="true" onclick="searching()"></span></button>
+            <button class="btn btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-search" aria-hidden="true" id="searchBtn"></span></button>
     </div>
     {% endif %}
     <table>
@@ -59,21 +59,17 @@
             $('#products').append( $('<option></option>').val(text).html(text) )
         });
 
-        });
-
+    });
     
-    function searching(){
-        console.log($('#products').val())
-        var value = $('#products').val()
-        if(value != "all"){
-            $("tr:not(:contains('"+value+"'))").hide ();
-            $("tr:contains('"+value+"')").show ();
-        } else{
-            $("tr:not(:contains('"+value+"'))").show ();
-        }
-
-
-    }    
+    $('#searchBtn').on('click', function(){
+            var value = $('#products').val()
+            if(value != "all"){
+                $("tr:not(:contains('"+value+"'))").hide ();
+                $("tr:contains('"+value+"')").show ();
+            }else{
+                $("tr:not(:contains('"+value+"'))").show ();
+            }
+    });
 
 </script>
 
