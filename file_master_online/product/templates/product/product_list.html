@@ -4,13 +4,6 @@
 
 {% if user.is_authenticated %}
     {% if user.is_superuser %}
-    <!-- <div>Filter owner </div>
-    <div style="display: flex;"id="search"> 
-        <select name="myselect" id="products">
-            <option value="all">all</option>
-        </select>
-            <button class="btn btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-search" aria-hidden="true" id="searchBtn"></span></button>
-    </div> -->
     <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for owners ..">
 
     {% endif %}
@@ -42,36 +35,13 @@
         $('#myModal').modal('show');
     }
 
-    // $(window).bind("load", function() {
-    // // code here
-    //     console.log("loaded")
-    //     var $products = $("#products");
+    $(window).bind("load", function() {
+    // code here
+        console.log("loaded")
+        var $input = $("#myInput");
+        $input.val('')
+    });
 
-    //     var objs = $('table tr td:nth-child(2)')
-    //     var listofTmp = []
-    //     for (var k=0; k<objs.length; k++){
-    //         listofTmp.push(objs[k].innerText)
-    //     }
-    //     function onlyUnique(value, index, self) { 
-    //         return self.indexOf(value) === index;
-    //     }
-    //     var listofUniqueOwner = listofTmp.filter( onlyUnique ); 
-
-    //     $.each(listofUniqueOwner, function(val, text) {
-    //         $('#products').append( $('<option></option>').val(text).html(text) )
-    //     });
-
-    // });
-    
-    // $('#searchBtn').on('click', function(){
-    //         var value = $('#products').val()
-    //         if(value != "all"){
-    //             $("tr:not(:contains('"+value+"'))").hide ();
-    //             $("tr:contains('"+value+"')").show ();
-    //         }else{
-    //             $("tr:not(:contains('"+value+"'))").show ();
-    //         }
-    // });
 
     function myFunction() {
   // Declare variables 
