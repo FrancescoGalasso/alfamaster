@@ -621,7 +621,7 @@ function generateDataMaster(){
             if(i==2){   //Ti not calculated for MASTER
                 res = 0
             } else{
-                _op1 = list_vv_b1[i]
+                _op1 = list_vv_b1[i+1]
                 _op2 = list_vv_ti[i]*((100-defLvl)/100)
                 _op3 = defLvl/100
                 res = (_op1 - _op2)/_op3
@@ -1089,6 +1089,11 @@ function showGenerateBtn(){
     if(btn_update_save){
         btn_update_save.style.display = "block"
     }
+
+    var btn_addRawMat = document.getElementById("addRawMat")
+    if(btn_addRawMat){
+        btn_addRawMat.style.display = "block"
+    }
 }
 
 // https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
@@ -1358,6 +1363,17 @@ function showLessDetailsMaster(){
             }
         }
     }
+}
+
+
+function addMoreLines(){
+    console.log("addMoreLines")
+
+    var tableBody = $('#generatedTable').find("tbody")
+    var trLast = tableBody.find("tr:last")
+    var trNew = trLast.clone()
+    trNew.children().text("")
+    trLast.after(trNew)
 }
 
 /*

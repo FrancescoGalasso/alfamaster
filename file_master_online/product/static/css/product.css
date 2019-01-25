@@ -109,6 +109,10 @@ td {
     margin-left: 10;
 }
 
+#addRawMat{
+    display:none;
+}
+
 /*
 *   css modal
 */
