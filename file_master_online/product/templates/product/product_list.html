@@ -4,15 +4,17 @@
 
 {% if user.is_authenticated %}
     {% if user.is_superuser %}
-    <div>Filter owner: </div>
+    <!-- <div>Filter owner </div>
     <div style="display: flex;"id="search"> 
         <select name="myselect" id="products">
             <option value="all">all</option>
         </select>
             <button class="btn btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-search" aria-hidden="true" id="searchBtn"></span></button>
-    </div>
+    </div> -->
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for owners ..">
+
     {% endif %}
-    <table>
+    <table id = "myTable">
     {% for product in products %}
     <tr style="border-bottom: 1px solid gray">
         <td><h1><a id="product" href="{% url 'product_detail' pk=product.pk %}">{{ product.name }}</a></h1></td>
@@ -40,37 +42,59 @@
         $('#myModal').modal('show');
     }
 
-    $(window).bind("load", function() {
-    // code here
-        console.log("loaded")
-        var $products = $("#products");
+    // $(window).bind("load", function() {
+    // // code here
+    //     console.log("loaded")
+    //     var $products = $("#products");
 
-        var objs = $('table tr td:nth-child(2)')
-        var listofTmp = []
-        for (var k=0; k<objs.length; k++){
-            listofTmp.push(objs[k].innerText)
-        }
-        function onlyUnique(value, index, self) { 
-            return self.indexOf(value) === index;
-        }
-        var listofUniqueOwner = listofTmp.filter( onlyUnique ); 
+    //     var objs = $('table tr td:nth-child(2)')
+    //     var listofTmp = []
+    //     for (var k=0; k<objs.length; k++){
+    //         listofTmp.push(objs[k].innerText)
+    //     }
+    //     function onlyUnique(value, index, self) { 
+    //         return self.indexOf(value) === index;
+    //     }
+    //     var listofUniqueOwner = listofTmp.filter( onlyUnique ); 
 
-        $.each(listofUniqueOwner, function(val, text) {
-            $('#products').append( $('<option></option>').val(text).html(text) )
-        });
+    //     $.each(listofUniqueOwner, function(val, text) {
+    //         $('#products').append( $('<option></option>').val(text).html(text) )
+    //     });
 
-    });
+    // });
     
-    $('#searchBtn').on('click', function(){
-            var value = $('#products').val()
-            if(value != "all"){
-                $("tr:not(:contains('"+value+"'))").hide ();
-                $("tr:contains('"+value+"')").show ();
-            }else{
-                $("tr:not(:contains('"+value+"'))").show ();
-            }
-    });
+    // $('#searchBtn').on('click', function(){
+    //         var value = $('#products').val()
+    //         if(value != "all"){
+    //             $("tr:not(:contains('"+value+"'))").hide ();
+    //             $("tr:contains('"+value+"')").show ();
+    //         }else{
+    //             $("tr:not(:contains('"+value+"'))").show ();
+    //         }
+    // });
 
+    function myFunction() {
+  // Declare variables 
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+            } 
+        }
+    }
+    
 </script>
 
 <!-- Modal -->
