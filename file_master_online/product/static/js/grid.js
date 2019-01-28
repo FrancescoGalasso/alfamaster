@@ -6,6 +6,7 @@ var global_sw = []
 var global_data = ''
 var _sum_ti = 0.0
 var h2o = 0.0
+var global_more_rawMaterial = 0
 
 function generateTable(id){
     showGenerateBtn()
@@ -454,6 +455,12 @@ function generateData(){
         var rowCount = $('#tdetail >tbody >tr').length;
         global_num_raw_material = rowCount                    // override for update action
     }
+    // check for more raw mat added by button (not by input)
+    if(global_more_rawMaterial > 0){
+        // global_num_raw_material +=  global_more_rawMaterial
+        global_num_raw_material ++
+    }
+
     var counterWeightClassName = 2
     for(var q=0; q< baseClassName.length; q++){
         sum_ml100g = 0
@@ -1374,13 +1381,12 @@ function addMoreLines(){
     var trNew = trLast.clone()
     trNew.children().text("")
     if(global_num_raw_material >= 3){
-        console.log("this is the num raw material")
-        console.log(global_num_raw_material)
         var tdNew = trNew.find("td:first")
         tdNew.attr("contentEditable","true");
         tdNew.css( "background-color", "rgb(255, 255, 0)")
     }
     trLast.after(trNew)
+    global_more_rawMaterial += 1
 }
 
 /*
