@@ -1373,6 +1373,13 @@ function addMoreLines(){
     var trLast = tableBody.find("tr:last")
     var trNew = trLast.clone()
     trNew.children().text("")
+    if(global_num_raw_material >= 3){
+        console.log("this is the num raw material")
+        console.log(global_num_raw_material)
+        var tdNew = trNew.find("td:first")
+        tdNew.attr("contentEditable","true");
+        tdNew.css( "background-color", "rgb(255, 255, 0)")
+    }
     trLast.after(trNew)
 }
 
