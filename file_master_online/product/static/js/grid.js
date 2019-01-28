@@ -408,9 +408,13 @@ function generateData(){
             } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
                 for (var j=0; j< listofWeightClassNames.length; j++ ){
                     if(listofInputClassNames[i] == listofWeightClassNames[j]){
-                        if(parseFloat(input) >= 0){
-                            matrixWeightInput[j].push(parseFloat(input))
-                            sum += parseFloat(input)
+                        if(input != ""){
+                            if(parseFloat(input) >= 0){
+                                matrixWeightInput[j].push(parseFloat(input))
+                                sum += parseFloat(input)
+                            }
+                        }else{
+                            sum=NaN
                         }
                     }
                 }
@@ -1380,7 +1384,7 @@ function addMoreLines(){
         tdNew.css( "background-color", "rgb(255, 255, 0)")
     }
     trLast.after(trNew)
-    
+
     global_more_rawMaterial += 1
     if(global_more_rawMaterial > 0){
         var remBtn = $('#removeRawMat')
