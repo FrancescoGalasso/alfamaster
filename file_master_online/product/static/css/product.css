@@ -109,8 +109,25 @@ td {
     margin-left: 10;
 }
 
-#addRawMat{
+/* #addRawMat{
     display:none;
+} */
+
+
+#addorRemoveRawMat{
+    float: left;
+    display:none;
+}
+
+#addorRemoveRawMat button:first-child{
+    display: inline-block;
+}
+
+#addorRemoveRawMat button:last-child{
+    display: inline-block;
+    opacity: 0.65;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /*

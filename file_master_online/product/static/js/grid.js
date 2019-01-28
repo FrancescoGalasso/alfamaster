@@ -455,11 +455,6 @@ function generateData(){
         var rowCount = $('#tdetail >tbody >tr').length;
         global_num_raw_material = rowCount                    // override for update action
     }
-    // check for more raw mat added by button (not by input)
-    if(global_more_rawMaterial > 0){
-        // global_num_raw_material +=  global_more_rawMaterial
-        global_num_raw_material ++
-    }
 
     var counterWeightClassName = 2
     for(var q=0; q< baseClassName.length; q++){
@@ -1097,9 +1092,9 @@ function showGenerateBtn(){
         btn_update_save.style.display = "block"
     }
 
-    var btn_addRawMat = document.getElementById("addRawMat")
-    if(btn_addRawMat){
-        btn_addRawMat.style.display = "block"
+    var addorRemoveRawMatDiv = document.getElementById("addorRemoveRawMat")
+    if(addorRemoveRawMatDiv){
+        addorRemoveRawMatDiv.style.display = "block"
     }
 }
 
@@ -1374,7 +1369,6 @@ function showLessDetailsMaster(){
 
 
 function addMoreLines(){
-    console.log("addMoreLines")
 
     var tableBody = $('#generatedTable').find("tbody")
     var trLast = tableBody.find("tr:last")
@@ -1386,7 +1380,30 @@ function addMoreLines(){
         tdNew.css( "background-color", "rgb(255, 255, 0)")
     }
     trLast.after(trNew)
+    
     global_more_rawMaterial += 1
+    if(global_more_rawMaterial > 0){
+        var remBtn = $('#removeRawMat')
+        remBtn.css("cursor", "auto")
+        remBtn.css("pointer-events", "auto")
+        remBtn.css("opacity", 1)
+    }
+    global_num_raw_material ++
+}
+
+function removeLastRawMatAdded(){
+    var tableBody = $('#generatedTable').find("tbody")
+    var trLast = tableBody.find("tr:last")
+    trLast.remove()
+    global_more_rawMaterial -= 1
+
+    if(global_more_rawMaterial < 1){
+        var remBtn = $('#removeRawMat')
+        remBtn.css("cursor", "not-allowed")
+        remBtn.css("pointer-events", "none")
+        remBtn.css("opacity", 0.65)
+    }
+    global_num_raw_material --
 }
 
 /*

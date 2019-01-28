@@ -29,10 +29,14 @@
 <div id="myGeneratedTable"></div>
 <script src="{% static 'js/grid.js' %}"></script>  
 <br>
-<div>
+<div id="addorRemoveRawMat">
     <button type="button" class="btn btn-info btn-sm" id="addRawMat" onclick="addMoreLines()">
         <span class="glyphicon glyphicon-plus"></span>
-        add raw material
+         raw material
+    </button>
+    <button type="button" class="btn btn-info btn-sm" id="removeRawMat" onclick="removeLastRawMatAdded()">
+        <span class="glyphicon glyphicon-minus"></span>
+         last raw material
     </button>
 </div>
 <button id = "btn_calculate" type="button" class="btn btn-xs" onclick=generateData()>Calculate</button>
