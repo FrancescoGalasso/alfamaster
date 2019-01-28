@@ -408,7 +408,7 @@ function generateData(){
             } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
                 for (var j=0; j< listofWeightClassNames.length; j++ ){
                     if(listofInputClassNames[i] == listofWeightClassNames[j]){
-                        if(input != ""){
+                        if(input != "" && !isNaN(input)){
                             if(parseFloat(input) >= 0){
                                 matrixWeightInput[j].push(parseFloat(input))
                                 sum += parseFloat(input)
@@ -437,7 +437,7 @@ function generateData(){
                 loadingOverlay.cancel(spinHandle);
             }
             else if(emptyListCheck){
-                msg = "OPS! You must fill all the empty yellow fields.."
+                msg = "OPS! You must fill all the empty yellow fields..\nAlso checks that no characters have been entered.."
                 loadingOverlay.cancel(spinHandle);
             }else if (productInputValue==""){
                 msg = "OPS! You must fill the Product name field.."
