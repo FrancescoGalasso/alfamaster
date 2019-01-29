@@ -393,6 +393,9 @@ function generateData(){
     listofInputClassNames.push(...listofWeightClassNames)
     var numofWeightClassNames = listofWeightClassNames.length
 
+    var comma = false
+    var char = false
+    var empty = false
     var matrixWeightInput = createMatrixInputValue(listofWeightClassNames)
     // inputClassNames example -> [".rm_cost", ".sw", ".ww_b1", ".ww_ti" ...]
     for (var i = 0; i < listofInputClassNames.length; i++){
@@ -403,22 +406,50 @@ function generateData(){
                 return false        // exit from loop
             }
             var input = $(this).text()
-            if (listofInputClassNames[i] == '.sw'){
-                sw.push(parseFloat(input))
-            } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
-                for (var j=0; j< listofWeightClassNames.length; j++ ){
-                    if(listofInputClassNames[i] == listofWeightClassNames[j]){
-                        if(input != "" && !isNaN(input)){
-                            if(parseFloat(input) >= 0){
-                                matrixWeightInput[j].push(parseFloat(input))
-                                sum += parseFloat(input)
-                            }
-                        }else{
-                            sum=NaN
+            if($.isNumeric(input)){
+                console.log(input)
+                if (listofInputClassNames[i] == '.sw'){
+                    sw.push(parseFloat(input))
+                } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
+                    for (var j=0; j< listofWeightClassNames.length; j++ ){
+                        if(listofInputClassNames[i] == listofWeightClassNames[j]){
+                            matrixWeightInput[j].push(parseFloat(input))
+                            sum += parseFloat(input)
                         }
                     }
                 }
+            }else{
+                // console.log("wrong : "+input)
+                if (input.indexOf(',') > -1){
+                    comma = true
+                }else if (input != ""){
+                    char = true
+                } else if( input == null || input.length == 0){
+                    console.log(input)
+                    // sum = NaN //working??
+                    empty = true
+                }
             }
+
+            // if (listofInputClassNames[i] == '.sw'){
+            //     sw.push(parseFloat(input))
+            // } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
+            //     for (var j=0; j< listofWeightClassNames.length; j++ ){
+            //         if(listofInputClassNames[i] == listofWeightClassNames[j]){
+            //             if(input != "" && !isNaN(input)){
+            //                 if(parseFloat(input) >= 0){
+            //                     matrixWeightInput[j].push(parseFloat(input))
+            //                     sum += parseFloat(input)
+            //                 }
+            //             }else{
+            //                 if (input.indexOf(',') > -1){
+            //                     comma = true
+            //                 }
+            //                 sum=NaN
+            //             }
+            //         }
+            //     }
+            // }
         });
         console.log("tot sum -> "+sum)
         list_sum.push(sum)
@@ -429,20 +460,29 @@ function generateData(){
 
     if(productInput){
         productInputValue = productInput.value
-        if (emptyListCheck || productInput==null || productInputValue==""){
-            
-            var msg = ""
-            if(emptyListCheck && productInputValue==""){
+        if (productInputValue == "" || empty || comma || char){
+            var msg=""
+            if(productInputValue=="" && empty){
                 msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
-                loadingOverlay.cancel(spinHandle);
             }
-            else if(emptyListCheck){
-                msg = "OPS! You must fill all the empty yellow fields..\nAlso checks that no characters have been entered.."
-                loadingOverlay.cancel(spinHandle);
-            }else if (productInputValue==""){
+            else if(productInputValue == ""){
                 msg = "OPS! You must fill the Product name field.."
-                loadingOverlay.cancel(spinHandle);
             }
+            else if(empty){
+                msg = "OPS! You must fill all the empty yellow fields.."
+            }
+            else if (comma && char){
+                msg = "OPS! character detected inside some fields..<br>Floating point numbers need a dot and not a comma.."
+            }
+            else if (comma){
+                msg = "OPS! Floating point numbers need a dot and not a comma.."
+            }
+            else if (char){
+                msg = "OPS! character detected inside some fields.."
+            }else{
+                msg = "OPS! UNKNOWN ERROR.."
+            }
+            loadingOverlay.cancel(spinHandle);
             $("#msg-modal").html(msg)
             $("#myModal").modal()
             return
