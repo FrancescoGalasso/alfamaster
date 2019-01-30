@@ -407,7 +407,6 @@ function generateData(){
             }
             var input = $(this).text()
             if($.isNumeric(input)){
-                console.log(input)
                 if (listofInputClassNames[i] == '.sw'){
                     sw.push(parseFloat(input))
                 } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
@@ -419,39 +418,17 @@ function generateData(){
                     }
                 }
             }else{
-                // console.log("wrong : "+input)
                 if (input.indexOf(',') > -1){
                     comma = true
                 }else if (input != ""){
                     char = true
                 } else if( input == null || input.length == 0){
-                    console.log(input)
-                    // sum = NaN //working??
                     empty = true
                 }
             }
 
-            // if (listofInputClassNames[i] == '.sw'){
-            //     sw.push(parseFloat(input))
-            // } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
-            //     for (var j=0; j< listofWeightClassNames.length; j++ ){
-            //         if(listofInputClassNames[i] == listofWeightClassNames[j]){
-            //             if(input != "" && !isNaN(input)){
-            //                 if(parseFloat(input) >= 0){
-            //                     matrixWeightInput[j].push(parseFloat(input))
-            //                     sum += parseFloat(input)
-            //                 }
-            //             }else{
-            //                 if (input.indexOf(',') > -1){
-            //                     comma = true
-            //                 }
-            //                 sum=NaN
-            //             }
-            //         }
-            //     }
-            // }
         });
-        console.log("tot sum -> "+sum)
+        // console.log("tot sum -> "+sum)
         list_sum.push(sum)
     }
 
