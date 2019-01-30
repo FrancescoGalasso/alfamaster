@@ -26,7 +26,7 @@ function generateTable(id){
         clean_after_wrong_input()
         return;
     }
-    if (num_bases < 1 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
+    if (num_bases < 2 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
         var msg = "OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases"
         $("#msg-modal").html(msg)
         $("#myModal").modal()
