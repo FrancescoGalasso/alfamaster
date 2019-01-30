@@ -396,6 +396,7 @@ function generateData(){
     var comma = false
     var char = false
     var empty = false
+    var noRawName = false
     var matrixWeightInput = createMatrixInputValue(listofWeightClassNames)
     // inputClassNames example -> [".rm_cost", ".sw", ".ww_b1", ".ww_ti" ...]
     for (var i = 0; i < listofInputClassNames.length; i++){
@@ -432,12 +433,19 @@ function generateData(){
         list_sum.push(sum)
     }
 
+    $('#generatedTable tbody td:first-child').each(function() {
+        console.log($(this).text());
+        if($(this).text() == ""){
+            noRawName = true
+        }
+    });
+
     var emptyListCheck = checkEmptyData(list_sum)
     var productInput = document.getElementById('nameProduct')
 
     if(productInput){
         productInputValue = productInput.value
-        if (productInputValue == "" || empty || comma || char){
+        if (productInputValue == "" || empty || comma || char || noRawName){
             var msg=""
             if(productInputValue=="" && empty){
                 msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
@@ -452,10 +460,12 @@ function generateData(){
                 msg = "OPS! character detected inside some fields..<br>Floating point numbers need a dot and not a comma.."
             }
             else if (comma){
-                msg = "OPS! Floating point numbers need a dot and not a comma.."
+                msg = "OPS! Floating point numbers need a dot and not a comma..<br>e.g<br>This number is valid -> 1.2<br>This number is invalid -> 1,2"
             }
             else if (char){
                 msg = "OPS! character detected inside some fields.."
+            }else if (noRawName){
+                msg = "OPS! One or more missing Raw material names.."
             }else{
                 msg = "OPS! UNKNOWN ERROR.."
             }
