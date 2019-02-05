@@ -876,6 +876,16 @@ function generateDataMaster(){
     tmp.classList.add("to_update")
 
 
+    // pre refactor for product update
+    var table_detail = document.getElementById("tdetail")
+    if(table_detail){
+        var form_update_save = document.getElementById("save")
+        if(form_update_save){
+            form_update_save.style.display = "block"
+        }
+    }
+
+
     if(prod_admin !== "undefined"){
         if(prod_admin == "False"){
             showLessDetailsMaster()
