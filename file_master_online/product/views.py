@@ -103,12 +103,10 @@ def product_new(request):
         if request.user.is_authenticated():
             username = request.user.username
 
-        # Product.objects.create(name=my_product_name, data=data, revision=my_product_rev, owner=username, currencies=my_product_currency)
         my_product = Product.objects.create(name=my_product_name, owner=username, currencies=my_product_currency)
-        # my_product = Product.objects.get(name='my_product_name')
-        # my_product = get_object_or_404(Product, name='my_product_name', owner=username)
         my_product.save()
         History.objects.create(data=my_product_data, revision=my_product_rev, product_id=my_product.id)
+        messages.success(request, "The product %s has been successfully created" % my_product.name.upper())
             # redirect to HOME
         return HttpResponseRedirect("/")
 
@@ -134,6 +132,8 @@ def product_save(request):
         #     username = request.user.username
         stdlogger.info("        +++ [info] new History object created")
         History.objects.create(data=data, revision=my_product_rev, product_id=my_product_pk)
+        obj = Product.objects.get(pk=my_product_pk)
+        messages.info(request, "The product %s has been successfully updated" % obj.name.upper())
             # redirect to HOME
         return HttpResponseRedirect("/")
 
@@ -142,10 +142,12 @@ def product_save(request):
 def product_delete(request, pk):
 
     if pk:
-        history = History.objects.filter(pk=pk)
-        if history.exists():
-            # Standard Django delete
-            history.delete()
+        history = get_object_or_404(History, pk=pk)
+
+    stdlogger.info(history.product_id)
+    prod_pk = history.product_id
+    obj = Product.objects.get(pk=prod_pk)
+    messages.info(request, "The last revision of product %s has been successfully deleted" % obj.name.upper())
 
     # redirect to HOME
     return HttpResponseRedirect("/")
@@ -165,7 +167,7 @@ def product_erase(request, pk):
         # Standard Django delete
         product.delete()
         history.delete()
-        messages.info(request, "The product %s has been successfully deleted" % product.name)
+        messages.warning(request, "The product %s has been successfully deleted" % product.name)
     except Exception as e:
         stdlogger.error("        +++ [error] {}".format(e))
         messages.error(request, "ERROR: " + str(e))

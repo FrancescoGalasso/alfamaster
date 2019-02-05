@@ -41,7 +41,8 @@
     <body>
             <div class="page-header">
                 <h1 align="center"><a href="/">Alfa Master File</a></h1>
-                {% if messages %}
+                <div id="msgContainer" style="height: 50; margin-top: -50px; width: 460px;">
+                    {% if messages %}
                     {% for message in messages %}
                     <!-- <div class="{{ message.tags }}">{{ message }}</div> -->
                     <div id="myMsg" class="alert {% if message.tags %}alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"{% endif %}>{{message}}</div>
@@ -54,6 +55,7 @@
                     </script>
                     {% endfor %}
                 {% endif %}
+                </div>
                 {% if not user.is_authenticated %} <!-- if not logged in -->
                     <p>TI DEVI AUTENTICARE</p>
                 {% else %} <!-- if logged in -->
