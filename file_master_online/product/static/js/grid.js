@@ -376,16 +376,19 @@ function generateData(){
         form_update_save.style.display = "none"
     }
 
-    var sum_sw = 0
-    var sum_rmcost = 0
-    var sum_ww = 0;
+    // stuff for checkTest
+    testOK = false
+    up = false
+    $("#checkTest").css("visibility", "hidden"); 
+    var verifyBtn = $('#verify')
+    verifyBtn.css("cursor", "auto")
+    verifyBtn.css("pointer-events", "auto")
+    verifyBtn.css("opacity", 1)
+
     var sum_ml100g = 0
     var sum_vv = 0
     var sum_ml1000g = 0
     var sum_fcost = 0
-    var sum_ww_ti = 0
-
-    var list_classNameSum = ['sum_ww', 'sum_ml100g', 'sum_vv', 'sum_ml1000g', 'sum_fcost']
     var baseClassName = generate_baseClassName() //[_b1, _ti, _b2 ...]
     var list_sum = []
     var ww = []
@@ -444,7 +447,6 @@ function generateData(){
         }
     });
 
-    var emptyListCheck = checkEmptyData(list_sum)
     var productInput = document.getElementById('nameProduct')
 
     if(productInput){
@@ -873,11 +875,6 @@ function generateDataMaster(){
     tmp.innerHTML = parseFloat(sum_fcost).toFixed(2)
     tmp.classList.add("to_update")
 
-    // var form_update_save = document.getElementById("save")
-    // if(form_update_save){
-    //     form_update_save.style.display = "block"
-    // }
-
 
     if(prod_admin !== "undefined"){
         if(prod_admin == "False"){
@@ -892,23 +889,6 @@ function generateDataMaster(){
 *
 */
 
-
-/**
- * Parse the array containing the amount of each sum for input %w/w columns. If you find even a single NaN assigned to a generic sum, the function returns False.
- * 
- * @param {Array<String>} list_sum list of total sum on each input %w/w columns 
- * @returns True if a NaN sum value is found; False otherwise
- */
-function checkEmptyData(list_sum){
-    var emptyData = false
-
-    for (i=0; i < list_sum.length; i++){
-        if (Number.isNaN(list_sum[i])) {
-            emptyData = true
-        }
-      }
-    return emptyData
-}
 
 /**
  * 
@@ -1448,13 +1428,12 @@ function removeLastRawMatAdded(){
 var supInput = ""
 var infInput = ""
 var counterTest = 2
+var testOK = false
+var up = false
 
-function test(){
+function startLabTest(){
     supInput = $('#rangesup').val()
     infInput = $('#rangeinf').val() 
-
-    console.log(supInput)
-    console.log(infInput)
 
     if(supInput == "" || infInput == ""){
         alert("fill all the input fields")
@@ -1462,10 +1441,17 @@ function test(){
         $('#checkTest').css("visibility", "visible");
     }
     counterTest = 2
+
+    var verifyBtn = $('#verify')
+    verifyBtn.css("cursor", "not-allowed")
+    verifyBtn.css("pointer-events", "none")
+    verifyBtn.css("opacity", 0.65)
+
+    $( ".test" ).remove();
+    var divCheckTest = $('#checkTest')
+    divCheckTest.append('<div class="test">Test result n°1 <input id="r1" type="number" style="margin-left:20px; width: 51 !important;text-align: center;"> <button style="margin-left:1;" onclick="verify(event)">Verify</button></div>')
 }
 
-var testOK = false
-var up = false
 function verify(event){
     var resultTest = $("#checkTest input:last")
 
@@ -1518,12 +1504,17 @@ function verify(event){
 
             counterTest++
             flag = false
+            generateDataMaster()
         }else{
             $(event.target).css("opacity", 0.65)    
             $(event.target).css("pointer-events", "none")
             row.append("    TEST PASSED")
+
+            var form_update_save = document.getElementById("save")
+            if(form_update_save){
+                form_update_save.style.display = "block"
+            }
         }
-        generateDataMaster()
     }
 }
 /*
