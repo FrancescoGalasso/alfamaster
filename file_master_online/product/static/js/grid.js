@@ -948,6 +948,9 @@ function clean_after_wrong_input(){
     calculate_btn.style.display = "none"
     var select_currencies = document.getElementById('money')
     select_currencies.style.display = "none"
+    var addorRemoveRawMatDiv = document.getElementById("addorRemoveRawMat")
+    addorRemoveRawMatDiv.style.display = "none"
+
 }
 
 /**
