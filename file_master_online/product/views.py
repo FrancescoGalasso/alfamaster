@@ -112,6 +112,7 @@ def product_new(request):
 
     return render(request, "product/product_new.html")
 
+
 @login_required
 def product_save(request):
     print(request.GET)
@@ -137,22 +138,29 @@ def product_save(request):
             # redirect to HOME
         return HttpResponseRedirect("/")
 
-# delete the history -> the current revision of the product
+    
+    # delete the history -> the current revision of the product
 @login_required
 def product_delete(request, pk):
 
     if pk:
         history = get_object_or_404(History, pk=pk)
-
-    stdlogger.info(history.product_id)
-    prod_pk = history.product_id
-    obj = Product.objects.get(pk=prod_pk)
-    messages.info(request, "The last revision of product %s has been successfully deleted" % obj.name.upper())
+        prod_pk = history.product_id
+        history_rev = history.revision
+        product = Product.objects.get(pk=prod_pk)
+        history.delete()
+        stdlogger.debug(history_rev)
+        if int(history_rev) >= 1:
+            messages.info(request, "Revision {} of product {} has been successfully deleted".format(history_rev,product.name.upper()))
+        else:
+            product.delete()
+            messages.warning(request, "Revision {} of product {} has been successfully deleted..\nThe product has been erased.".format(history_rev,product.name.upper()))
 
     # redirect to HOME
     return HttpResponseRedirect("/")
 
-# erase current product and all his history/revisions
+
+    # erase current product and all his history/revisions
 @login_required
 def product_erase(request, pk):
 
