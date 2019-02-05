@@ -9,6 +9,7 @@ body {
 
 #nameProduct{
     display:none;
+    margin-top: 30px;
 }
 
 #generateBtn {
@@ -72,6 +73,10 @@ input[type="number"] {
     font-weight: bold;
 }
 
+.grid_generator{
+    margin-top: 30px;
+}
+
 /*
 *   css table generated
 */
@@ -121,6 +126,16 @@ td {
     visibility: hidden;
 }
 
+#tips{
+    border: 1px solid black;
+    width: 1150px;
+    background-color: lightyellow;
+}
+
+#tips div {
+    padding-top: 15px;
+    padding-left: 15;
+}
 /*
 *   css for div & btn add/remove raw mat during creation
 */

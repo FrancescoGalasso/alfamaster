@@ -26,7 +26,7 @@ function generateTable(id){
         clean_after_wrong_input()
         return;
     }
-    if (num_bases < 2 || num_raw_material < 3 || num_bases == "" || num_raw_material == ""){
+    if (num_bases < 2 || num_raw_material < 4 || num_bases == "" || num_raw_material == ""){
         var msg = "OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases"
         $("#msg-modal").html(msg)
         $("#myModal").modal()
@@ -97,7 +97,7 @@ function creationTHead(tr_head, list_of_thead){
 }
 
 function creationTBody(num_raw_material, tableBody){
-    var defaultRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>']
+    var defaultRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>', 'Ext TiO<sub>2</sub>']
 
     var indexInput=[1,2,3]
     for(var q = 0; q<global_num_bases; q++){
@@ -113,12 +113,12 @@ function creationTBody(num_raw_material, tableBody){
             var td = document.createElement('TD')
             td.style.height = "30px"
 
-            if (j == 0 && i < 3){
+            if (j == 0 && i < 4){
                 td.innerHTML = defaultRawMaterial[i]
                 td.contentEditable = false
                 td.style.backgroundColor = "transparent";
             }
-            if (indexInput.indexOf(j) > -1 || (j == 0 && i >= 3)){
+            if (indexInput.indexOf(j) > -1 || (j == 0 && i >= 4)){
                 td.contentEditable = true
                 td.style.backgroundColor = "#ffff00"  
             }
@@ -361,12 +361,9 @@ function generateData(){
         // $(".main").css("display", "block");
         $(".main").css("visibility", "visible");
     }
-    // test loadingOverlay
     var btnDisabled = $("#updateCalculateBtn").is(":disabled")
     console.log("btnDisabled -> " + btnDisabled)
     if(!btnDisabled){
-        // $(".main").css("display", "none");
-        // $(".main").css("visibility", "hidden"); //correct one
         $(".main").css("visibility", "visible"); //correct one
         var spinHandle = loadingOverlay.activate();
     }
@@ -404,6 +401,7 @@ function generateData(){
     var char = false
     var empty = false
     var noRawName = false
+    var swZero = false
     var matrixWeightInput = createMatrixInputValue(listofWeightClassNames)
     // inputClassNames example -> [".rm_cost", ".sw", ".ww_b1", ".ww_ti" ...]
     for (var i = 0; i < listofInputClassNames.length; i++){
@@ -451,8 +449,15 @@ function generateData(){
 
     if(productInput){
         productInputValue = productInput.value
-        if (productInputValue == "" || empty || comma || char || noRawName){
-            var msg=""
+        var msg=""
+
+        for (let switem of sw){
+            if (switem == 0){
+                swZero = true
+            }
+        }
+
+        if (productInputValue == "" || empty || comma || char || noRawName || swZero){
             if(productInputValue=="" && empty){
                 msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
             }
@@ -472,7 +477,10 @@ function generateData(){
                 msg = "OPS! character detected inside some fields.."
             }else if (noRawName){
                 msg = "OPS! One or more missing Raw material names.."
-            }else{
+            }else if (swZero){
+                msg="OPS! You have entered a value of 0 in a Specific Weight field..Change it to continue.."
+            }
+            else{
                 msg = "OPS! UNKNOWN ERROR.."
             }
             loadingOverlay.cancel(spinHandle);
