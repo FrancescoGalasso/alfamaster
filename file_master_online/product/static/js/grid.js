@@ -1264,7 +1264,8 @@ function download_csv(rev){
             }
             if(i==table1.rows.length - 1 && j == 0){
                 var tmp = Array(2).join("")
-                lista.push(tmp)
+                var tmp2 = Array(2).join("")
+                lista.push(tmp, tmp2)
             }
         }
         body_tbl1.push(lista)
