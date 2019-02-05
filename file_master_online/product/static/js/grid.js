@@ -222,6 +222,10 @@ async function generateTableFillLvl(){
     }
          
     myTableDiv.appendChild(table)
+
+    // generateColorStrength
+    $('#startTest').css("visibility", "visible");
+
     generateTableMaster()
 }
 
@@ -646,8 +650,12 @@ function generateDataMaster(){
     }
 
     var cell = tableFillLvl.querySelectorAll('td:nth-child(3)')
-    var defLvl = cell[1].innerHTML
-
+    // var cell = tableFillLvl.querySelectorAll('td:nth-last-child()') //WRONG
+    // var defLvl = cell[1].innerHTML
+    var defLvl = cell[cell.length-1].innerHTML
+    console.log("....")
+    console.log(defLvl)
+    console.log("....")
     for(var i=0; i < global_num_raw_material; i++){
         var res = ''
         if(table_new){
@@ -865,10 +873,10 @@ function generateDataMaster(){
     tmp.innerHTML = parseFloat(sum_fcost).toFixed(2)
     tmp.classList.add("to_update")
 
-    var form_update_save = document.getElementById("save")
-    if(form_update_save){
-        form_update_save.style.display = "block"
-    }
+    // var form_update_save = document.getElementById("save")
+    // if(form_update_save){
+    //     form_update_save.style.display = "block"
+    // }
 
 
     if(prod_admin !== "undefined"){
@@ -1437,6 +1445,87 @@ function removeLastRawMatAdded(){
     global_num_raw_material --
 }
 
+var supInput = ""
+var infInput = ""
+var counterTest = 2
+
+function test(){
+    supInput = $('#rangesup').val()
+    infInput = $('#rangeinf').val() 
+
+    console.log(supInput)
+    console.log(infInput)
+
+    if(supInput == "" || infInput == ""){
+        alert("fill all the input fields")
+    }else{
+        $('#checkTest').css("visibility", "visible");
+    }
+    counterTest = 2
+}
+
+var testOK = false
+var up = false
+function verify(event){
+    var resultTest = $("#checkTest input:last")
+
+    if(resultTest.val() != ""){
+        if(resultTest.val() <= parseInt(supInput) && resultTest.val() >= parseInt(infInput)){
+            testOK=true
+        }else if (resultTest.val() < parseInt(infInput)){
+            testOK=false
+            up = true
+        }else if(resultTest.val() > parseInt(supInput)){
+            testOK=false
+        }
+
+        var check = $('#checkTest')
+        var row = $('#checkTest').find("div:last")
+        if(!testOK){
+            var newRow = row.clone()
+    
+            $(event.target).css("opacity", 0.65)    
+            $(event.target).css("pointer-events", "none")
+
+            inputt =  newRow.find("input").val("")
+            inputt.css("margin-left", "24px")
+            btnn = newRow.find("button")
+            btnn.css("margin-left", "5px")
+            newRow.html("Test result n°"+counterTest)
+            newRow.append(inputt)
+            newRow.append(btnn)
+            check.append(newRow)
+            row.append("    TEST FAILED")
+
+            var rowtableFillCalculation = $('#tableFillCalculation tr:last')
+            var text1 = $('#tableFillCalculation tr:last td:nth-child(1)').text()
+            var text2 = $('#tableFillCalculation tr:last td:nth-child(2)').text()
+            var text3 = $('#tableFillCalculation tr:last td:nth-child(3)').text()
+
+            $('#generatedTableFillLvl tr:last').remove();
+            $("#generatedTableFillLvl").append('<tr><td><del>'+text1+'</del></td><td><del>'+text2+'</del></td><td><del>'+text3+'</del></td></tr>');
+
+            if(up){
+                text1 = parseInt(text1) + 1
+                text2 = parseInt(text2) - 1
+                text3 = text2
+            }else{
+                text1 = parseInt(text1) - 1
+                text2 = parseInt(text2) + 1
+                text3 = text2
+            }
+            $("#generatedTableFillLvl").append('<tr><td>'+text1+'</td><td>'+text2+'</td><td>'+text3+'</td></tr>');
+
+            counterTest++
+            flag = false
+        }else{
+            $(event.target).css("opacity", 0.65)    
+            $(event.target).css("pointer-events", "none")
+            row.append("    TEST PASSED")
+        }
+        generateDataMaster()
+    }
+}
 /*
 *
 *               Document ready 
@@ -1478,7 +1567,7 @@ $( document ).ready(function() {
     //             alert("Ext TiO2 ask")
     //         }
     //     });
-    // }
+    // } 
 
 });
 

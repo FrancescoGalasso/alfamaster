@@ -84,6 +84,9 @@ td {
     min-width: 80px;
 }
 
+/*
+*   stuffs
+*/
 #btn_calculate {
     display:none;
     margin-top: 55px;
@@ -110,11 +113,17 @@ td {
     margin-left: 10;
 }
 
-/* #addRawMat{
-    display:none;
-} */
+#startTest{
+    visibility: hidden;
+}
 
+#checkTest{
+    visibility: hidden;
+}
 
+/*
+*   css for div & btn add/remove raw mat during creation
+*/
 #addorRemoveRawMat{
     float: left;
     display:none;
@@ -142,4 +151,25 @@ div.modal-footer form {
 
 #save {
     display:none;   
+}
+
+/*
+*   test on develop
+*/
+
+#tableFillCalculation{
+    background-color: aqua
+}
+
+#startTest{
+    background-color: beige
+
+}
+
+#checkTest{
+    background-color: thistle
+}
+
+#container{
+    background-color: yellow
 }
