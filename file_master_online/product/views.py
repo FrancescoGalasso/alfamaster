@@ -23,7 +23,6 @@ def product_detail(request, pk):
         # import pdb; pdb.set_trace()
         stdlogger.info("        +++ [info] Call to PRODUCT_DETAIL method")
         product = get_object_or_404(Product, pk=pk)
-        # history_list = get_list_or_404(History, product=pk)
         history= History.objects.filter(product=pk).latest('revision')
 
         data = history.data
@@ -46,6 +45,8 @@ def product_detail(request, pk):
         stdlogger.debug("       *** [debug] product_currency: "+ prod_currency)
         prod_admin = ""
 
+        prod_lvl_fill = history.lvl_fill
+
         if prod_owner == request.user.username or request.user.username == "admin":
             try:
                 lista = _data['data']
@@ -60,11 +61,12 @@ def product_detail(request, pk):
             else:
                 prod_admin = False
 
-            return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':prod_rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin, 'history_id':history_id})    
+            return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':prod_rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin, 'history_id':history_id, 'prod_lvl_fill':prod_lvl_fill})    
             # return render(request, 'product/product_detail.html')
         else:
             stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
             return render(request, 'product/error.html')
+
 
 # @login_required
 def product_list(request):
@@ -89,11 +91,13 @@ def product_new(request):
     print(request.GET)
     print(request.POST)
     if request.method == "POST":
+        # import pdb; pdb.set_trace()
         my_product_name = request.POST.get('name')
         my_product_data = request.POST.get('data')
         my_product_rev = request.POST.get('revision')
         my_product_currency= request.POST.get('currency')
-
+        my_product_lvl_fill = request.POST.get('lvl_fill')
+        my_product_lvl_fill = map(int, my_product_lvl_fill.split(" "))
         if(my_product_rev):
             print("revision -> "+str(my_product_rev))
         elif (my_product_rev is None):
@@ -105,7 +109,7 @@ def product_new(request):
 
         my_product = Product.objects.create(name=my_product_name, owner=username, currencies=my_product_currency)
         my_product.save()
-        History.objects.create(data=my_product_data, revision=my_product_rev, product_id=my_product.id)
+        History.objects.create(data=my_product_data, revision=my_product_rev, product_id=my_product.id,lvl_fill=my_product_lvl_fill)
         messages.success(request, "The product %s has been successfully created" % my_product.name.upper())
             # redirect to HOME
         return HttpResponseRedirect("/")
@@ -121,6 +125,8 @@ def product_save(request):
         my_product_pk = request.POST.get('pk')
         my_product_data = request.POST.get('data')
         my_product_rev = request.POST.get('revision')
+        my_product_lvl_fill = request.POST.get('lvl_fill')
+
         # my_product_currency= request.POST.get('currency')
 
         if(my_product_rev):
@@ -132,14 +138,15 @@ def product_save(request):
         # if request.user.is_authenticated():
         #     username = request.user.username
         stdlogger.info("        +++ [info] new History object created")
-        History.objects.create(data=data, revision=my_product_rev, product_id=my_product_pk)
+        lvl_fill = map(int, my_product_lvl_fill.split(" "))
+        History.objects.create(data=data, revision=my_product_rev, product_id=my_product_pk, lvl_fill=lvl_fill)
         obj = Product.objects.get(pk=my_product_pk)
         messages.info(request, "The product %s has been successfully updated" % obj.name.upper())
             # redirect to HOME
         return HttpResponseRedirect("/")
 
     
-    # delete the history -> the current revision of the product
+# delete the history -> the current revision of the product
 @login_required
 def product_delete(request, pk):
 
@@ -160,7 +167,7 @@ def product_delete(request, pk):
     return HttpResponseRedirect("/")
 
 
-    # erase current product and all his history/revisions
+# erase current product and all his history/revisions
 @login_required
 def product_erase(request, pk):
 
@@ -203,6 +210,7 @@ def product_update(request, pk):
     prod_currency = unicode(product.currencies)
     stdlogger.debug("       *** [debug] product currency: "+ prod_currency)
     prod_admin = ""
+    prod_lvl_fill = history.lvl_fill
 
     if prod_owner == request.user.username:
         try:
@@ -219,7 +227,7 @@ def product_update(request, pk):
         else:
             prod_admin = False
 
-        return render(request, 'product/product_update.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin})   
+        return render(request, 'product/product_update.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin, 'prod_lvl_fill':prod_lvl_fill})   
     else:
         stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
         return render(request, 'product/error.html')

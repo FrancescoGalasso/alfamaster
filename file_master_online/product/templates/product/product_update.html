@@ -15,9 +15,8 @@
   var rev = '{{prod_rev}}'
   rev = parseInt(rev)+1
   var prod_currency = '{{prod_currency}}'
-  console.log("prod_currency -> "+prod_currency)
   var prod_admin = '{{prod_admin}}'
-  console.log("prod_admin -> "+prod_admin)
+  var lvl_fill = '{{prod_lvl_fill}}'
 </script>
 
 <style>
@@ -123,6 +122,7 @@
       <input type='hidden' name='data' />
       <input type='hidden' name='revision'/>
       <input type='hidden' name='currency' />
+      <input type='hidden' name='lvl_fill' />
       <input id="btn_update_save" type='submit' onclick=saveProduct(rev,prod_currency) value='Save' />
   </form>
 </div>

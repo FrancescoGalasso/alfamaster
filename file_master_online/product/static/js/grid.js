@@ -206,12 +206,26 @@ async function generateTableFillLvl(){
     var vb1 = cells_b1[2].textContent
     var vti = cells_ti[2].textContent
 
-    var _op1 = parseFloat(vb1)
-    var _op2 = parseFloat(vti)
-    var _op = (100*_op1)/_op2
-    var op = parseFloat(_op).toFixed(0)
-    var op2 = 100 - op
-    var op3 = op2
+    var op = ""
+    var op2 = ""
+    var op3 = ""
+
+    var tableDetailorUpdate = document.getElementById('tdetail')
+    if(tableDetailorUpdate){
+        // something
+        lvl_fill = lvl_fill.slice(1,-1)
+        var listofLvl_fill = lvl_fill.split(',').map(Number);
+        op = listofLvl_fill[0]
+        op2 = listofLvl_fill[1]
+        op3 = op2
+    }else{
+        var _op1 = parseFloat(vb1)
+        var _op2 = parseFloat(vti)
+        var _op = (100*_op1)/_op2
+        op = parseFloat(_op).toFixed(0)
+        op2 = 100 - op
+        op3 = op2
+    }
 
     var op_listì = [op, op2, op3]
     for (var i = 0; i<op_listì.length; i++){
@@ -1176,15 +1190,26 @@ function saveProduct(rev,currency) {
 
     if(currency == null || currency == ''){
         currency = $( "#currencies option:selected" ).text();
-        console.log("currency from save -> "+currency)
     }
     var input_test4 =  document.getElementsByName("currency")[0]
     if(input_test4){
         input_test4.value = currency
     } else if(prod_currency){
-        console.log(prod_currency)
         input_test4.value = prod_currency
     }
+
+    var rowtableFillCalculation = $('#tableFillCalculation tr:last')
+    if(rowtableFillCalculation){
+        var text1 = $('#tableFillCalculation tr:last td:nth-child(1)').text()
+        var text2 = $('#tableFillCalculation tr:last td:nth-child(2)').text()
+        // var text3 = $('#tableFillCalculation tr:last td:nth-child(3)').text()
+        var lvl_fill = text1+" "+text2+" "+ text2
+        var input_test5 =  document.getElementsByName("lvl_fill")[0]
+        if(input_test5){
+            input_test5.value = lvl_fill
+        }
+    }
+
 }
 
 function createJson(){
