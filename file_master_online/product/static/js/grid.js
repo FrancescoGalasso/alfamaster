@@ -416,6 +416,7 @@ function generateData(){
     var empty = false
     var noRawName = false
     var swZero = false
+    var minus = false
     var matrixWeightInput = createMatrixInputValue(listofWeightClassNames)
     // inputClassNames example -> [".rm_cost", ".sw", ".ww_b1", ".ww_ti" ...]
     for (var i = 0; i < listofInputClassNames.length; i++){
@@ -426,6 +427,9 @@ function generateData(){
                 return false        // exit from loop
             }
             var input = $(this).text()
+            if(input.indexOf('-') > -1){
+                minus = true
+            }
             if($.isNumeric(input)){
                 if (listofInputClassNames[i] == '.sw'){
                     sw.push(parseFloat(input))
@@ -471,7 +475,7 @@ function generateData(){
             }
         }
 
-        if (productInputValue == "" || empty || comma || char || noRawName || swZero){
+        if (productInputValue == "" || empty || comma || char || noRawName || swZero || minus){
             if(productInputValue=="" && empty){
                 msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
             }
@@ -493,6 +497,10 @@ function generateData(){
                 msg = "OPS! One or more missing Raw material names.."
             }else if (swZero){
                 msg="OPS! You have entered a value of 0 in a Specific Weight field..Change it to continue.."
+            }else if(comma && minus){
+                msg = "OPS! One or more negative floating numbers detected..<br>Floating point numbers need a dot and not a comma..<br>e.g<br>This number is valid -> 1.2<br>This number is invalid -> 1,2"
+            }else if(minus){
+                msg = "OPS! One or more negative integer numbers detected.."
             }
             else{
                 msg = "OPS! UNKNOWN ERROR.."
