@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import ArrayField
+
 
 
 class Product(models.Model):
@@ -19,3 +21,4 @@ class History(models.Model):
     data = JSONField(default=list)
     revision = models.IntegerField(default=0)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    lvl_fill = ArrayField(models.IntegerField(), size=3)
