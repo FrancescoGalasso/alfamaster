@@ -5,12 +5,10 @@ $( document ).ready(function() {
     var materials = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>']
     for(var i=0; i<3; i++){
         body.rows[i+2].cells[0].innerHTML = materials[i]
-        console.log(body.rows[i+2].cells[0])
         }
 
     // adding classname and content editable for update operation
     var amountOfRows = $("#tdetail  tbody  tr").length
-    var amountOfColums = document.getElementById('tdetail').rows[1].cells.length
 
     var numberofBases = document.getElementById('tdetail').rows[0].cells.length -3
     var listofIndexInput = [2,3,4,9]
@@ -24,13 +22,14 @@ $( document ).ready(function() {
     
     for(var i=2; i<amountOfRows+2; i++){
         for (var j=0; j<listofIndexInput.length; j++){
-            body.rows[i].cells[listofIndexInput[j]-1].contentEditable = true
-            body.rows[i].cells[listofIndexInput[j]-1].style.backgroundColor = "#ffff00"
-            body.rows[i].cells[listofIndexInput[j]-1].className = "update"
+            var el = body.rows[i].cells[listofIndexInput[j]-1]
+            el.contentEditable = true
+            el.style.backgroundColor = "#ffff00"
+            el.className = "update"
             if(j == 1){
-                body.rows[i].cells[listofIndexInput[j]-1].className = "rm_cost"
+                el.classList.add("rm_cost", "update")
             }else if(j == 0){
-                body.rows[i].cells[listofIndexInput[j]-1].className = "sw"
+                el.classList.add("sw", "update")
             }
         }
     }
