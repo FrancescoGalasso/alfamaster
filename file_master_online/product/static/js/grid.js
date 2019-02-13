@@ -411,6 +411,7 @@ function generateData(){
     listofInputClassNames.push(...listofWeightClassNames)
     var numofWeightClassNames = listofWeightClassNames.length
 
+    var emptyNameInput = false
     var comma = false
     var char = false
     var empty = false
@@ -423,34 +424,36 @@ function generateData(){
         var tmp = 0;
         var sum = 0;
         $(listofInputClassNames[i]).each(function(){
-            if($(this).hasClass( "tirem_m" )){
-                return false        // exit from loop
-            }
-            var input = $(this).text()
-            if(input.indexOf('-') > -1){
-                minus = true
-            }
-            if($.isNumeric(input)){
-                if (listofInputClassNames[i] == '.sw'){
-                    sw.push(parseFloat(input))
-                } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
-                    for (var j=0; j< listofWeightClassNames.length; j++ ){
-                        if(listofInputClassNames[i] == listofWeightClassNames[j]){
-                            matrixWeightInput[j].push(parseFloat(input))
-                            sum += parseFloat(input)
+            var id_table = $(this).closest('table').attr('id')
+            if(id_table == "tdetail" || id_table == "generatedTable"){
+                if ($(this).attr('class').indexOf('_m') > -1) {
+                    return false        // exit from loop
+                }
+                var input = $(this).text()
+                if(input.indexOf('-') > -1){
+                    minus = true
+                }
+                if($.isNumeric(input)){
+                    if (listofInputClassNames[i] == '.sw'){
+                        sw.push(parseFloat(input))
+                    } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
+                        for (var j=0; j< listofWeightClassNames.length; j++ ){
+                            if(listofInputClassNames[i] == listofWeightClassNames[j]){
+                                matrixWeightInput[j].push(parseFloat(input))
+                                sum += parseFloat(input)
+                            }
                         }
                     }
-                }
-            }else{
-                if (input.indexOf(',') > -1){
-                    comma = true
-                }else if (input != ""){
-                    char = true
-                } else if( input == null || input.length == 0){
-                    empty = true
+                }else{
+                    if (input.indexOf(',') > -1){
+                        comma = true
+                    }else if (input != ""){
+                        char = true
+                    } else if( input == null || input.length == 0){
+                        empty = true
+                    }
                 }
             }
-
         });
         // console.log("tot sum -> "+sum)
         list_sum.push(sum)
@@ -464,53 +467,54 @@ function generateData(){
     });
 
     var productInput = document.getElementById('nameProduct')
-
     if(productInput){
         productInputValue = productInput.value
-        var msg=""
-
-        for (let switem of sw){
-            if (switem == 0){
-                swZero = true
-            }
-        }
-
-        if (productInputValue == "" || empty || comma || char || noRawName || swZero || minus){
-            if(productInputValue=="" && empty){
-                msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
-            }
-            else if(productInputValue == ""){
-                msg = "OPS! You must fill the Product name field.."
-            }
-            else if(empty){
-                msg = "OPS! You must fill all the empty yellow fields.."
-            }
-            else if (comma && char){
-                msg = "OPS! character detected inside some fields..<br>Floating point numbers need a dot and not a comma.."
-            }
-            else if (comma){
-                msg = "OPS! Floating point numbers need a dot and not a comma..<br>e.g<br>This number is valid -> 1.2<br>This number is invalid -> 1,2"
-            }
-            else if (char){
-                msg = "OPS! character detected inside some fields.."
-            }else if (noRawName){
-                msg = "OPS! One or more missing Raw material names.."
-            }else if (swZero){
-                msg="OPS! You have entered a value of 0 in a Specific Weight field..Change it to continue.."
-            }else if(comma && minus){
-                msg = "OPS! One or more negative floating numbers detected..<br>Floating point numbers need a dot and not a comma..<br>e.g<br>This number is valid -> 1.2<br>This number is invalid -> 1,2"
-            }else if(minus){
-                msg = "OPS! One or more negative integer numbers detected.."
-            }
-            else{
-                msg = "OPS! UNKNOWN ERROR.."
-            }
-            loadingOverlay.cancel(spinHandle);
-            $("#msg-modal").html(msg)
-            $("#myModal").modal()
-            return
+        if(productInputValue == ""){
+            emptyNameInput = true
         }
     }
+    for (let switem of sw){
+        if (switem == 0){
+            swZero = true
+        }
+    }
+    var msg=""
+    if (emptyNameInput || empty || comma || char || noRawName || swZero || minus){
+        if(emptyNameInput && empty){
+            msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
+        }
+        else if(emptyNameInput){
+            msg = "OPS! You must fill the Product name field.."
+        }
+        else if(empty){
+            msg = "OPS! You must fill all the empty yellow fields.."
+        }
+        else if (comma && char){
+            msg = "OPS! character detected inside some fields..<br>Floating point numbers need a dot and not a comma.."
+        }
+        else if (comma){
+            msg = "OPS! Floating point numbers need a dot and not a comma..<br>e.g<br>This number is valid -> 1.2<br>This number is invalid -> 1,2"
+        }
+        else if (char){
+            msg = "OPS! character detected inside some fields.."
+        }else if (noRawName){
+            msg = "OPS! One or more missing Raw material names.."
+        }else if (swZero){
+            msg="OPS! You have entered a value of 0 in a Specific Weight field..Change it to continue.."
+        }else if(comma && minus){
+            msg = "OPS! One or more negative floating numbers detected..<br>Floating point numbers need a dot and not a comma..<br>e.g<br>This number is valid -> 1.2<br>This number is invalid -> 1,2"
+        }else if(minus){
+            msg = "OPS! One or more negative integer numbers detected.."
+        }
+        else{
+            msg = "OPS! UNKNOWN ERROR.."
+        }
+        loadingOverlay.cancel(spinHandle);
+        $("#msg-modal").html(msg)
+        $("#myModal").modal()
+        return
+    }
+    
 
     //
     //  here the logic to populate the table
