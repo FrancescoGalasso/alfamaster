@@ -7,6 +7,7 @@ var global_data = ''
 var _sum_ti = 0.0
 var h2o = 0.0
 var global_more_rawMaterial = 0
+var global_inputValues = []
 
 function generateTable(id){
     showGenerateBtn()
@@ -238,6 +239,16 @@ async function generateTableFillLvl(){
     myTableDiv.appendChild(table)
 
     // generateColorStrength
+    // if(window.location.href.indexOf("update") > -1){
+    //     console.log("URL UPDATE")
+    //     if(global_flag){
+    //         $('#startTest').css("visibility", "visible");
+    //     }else{
+    //         $('#startTest').css("visibility", "hidden");
+    //     }
+
+    //     // $('#startTest').css("visibility", "hidden");
+    // }
     $('#startTest').css("visibility", "visible");
 
     generateTableMaster()
@@ -369,7 +380,7 @@ function creationTFootMaster(tableFoot, tr_foot){
 */
 
 function generateData(){
-
+        
     if( $('#updateCalculateBtn').length ){
         // visibility:hidden
         // $(".main").css("display", "block");
@@ -515,6 +526,34 @@ function generateData(){
         return
     }
     
+    var listofUpdatedInputB1 = []
+    var updatedInputB1 = $("#tdetail tbody tr td:nth-child(4)")
+    for (var i=0; i< updatedInputB1.length; i++){
+        if(i<4){
+            var tmp = updatedInputB1[i].textContent
+            listofUpdatedInputB1.push(tmp)
+        }
+    }
+    
+    for (var i in global_inputValues) {
+        if(i !=0){
+            if(listofUpdatedInputB1.indexOf(global_inputValues[i]) === -1){
+                console.log(listofUpdatedInputB1[i])
+                console.log(global_inputValues[i])
+    
+                var old_value = global_inputValues[i]
+                var new_value = listofUpdatedInputB1[i]
+    
+                var op =  Math.abs(new_value - old_value);
+                var bound = 3*parseFloat(old_value)/100
+                if(op > bound){
+                    console.log("ColorStrength ")
+                }else{
+                    console.log("minimal changes")
+                }
+            }
+        }
+    }
 
     //
     //  here the logic to populate the table
@@ -1618,6 +1657,40 @@ $( document ).ready(function() {
     //         }
     //     });
     // } 
+    console.log("doc ready!")
+
+    var inputB1 = $("#tdetail tbody tr td:nth-child(4)")
+    for (var i=0; i< inputB1.length; i++){
+        if(i<4){
+            var tmp = inputB1[i].textContent
+            global_inputValues.push(tmp)
+        }
+    }
+
+    // store all . input values
+    // 
+    // var $tableFirstRow = $("#tdetail tbody tr:first")
+    // var _row = $tableFirstRow.find('td')
+    // var listofIndexUpdate = [1,2,3]
+    // var lengthofRow = parseInt(_row.length) -1
+    // var index = (lengthofRow-2)/5
+    // i = 0
+    // while(i < index){
+    //     _i = listofIndexUpdate[listofIndexUpdate.length-1]
+    //     _i += 5
+    //     if(_i < lengthofRow){
+    //         listofIndexUpdate.push(_i)
+    //     }
+    //     i ++
+    // }
+    // $table = $("#tdetail tbody tr")
+    // $table.each(function(i){
+    //     var td = $(this).find('td')
+    //     for (let index of listofIndexUpdate){
+    //         var tmp = td[index]
+    //         global_inputValues.push(tmp.textContent)
+    //     }
+    // })
 
 });
 
