@@ -109,7 +109,21 @@
   <button id="updateCalculateBtn" type="button" class="btn btn-xs" disabled = "true" onclick=generateData()>Calculate</button> 
 
   <br>
-  <div id="tableFillCalculation" style="margin-top: 20;"></div>
+  <div id="container">
+    <div id="tableFillCalculation" style = "display: inline-grid;"></div>
+    <div id="startTest" style = "display: inline-grid; padding-left:220;">
+            <p>Acceptability range for COLOR STRENGTH</p>
+            <div class="grid_generator">
+                <div>Inferior Range<input id="rangeinf" type="number" style="margin-left:29px; width: 51 !important;text-align: center;" value=98 placeholder="98" readonly></div>
+                <div>Superior Range<input id="rangesup" type="number" style="margin-left:20px; width: 51 !important;text-align: center;" value=102 placeholder="102" readonly></div>
+            </div>
+            <div>Laboratory Test</div>
+            <button id="verify" onclick="startLabTest()">Start</button>
+    </div>
+    <div id="checkTest" style = "display: inline-grid; padding-left:150;">
+        <p>Insert result of Laboratory Test</p>
+    </div>
+  </div>
   <br>
   <div id="tableMaster"></div>
   <br>

@@ -58,7 +58,10 @@ $( document ).ready(function() {
                 cell.innerHTML = " "
             }
         }
-    
+        keyupAction = true
     }); 
 
+    $('#startTest').css("visibility", "hidden");
+    $('#btn_update_save').css("visibility", "hidden");
+    var keyupAction = false
 });

@@ -8,6 +8,8 @@ var _sum_ti = 0.0
 var h2o = 0.0
 var global_more_rawMaterial = 0
 var global_inputValues = []
+var global_colorStrength = false
+var global_popupNewProd = false
 
 function generateTable(id){
     showGenerateBtn()
@@ -241,16 +243,17 @@ async function generateTableFillLvl(){
     // generateColorStrength
     if(window.location.href.indexOf("update") > -1){
         console.log("URL UPDATE")
-        var elem = document.getElementById("tdetail")
-        if(elem){
-            $('#startTest').css("visibility", "hidden");
+        if(global_colorStrength){
+            $('#startTest').css("visibility", "visible");
         }
-
-        // $('#startTest').css("visibility", "hidden");
+        if(global_popupNewProd){
+            alert("DEVI CREARE NUOVO PRODOTTO!")
+            $('#startTest').css("visibility", "hidden");
+            return
+        }
     }else{
         $('#startTest').css("visibility", "visible");
     }
-    // $('#startTest').css("visibility", "visible");
 
     generateTableMaster()
 }
@@ -382,6 +385,9 @@ function creationTFootMaster(tableFoot, tr_foot){
 
 function generateData(){
         
+    global_colorStrength = false
+    global_popupNewProd = false
+
     if( $('#updateCalculateBtn').length ){
         // visibility:hidden
         // $(".main").css("display", "block");
@@ -553,14 +559,11 @@ function generateData(){
                 var lowerBound = parseFloat(old_value) - parseFloat(gap)
                 if(new_value <= upperBound && new_value >= lowerBound){
                     console.log("Perform ColorStrength ")
+                    global_colorStrength = true
                 } else {
                     console.log("popup Create new Product")
+                    global_popupNewProd = true
                 }
-                // if(op > bound){
-                //     console.log("ColorStrength ")
-                // }else{
-                //     console.log("minimal changes")
-                // }
             }
         }
     }
@@ -1622,6 +1625,7 @@ function verify(event){
             if(form_update_save){
                 form_update_save.style.display = "block"
             }
+            $('#btn_update_save').css("visibility", "visible");
         }
     }
 }
@@ -1660,13 +1664,6 @@ $( document ).ready(function() {
     }
     $('#currencies').append(option);
 
-    // if ( $( "#input_grid2" ).length ){
-    //     $('#input_grid2').keyup(function(){
-    //         if($('#input_grid2').val()){
-    //             alert("Ext TiO2 ask")
-    //         }
-    //     });
-    // } 
     console.log("doc ready!")
 
     var inputB1 = $("#tdetail tbody tr td:nth-child(4)")
@@ -1676,31 +1673,6 @@ $( document ).ready(function() {
             global_inputValues.push(tmp)
         }
     }
-
-    // store all . input values
-    // 
-    // var $tableFirstRow = $("#tdetail tbody tr:first")
-    // var _row = $tableFirstRow.find('td')
-    // var listofIndexUpdate = [1,2,3]
-    // var lengthofRow = parseInt(_row.length) -1
-    // var index = (lengthofRow-2)/5
-    // i = 0
-    // while(i < index){
-    //     _i = listofIndexUpdate[listofIndexUpdate.length-1]
-    //     _i += 5
-    //     if(_i < lengthofRow){
-    //         listofIndexUpdate.push(_i)
-    //     }
-    //     i ++
-    // }
-    // $table = $("#tdetail tbody tr")
-    // $table.each(function(i){
-    //     var td = $(this).find('td')
-    //     for (let index of listofIndexUpdate){
-    //         var tmp = td[index]
-    //         global_inputValues.push(tmp.textContent)
-    //     }
-    // })
 
 });
 
