@@ -702,15 +702,18 @@ function generateDataMaster(){
     var table_update = document.getElementById("tdetail")
     var tableInput = ''
     var index = ''
+    var index2cells = ''
     var table_id = ''
     if(table_new){
         tableInput = table_new
         index = 1
+        index2cells = 5
         table_id = "generatedTable"
     } else if (table_update){
         tableInput = table_update
         index = 0
         table_id = "tdetail"
+        index2cells = 3
     }
     var tableFillLvl = document.getElementById("generatedTableFillLvl")
     var list_vv_ti = []
@@ -721,15 +724,21 @@ function generateDataMaster(){
     var sum_test = 0
     var sum_ww = 0
     var sum_fcost = 0
+    var swExt = 0
+    var resExt = 0
 
-    for (var j=4; j < 12; j++){
+    for (var j=2; j < 12; j++){
         var cells = tableInput.querySelectorAll('td:nth-child('+j+')')
         for(var i = index ; i < cells.length ; i++) {
             if(j == 6){
                 if(cells[i].innerText){
                     list_vv_b1.push(cells[i].innerText)
                 }
-            } else if(j==11) {
+            } else if(j==2){
+                console.log(cells[index2cells])
+                swExt = cells[index2cells].innerText
+                break
+            }else if(j==11) {
                 if(cells[i].innerText){
                     list_vv_ti.push(cells[i].innerText)
                 }
@@ -741,9 +750,9 @@ function generateDataMaster(){
     // var cell = tableFillLvl.querySelectorAll('td:nth-last-child()') //WRONG
     // var defLvl = cell[1].innerHTML
     var defLvl = cell[cell.length-1].innerHTML
-    console.log("....")
-    console.log(defLvl)
-    console.log("....")
+    console.log("defLvl : "+defLvl)
+
+        // calculate datum for cell with className 'tirem_m'
     for(var i=0; i < global_num_raw_material; i++){
         var res = ''
         var indexMaster = i
@@ -754,13 +763,17 @@ function generateDataMaster(){
             res = 0
         } else{
             _op1 = list_vv_b1[indexMaster]
-            _op2 = list_vv_ti[indexMaster]*((100-defLvl)/100)
+            _op2 = list_vv_ti[i]*((100-defLvl)/100)
             _op3 = defLvl/100
             // res_tableNew = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
             // res_tableUpdate = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
-            res = (_op1 - _op2)/_op3
+            if(i==3 && swExt <= 2){
+                res = 0
+                resExt = (_op1 - _op2)/_op3
+            }else{
+                res = (_op1 - _op2)/_op3
+            }
         }
-        
         list_tiRemoving.push(res)
         sum_tiRemoving += res
     }
@@ -769,6 +782,9 @@ function generateDataMaster(){
     for (var i = 0; i < global_num_raw_material; i++){
         tmp = document.getElementsByClassName('tirem_m')[i+1]
         var _op = list_tiRemoving[i]
+        if( i == 0 && resExt !=0){
+            _op += parseFloat(resExt)
+        }
         var op = parseFloat(_op).toFixed(3)
         tmp.innerHTML = op
         tmp.classList.add("to_update")
