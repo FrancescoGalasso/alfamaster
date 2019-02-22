@@ -746,23 +746,21 @@ function generateDataMaster(){
     console.log("....")
     for(var i=0; i < global_num_raw_material; i++){
         var res = ''
+        var indexMaster = i
         if(table_new){
-            if(i==2){   //Ti not calculated for MASTER
-                res = 0
-            } else{
-                _op1 = list_vv_b1[i+1]
-                _op2 = list_vv_ti[i]*((100-defLvl)/100)
-                _op3 = defLvl/100
-                res = (_op1 - _op2)/_op3
-                // res = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
-            }
-        }else if (table_update){
-            if(i == 2){  //Ti not calculated for MASTER
-                res = 0
-            } else {
-                res = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
-            }
+            indexMaster = parseInt(indexMaster)+1
         }
+        if(i==2){   //Ti not calculated for MASTER
+            res = 0
+        } else{
+            _op1 = list_vv_b1[indexMaster]
+            _op2 = list_vv_ti[indexMaster]*((100-defLvl)/100)
+            _op3 = defLvl/100
+            // res_tableNew = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+            // res_tableUpdate = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+            res = (_op1 - _op2)/_op3
+        }
+        
         list_tiRemoving.push(res)
         sum_tiRemoving += res
     }
