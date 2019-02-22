@@ -239,17 +239,18 @@ async function generateTableFillLvl(){
     myTableDiv.appendChild(table)
 
     // generateColorStrength
-    // if(window.location.href.indexOf("update") > -1){
-    //     console.log("URL UPDATE")
-    //     if(global_flag){
-    //         $('#startTest').css("visibility", "visible");
-    //     }else{
-    //         $('#startTest').css("visibility", "hidden");
-    //     }
+    if(window.location.href.indexOf("update") > -1){
+        console.log("URL UPDATE")
+        var elem = document.getElementById("tdetail")
+        if(elem){
+            $('#startTest').css("visibility", "hidden");
+        }
 
-    //     // $('#startTest').css("visibility", "hidden");
-    // }
-    $('#startTest').css("visibility", "visible");
+        // $('#startTest').css("visibility", "hidden");
+    }else{
+        $('#startTest').css("visibility", "visible");
+    }
+    // $('#startTest').css("visibility", "visible");
 
     generateTableMaster()
 }
@@ -537,7 +538,7 @@ function generateData(){
     
     for (var i in global_inputValues) {
         if(i !=0){
-            if(listofUpdatedInputB1.indexOf(global_inputValues[i]) === -1){
+            if(listofUpdatedInputB1[i] != global_inputValues[i]){
                 console.log(listofUpdatedInputB1[i])
                 console.log(global_inputValues[i])
     
@@ -545,12 +546,21 @@ function generateData(){
                 var new_value = listofUpdatedInputB1[i]
     
                 var op =  Math.abs(new_value - old_value);
-                var bound = 3*parseFloat(old_value)/100
-                if(op > bound){
-                    console.log("ColorStrength ")
-                }else{
-                    console.log("minimal changes")
+                var gap = 3*parseFloat(old_value)/100
+                console.log("op " +op)
+                console.log("gap "+gap)
+                var upperBound = parseFloat(old_value) + parseFloat(gap)
+                var lowerBound = parseFloat(old_value) - parseFloat(gap)
+                if(new_value <= upperBound && new_value >= lowerBound){
+                    console.log("Perform ColorStrength ")
+                } else {
+                    console.log("popup Create new Product")
                 }
+                // if(op > bound){
+                //     console.log("ColorStrength ")
+                // }else{
+                //     console.log("minimal changes")
+                // }
             }
         }
     }
