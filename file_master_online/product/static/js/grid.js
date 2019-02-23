@@ -752,7 +752,7 @@ function generateDataMaster(){
     var defLvl = cell[cell.length-1].innerHTML
     console.log("defLvl : "+defLvl)
 
-        // calculate datum for cell with className 'tirem_m'
+        // calculate data for cell with className 'tirem_m'
     for(var i=0; i < global_num_raw_material; i++){
         var res = ''
         var indexMaster = i
@@ -761,6 +761,7 @@ function generateDataMaster(){
         }
         if(i==2){   //Ti not calculated for MASTER
             res = 0
+            console.log(i + " : " +res)
         } else{
             _op1 = list_vv_b1[indexMaster]
             _op2 = list_vv_ti[i]*((100-defLvl)/100)
@@ -770,14 +771,20 @@ function generateDataMaster(){
             if(i==3 && swExt <= 2){
                 res = 0
                 resExt = (_op1 - _op2)/_op3
+                console.log(i + " : "+ resExt)
             }else{
                 res = (_op1 - _op2)/_op3
+                console.log(i + " : " +res)
             }
         }
         list_tiRemoving.push(res)
         sum_tiRemoving += res
     }
 
+    if (resExt != 0){
+        sum_tiRemoving += resExt
+    }
+    console.log("sum_tiRemoving : "+sum_tiRemoving)
         // insert single datum for cell with className 'tirem_m'
     for (var i = 0; i < global_num_raw_material; i++){
         tmp = document.getElementsByClassName('tirem_m')[i+1]
