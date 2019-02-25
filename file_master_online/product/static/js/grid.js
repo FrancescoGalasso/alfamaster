@@ -277,10 +277,7 @@ async function generateTableMaster(){
         _table = '#generatedTable'
         cell_table = 'td'
     }
-    // var formulaCost = $(_table+' tr:nth-child(2) th:eq(7)')[0].innerText        // not work on new :-/
-    // var formulaCost = $(_table+' tr:nth-child(2) td:eq(7)').text()                 // OK new - bad on details
-    // var formulaCost = $('#tdetail thead tr:nth-child(2) th:eq(7)').text()
-    // formulaCost = $('#generatedTable thead tr:nth-child(2) td:eq(7)').text()
+
     var formulaCost = $(_table+' thead tr:nth-child(2) '+cell_table+':eq(7)').text()
     var array = formulaCost.split('['),
         fc = '<div>'+array[0]+'</div>', c = '<div>['+array[1]+'</div>';
