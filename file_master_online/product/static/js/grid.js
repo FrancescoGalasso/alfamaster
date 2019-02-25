@@ -268,29 +268,30 @@ async function generateTableMaster(){
     await sleep(200);    // sleep 0.2 sec
     console.log('generateTableMaster')
 
-    var r = $("#tdetail tr:nth-child(2)")[0]
-    // console.log(r)
-    if(typeof r !== "undefined"){
-
-        var r1 = r[16]
-        console.log(r1)
-
-        var rr = $("#tdetail").find("thead tr").eq(1).children()
-        var formulaCost = ""
-        if(rr[16] === undefined){
-            formulaCost = rr[9].innerText
-        }else{
-            formulaCost = rr[16].innerText
-        }
+    var _table = ""
+    var cell_table = ""
+    if ( $( "#tdetail" ).length ){
+        _table = '#tdetail'
+        cell_table = 'th'
     } else {
-        formulaCost = "Formula Cost"
+        _table = '#generatedTable'
+        cell_table = 'td'
     }
-    // var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", "Formula Cost ["+prod_currency+"/L]"]
+    // var formulaCost = $(_table+' tr:nth-child(2) th:eq(7)')[0].innerText        // not work on new :-/
+    // var formulaCost = $(_table+' tr:nth-child(2) td:eq(7)').text()                 // OK new - bad on details
+    // var formulaCost = $('#tdetail thead tr:nth-child(2) th:eq(7)').text()
+    // formulaCost = $('#generatedTable thead tr:nth-child(2) td:eq(7)').text()
+    var formulaCost = $(_table+' thead tr:nth-child(2) '+cell_table+':eq(7)').text()
+    var array = formulaCost.split('['),
+        fc = '<div>'+array[0]+'</div>', c = '<div>['+array[1]+'</div>';
+
+    // var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", fc+c]
     var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", formulaCost]
+
     var myTableDiv = document.getElementById("tableMaster")
 
 
-    var table = document.createElement('TABLE')
+    var table = document.createElement('TABLE') 
     table.id = "generatedTableMaster"
     var tableHead = document.createElement('THEAD')
     var tableBody = document.createElement('TBODY')
