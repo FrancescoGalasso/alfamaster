@@ -725,6 +725,7 @@ function generateDataMaster(){
     var swExt = 0
     var resExt = 0
     var tio2add = 0
+    var listofSolidRawMat = []
 
     for (var j=2; j < 12; j++){
         var cells = tableInput.querySelectorAll('td:nth-child('+j+')')
@@ -787,10 +788,16 @@ function generateDataMaster(){
                         if(wwBN < wwB1){
                             console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() +" be calculated to ZERO on MASTER TABLE")
                             res = 0
-                            tio2add = (_op1 - _op2)/_op3
+                            calculated_res = (_op1 - _op2)/_op3
+                            console.log("calculated res to add to RAW MAT SOLID -> "+calculated_res)
+                            tio2add += calculated_res
                         } else { // wwB1 > wwBN
                             if(diff <= limit){
                                 console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() +" is a RAW MATERIAL SOLID\nAdd other values")
+                                console.log("wwB1 of "+$('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text()+ " : "+wwB1)
+                                var rawMatSolid = []
+                                rawMatSolid.push(parseFloat(wwB1), i)
+                                listofSolidRawMat.push(rawMatSolid)
                             }else{
                                 console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() +" is calculated NORMALLY")
                             }
@@ -808,7 +815,37 @@ function generateDataMaster(){
     if (resExt != 0){
         sum_tiRemoving += resExt
     }
-    console.log(list_tiRemoving)
+
+    if(tio2add > 0){
+
+        console.log("tio2add : "+tio2add)
+
+        console.log("test max Raw Mat Solid")
+        var test = [8.9, 14]
+        listofSolidRawMat.push(test)
+
+        console.log(listofSolidRawMat)
+        var max = -Infinity;
+        var index = -1;
+        listofSolidRawMat.forEach(function(a, i){
+            if(a[0]>max){
+                max = a[0]
+                index = a[1]
+            }
+        });
+
+        console.log("max: "+max + " ; index: "+index)
+        console.log("tio2add : "+tio2add)
+        var valueAtIndex = list_tiRemoving[index]
+        console.log("valueAtIndex -> "+valueAtIndex)
+        valueAtIndex += tio2add
+        console.log("valueAtIndex modified -> "+valueAtIndex)
+        var start_index = parseInt(index),
+            number_of_elements_to_remove = 1
+
+        list_tiRemoving.splice(start_index, number_of_elements_to_remove, valueAtIndex);
+    }
+
     console.log("sum_tiRemoving : "+sum_tiRemoving)
         // insert single datum for cell with className 'tirem_m'
     for (var i = 0; i < global_num_raw_material; i++){
