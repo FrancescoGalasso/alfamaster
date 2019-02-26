@@ -750,18 +750,15 @@ function generateDataMaster(){
     console.log("defLvl : "+defLvl)
 
         // calculate data for cell with className 'tirem_m'
-    for(var i=0; i < global_num_raw_material; i++){              // original one
-    // for(var i=0; i < global_num_raw_material+1; i++){
+    for(var i=0; i < global_num_raw_material; i++){
         var res = ''
         var indexMaster = i
         if(table_new){
             indexMaster = parseInt(indexMaster)+1
         }
         var idx = parseInt(i)+1
-        // console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text())
         if(i==2){   //Ti not calculated for MASTER
             res = 0
-            // console.log(i + " : " +res)
         } else{
             // res_tableNew = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
             // res_tableUpdate = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
@@ -772,34 +769,24 @@ function generateDataMaster(){
             if(i==3 && swExt <= 2){
                 res = 0
                 resExt = (_op1 - _op2)/_op3
-                // console.log(i + " : "+ resExt)
             }else{
                 // Normal working behaviour
                 res = (_op1 - _op2)/_op3
-                console.log(i + " : " +res)
 
                 // TODO check for solid raw material
                 if (i > 3){
                     var specificWeight = $('#tdetail tbody tr:nth-child('+idx+') td:eq(1)').text()
-                    console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() + " || specific weigth -> "+specificWeight)
                     res = (_op1 - _op2)/_op3
-                    console.log(i + " > 4 : " +res)
                     if(parseFloat(specificWeight) >= 2.000){
                         var wwB1 = parseFloat($('#tdetail tbody tr:nth-child('+idx+') td:eq(3)').text())
                         var lengthRow = $('#tdetail >tbody >tr:first>td').length
                         lengthRow -= 5
                         var wwBN = parseFloat($('#tdetail tbody tr:nth-child('+idx+') td:eq('+lengthRow+')').text())
-                        console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() + " || wwB1 : "+wwB1)
-                        console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() + " || wwBN : "+wwBN)
                         var diff = Math.abs(wwBN - wwB1)
                         var limit = wwB1*10/100
                         if(wwBN < wwB1){
                             console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() +" be calculated to ZERO on MASTER TABLE")
-                            // console.log("test :::: "+i +" -> "+idx)
-
-                            console.log("           old value | "+i + " : "+res)
                             res = 0
-                            console.log("           new value | "+i + " : "+res)
                             tio2add = (_op1 - _op2)/_op3
                         } else { // wwB1 > wwBN
                             if(diff <= limit){
@@ -808,7 +795,6 @@ function generateDataMaster(){
                                 console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() +" is calculated NORMALLY")
                             }
                             res = (_op1 - _op2)/_op3
-                            console.log("            new value | "+i + " : "+res)
                         }
                     }
                 }
