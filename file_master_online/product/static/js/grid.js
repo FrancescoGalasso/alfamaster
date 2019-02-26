@@ -216,10 +216,13 @@ async function generateTableFillLvl(){
     var tableDetailorUpdate = document.getElementById('tdetail')
     if(tableDetailorUpdate){
         // something
-        lvl_fill = lvl_fill.slice(1,-1)
-        var listofLvl_fill = lvl_fill.split(',').map(Number);
+        console.log("lvl_fill_prod  --> "+lvl_fill_prod)
+        if (lvl_fill_prod.indexOf('[') > -1 && lvl_fill_prod.indexOf(']') > -1){
+            lvl_fill_prod = lvl_fill_prod.slice(1,-1)
+        }
+        var listofLvl_fill = lvl_fill_prod.split(',').map(Number);
         op = listofLvl_fill[0]
-        op2 = listofLvl_fill[1]
+        op2 = 100 - op
         op3 = op2
     }else{
         var _op1 = parseFloat(vb1)
@@ -245,11 +248,12 @@ async function generateTableFillLvl(){
         console.log("URL UPDATE")
         if(global_colorStrength){
             $('#startTest').css("visibility", "visible");
-        }
-        if(global_popupNewProd){
+        }else if(global_popupNewProd){
             alert("DEVI CREARE NUOVO PRODOTTO!")
             $('#startTest').css("visibility", "hidden");
             return
+        } else {
+            // $('#startTest').css("visibility", "visible");            
         }
     }else{
         $('#startTest').css("visibility", "visible");
