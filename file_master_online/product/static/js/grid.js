@@ -724,6 +724,7 @@ function generateDataMaster(){
     var sum_fcost = 0
     var swExt = 0
     var resExt = 0
+    var tio2add = 0
 
     for (var j=2; j < 12; j++){
         var cells = tableInput.querySelectorAll('td:nth-child('+j+')')
@@ -745,34 +746,73 @@ function generateDataMaster(){
     }
 
     var cell = tableFillLvl.querySelectorAll('td:nth-child(3)')
-    // var cell = tableFillLvl.querySelectorAll('td:nth-last-child()') //WRONG
-    // var defLvl = cell[1].innerHTML
     var defLvl = cell[cell.length-1].innerHTML
     console.log("defLvl : "+defLvl)
 
         // calculate data for cell with className 'tirem_m'
-    for(var i=0; i < global_num_raw_material; i++){
+    for(var i=0; i < global_num_raw_material; i++){              // original one
+    // for(var i=0; i < global_num_raw_material+1; i++){
         var res = ''
         var indexMaster = i
         if(table_new){
             indexMaster = parseInt(indexMaster)+1
         }
+        var idx = parseInt(i)+1
+        // console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text())
         if(i==2){   //Ti not calculated for MASTER
             res = 0
-            console.log(i + " : " +res)
+            // console.log(i + " : " +res)
         } else{
+            // res_tableNew = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+            // res_tableUpdate = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
             _op1 = list_vv_b1[indexMaster]
             _op2 = list_vv_ti[i]*((100-defLvl)/100)
             _op3 = defLvl/100
-            // res_tableNew = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
-            // res_tableUpdate = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
+
             if(i==3 && swExt <= 2){
                 res = 0
                 resExt = (_op1 - _op2)/_op3
-                console.log(i + " : "+ resExt)
+                // console.log(i + " : "+ resExt)
             }else{
+                // Normal working behaviour
                 res = (_op1 - _op2)/_op3
                 console.log(i + " : " +res)
+
+                // TODO check for solid raw material
+                if (i > 3){
+                    var specificWeight = $('#tdetail tbody tr:nth-child('+idx+') td:eq(1)').text()
+                    console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() + " || specific weigth -> "+specificWeight)
+                    res = (_op1 - _op2)/_op3
+                    console.log(i + " > 4 : " +res)
+                    if(parseFloat(specificWeight) >= 2.000){
+                        var wwB1 = parseFloat($('#tdetail tbody tr:nth-child('+idx+') td:eq(3)').text())
+                        var lengthRow = $('#tdetail >tbody >tr:first>td').length
+                        lengthRow -= 5
+                        var wwBN = parseFloat($('#tdetail tbody tr:nth-child('+idx+') td:eq('+lengthRow+')').text())
+                        console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() + " || wwB1 : "+wwB1)
+                        console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() + " || wwBN : "+wwBN)
+                        var diff = Math.abs(wwBN - wwB1)
+                        var limit = wwB1*10/100
+                        if(wwBN < wwB1){
+                            console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() +" be calculated to ZERO on MASTER TABLE")
+                            // console.log("test :::: "+i +" -> "+idx)
+
+                            console.log("           old value | "+i + " : "+res)
+                            res = 0
+                            console.log("           new value | "+i + " : "+res)
+                            tio2add = (_op1 - _op2)/_op3
+                        } else { // wwB1 > wwBN
+                            if(diff <= limit){
+                                console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() +" is a RAW MATERIAL SOLID\nAdd other values")
+                            }else{
+                                console.log($('#tdetail tbody tr:nth-child('+idx+') td:eq(0)').text() +" is calculated NORMALLY")
+                            }
+                            res = (_op1 - _op2)/_op3
+                            console.log("            new value | "+i + " : "+res)
+                        }
+                    }
+                }
+
             }
         }
         list_tiRemoving.push(res)
@@ -782,6 +822,7 @@ function generateDataMaster(){
     if (resExt != 0){
         sum_tiRemoving += resExt
     }
+    console.log(list_tiRemoving)
     console.log("sum_tiRemoving : "+sum_tiRemoving)
         // insert single datum for cell with className 'tirem_m'
     for (var i = 0; i < global_num_raw_material; i++){
@@ -829,7 +870,7 @@ function generateDataMaster(){
                     }
                     for(var i=1; i< global_num_bases; i++){
                         var value = $(this).find(".vv_b"+i).html();  
-                        console.log("testo  vv_b"+i+"    -->     "+value)
+                        // console.log("testo  vv_b"+i+"    -->     "+value)
                         _lista.push(value)
                     }
                     });
@@ -842,7 +883,7 @@ function generateDataMaster(){
                     var p1 = _lista[k]
                     var p2 = 0
                     var index2 = k+1
-                    console.log("index2 ---> "+index2)
+                    // console.log("index2 ---> "+index2)
                     if(index2 >= _lista.length){
                         p2 = _lista[0]
                     }else{
@@ -853,10 +894,10 @@ function generateDataMaster(){
                     var margin = 0.1*_lista[0]
                     if(calc < margin){
                         result.push(1)          // correct 
-                        console.log("calc < margin")
+                        // console.log("calc < margin")
                     } else{
                         result.push(0)          // uncorrect
-                        console.log("calc > margin")
+                        // console.log("calc > margin")
                     }
                 }
 
@@ -871,12 +912,12 @@ function generateDataMaster(){
                     var rightBound = parseFloat(base1) + parseFloat(base1*margin)  
 
                     if(op > leftBound && op < rightBound){
-                        console.log("op > leftBound && op < rightBound")
+                        // console.log("op > leftBound && op < rightBound")
                         tmp.innerHTML = op                      // populate the cell
                         tmp.style.backgroundColor = "blue";
                         sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
                     }else{
-                        console.log("****   NO **** op > leftBound && op < rightBound")
+                        // console.log("****   NO **** op > leftBound && op < rightBound")
                         // mostro contenuto vvB1 al posto del valore calcolato
                         tmp.innerHTML=_lista[0]
                         tmp.style.backgroundColor = "yellow";
