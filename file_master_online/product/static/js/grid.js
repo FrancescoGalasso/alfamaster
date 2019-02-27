@@ -216,7 +216,6 @@ async function generateTableFillLvl(){
     var tableDetailorUpdate = document.getElementById('tdetail')
     if(tableDetailorUpdate){
         // something
-        console.log("lvl_fill_prod  --> "+lvl_fill_prod)
         if (lvl_fill_prod.indexOf('[') > -1 && lvl_fill_prod.indexOf(']') > -1){
             lvl_fill_prod = lvl_fill_prod.slice(1,-1)
         }
@@ -789,23 +788,30 @@ function generateDataMaster(){
                         var wwBN = parseFloat($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq('+lengthRow+')').text())
                         var diff = Math.abs(wwBN - wwB1)
                         var limit = wwB1*10/100
-                        if(wwBN < wwB1){
+
+                        if(wwB1 <= wwBN && diff <= limit){
+                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" is a RAW MATERIAL SOLID\nadd to rawMatSolid list")
+                            console.log("wwB1 of "+$('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text()+ " : "+wwB1)
+                            var rawMatSolid = []
+                            rawMatSolid.push(parseFloat(wwB1), i)
+                            listofSolidRawMat.push(rawMatSolid)
+                            res = (_op1 - _op2)/_op3
+                        } else  if(wwB1 <= wwBN && diff > limit){
+                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" is calculated NORMALLY")
+                            res = (_op1 - _op2)/_op3
+                        } else if (wwB1 > wwBN && diff <= limit){
+                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" is a RAW MATERIAL SOLID\nadd to rawMatSolid list")
+                            console.log("wwB1 of "+$('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text()+ " : "+wwB1)
+                            var rawMatSolid = []
+                            rawMatSolid.push(parseFloat(wwB1), i)
+                            listofSolidRawMat.push(rawMatSolid)
+                            res = (_op1 - _op2)/_op3
+                        } else if (wwB1 > wwBN && diff > limit){
                             console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" be calculated to ZERO on MASTER TABLE")
                             res = 0
                             calculated_res = (_op1 - _op2)/_op3
                             console.log("calculated res to add to RAW MAT SOLID -> "+calculated_res)
                             tio2add += calculated_res
-                        } else { // wwB1 > wwBN
-                            if(diff <= limit){
-                                console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" is a RAW MATERIAL SOLID\nAdd other values")
-                                console.log("wwB1 of "+$('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text()+ " : "+wwB1)
-                                var rawMatSolid = []
-                                rawMatSolid.push(parseFloat(wwB1), i)
-                                listofSolidRawMat.push(rawMatSolid)
-                            }else{
-                                console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" is calculated NORMALLY")
-                            }
-                            res = (_op1 - _op2)/_op3
                         }
                     }
                 }
@@ -822,6 +828,8 @@ function generateDataMaster(){
 
     if(tio2add > 0){
 
+        // TODO
+        // check if exists multiple max values and choose the one with the greater diff(wwB1 - wwBN)
         console.log("tio2add : "+tio2add)
         console.log(listofSolidRawMat)
         var max = -Infinity;
