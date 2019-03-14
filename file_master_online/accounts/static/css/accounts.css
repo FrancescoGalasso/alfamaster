@@ -1,0 +1,80 @@
+/*
+*   css login dashboard
+*/
+
+#login-dashboard {
+    background-image: url("/static/img/paint-cans-color-palette-close.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+#login-dashboard-inner {
+    display: grid;
+    height: 90vh;
+    margin: 0;
+    place-items: center center;
+}
+
+#login-dashboard-inner-form {
+    padding: 20px;
+    background-color: white;
+    border-radius:25px;
+    width: 382px;
+}
+
+#login-dashboard-inner-logo {
+    content:url("/static/img/alfa-logo-black.png");
+    height: auto; 
+    width: auto; 
+    max-width: 210; 
+    max-height: 100px;
+    margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+#login-dashboard-inner-form  p{
+    margin-left: 25;
+}
+
+#login-dashboard-inner-form  p label{
+    width: 75px;
+}
+
+#login-dashboard-inner-form h3{
+    margin-top: 10px;
+    text-align: center;
+}
+
+#login-dashboard-inner-span-pwd{
+    margin-left: 25px;
+}
+
+#login-dashboard-inner-span-pwd:hover {
+    cursor:pointer;
+}
+
+#login-dashboard-inner-form-pwdreset{
+    padding-left: 35px;
+}
+
+#login-dashboard-inner-form-btn-login {
+    float: right;
+    height: 32px;
+    position: relative;
+    margin: 4px 22px;
+    width: 119px;
+    background: #4CAF50;
+    border: none;
+    color: #FFF;
+    font-weight: bold;
+}
+
+.login-dashboard-inner-form-container-login-containe-inline {
+    display: inline-block;
+}
+
+.reset{
+    width: 165px !important;
+}

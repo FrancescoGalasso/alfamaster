@@ -68,7 +68,7 @@ def product_detail(request, pk):
             return render(request, 'product/error.html')
 
 
-# @login_required
+@login_required(login_url='login/')
 def product_list(request):
 
     if request.user.is_authenticated():
