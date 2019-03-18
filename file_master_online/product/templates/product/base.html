@@ -30,10 +30,6 @@
         <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
 
         <style>
-            /* table, th, td {
-                border: 1px solid black;
-                border-collapse: collapse;
-            } */
             th, td {
                 padding: 5px;
                 text-align: left;    
@@ -41,7 +37,6 @@
             .testimonial-group > .row {
                 overflow-x: auto;
                 white-space: nowrap;
-                /* background: rgb(231, 245, 143); */
             }
             .testimonial-group > .row > .col-xs-4 {
             display: inline-block;
@@ -54,13 +49,11 @@
         <!-- ================== END BASE CSS STYLE ================== -->
 
     </head>
-    <!-- <body scroll="no" style="overflow: hidden"> -->
     <body class="disableScroll">
         <div id="main-dashboard-header">
             <div id="main-dashboard-header-messages-container">
                 {% if messages %}
                 {% for message in messages %}
-                <!-- <div class="{{ message.tags }}">{{ message }}</div> -->
                 <div id="main-dashboard-header-message" class="alert {% if message.tags %}alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"{% endif %}>{{message}}</div>
                 {% endfor %}
             {% endif %}
