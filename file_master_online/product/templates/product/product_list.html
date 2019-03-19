@@ -4,74 +4,20 @@
 
 {% if user.is_authenticated %}
     {% if user.is_superuser %}
-    <input type="text" id="myInput" onkeyup="seekingForOwner()" placeholder="Search for owners ..">
-
+    <input type="text" id="main-dashboard-listpage-input" onkeyup="seekingForOwner()" placeholder="Search for owners ..">
     {% endif %}
-    <table id = "myTable">
+    <table id = "main-dashboard-listpage-table">
     {% for product in products %}
-    <tr style="border-bottom: 1px solid gray">
+    <tr>
         <td><h1><a id="product" href="{% url 'product_detail' pk=product.pk %}">{{ product.name }}</a></h1></td>
         {% if user.is_superuser %}
-            <td style="float: left; margin-top: 25px; margin-left: 350px;" >{{product.owner}}</td>
+        <td class="main-dashboard-listpage-table-td-owner">{{product.owner}}</td>
         {% endif %}
-        <td><button type="button" class="btn btn-danger" href= "{% url 'product_erase' pk=product.pk %}" onclick="callModal(this)" style="float: left; margin-top: 7px; margin-left: 150px; ">Delete </button></td>
+        <td><button type="button" id="btn-list-delete" class="btn btn-danger btn-list-delete" href= "{% url 'product_erase' pk=product.pk %}">Delete </button></td>
     </tr>
     {% endfor %}
     </table>
-{% elif not user.is_authenticated %}
-    <a href="{% url 'login' %}">login</a>
 {% endif %}
 
-<script>
-    var url = ""
-    function callModal(obj){
-        url = obj.getAttribute("href")
-        console.log(url)
-        var parent = $(obj).parent().parent()
-        var firstElem = parent[0].firstElementChild
-        var children = firstElem.children[0]
-        var name_prod = children.innerText 
-        $('.modal-title').text('DELETE '+name_prod)
-        $('#myModal').modal('show');
-    }
-
-    $(window).bind("load", function() {
-    // code here
-        console.log("loaded")
-        var $input = $("#myInput");
-        $input.val('')
-    });    
-</script>
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog">
-        <script>
-            // on load of modal
-            $('#myModal').on('show.bs.modal', function () {
-                // do something…
-                var htmlForm = document.getElementById('eraseForm')
-                htmlForm.action = url
-            })
-        </script>
-    
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                    <p>Delete this product and all his history?</p>
-                    <p>THIS ACTION IS IRREVERSIBLE</p>
-                </div>
-                <div class="modal-footer">
-                    <form action="" method="post" id="eraseForm">
-                            {% csrf_token %}
-                    <input class="btn btn-danger" type="submit" value="Delete" >  
-                    </form> 
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+{% include 'product/modal.html' %}
 {% endblock %}

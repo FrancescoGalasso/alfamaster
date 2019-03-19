@@ -11,6 +11,7 @@
  02. Handle Input searching
  03. Handle Sidebar - Minify / Expand
  04. Utility Scripts
+ 05. Handle Modal
 
  05. Handle Page Load - Fade in
  06. Handle Panel - Remove / Reload / Collapse / Expand
@@ -23,11 +24,12 @@
 
 
 
- /* 01. Handle document (ready and resize)
+ /* 01. Handle document
  ------------------------------------------------ */
 $(document).ready(function(){
     console.log("index HTML ready!")
     setCssProperty('.main-dashboard-sidebar-nav', '#main-dashboard', 'max-height')
+    setCssProperty('.main-dashboard-sidebar-nav', '#main-dashboard', 'height')
 })
 
 // https://stackoverflow.com/questions/11981174/how-to-resize-a-divs-max-height-upon-window-resize
@@ -43,27 +45,31 @@ $(window).on('windowResize', function() {
     setCssProperty('.main-dashboard-sidebar-nav', '#main-dashboard', 'max-height')
 });
 
+$(window).bind("load", function() {
+        var $input = $("#main-dashboard-listpage-input");
+        $input.val('')
+});  
 
 /* 02. Handle Input searching
  ------------------------------------------------ */
 function seekingForOwner() {
     // Declare variables 
     var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInput");
+    input = document.getElementById("main-dashboard-listpage-input");
     filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
+    table = document.getElementById("main-dashboard-listpage-table");
     tr = table.getElementsByTagName("tr");
 
     // Loop through all table rows, and hide those who don't match the search query
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[1];
         if (td) {
-        txtValue = td.textContent || td.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
         } 
     }
     setCssProperty('.main-dashboard-sidebar-nav', '#main-dashboard', 'height')         
@@ -72,9 +78,6 @@ function seekingForOwner() {
 /* 03. Handle Sidebar - Minify / Expand
  ------------------------------------------------ */
 
-// $('#main-dashboard-sidebar-nav-item-handler').on('click',function(){
-//     console.log('clicked JQUERY');
-// });
 $(document).on('click','#main-dashboard-sidebar-nav-item-handler',function(){
     console.log('clicked');
     var widthSidebar = $('.main-dashboard-sidebar-nav').width()
@@ -102,6 +105,28 @@ $(document).on('click','#main-dashboard-sidebar-nav-item-handler',function(){
             break;
         default:
             console.log("default")
+    }
+})
+
+/* 05. Handle modal 
+ ------------------------------------------------ */
+
+var url = ""
+$(document).on('click','#btn-list-delete',function(event){
+    event.preventDefault()
+    url = $(this).attr('href');
+    var parent = $(this).parent().parent()
+    var felem = parent.children(":first")
+    var name_prod = felem.text()
+    $('.modal-title').text('DELETE '+name_prod)
+    $('#myModal').modal('show');
+});
+
+// on load of modal
+$(document).on('show.bs.modal',function(){
+    var htmlForm = document.getElementById('eraseForm')
+    if(htmlForm){
+        htmlForm.action = url
     }
 })
 
