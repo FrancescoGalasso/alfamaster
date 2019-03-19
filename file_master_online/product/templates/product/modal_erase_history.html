@@ -1,0 +1,25 @@
+<!-- Modal -->
+<div class="modal fade" id="modalHistory" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">DELETE this revision of {{prod_name}}</h4>
+        </div>
+        <div class="modal-body">
+          <p>Delete this last revision of this product?</p>
+        </div>
+        <div class="modal-footer">
+            <form action="{% url 'product_delete' pk=history_id %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+        </div>
+      </div>
+      
+    </div>
+</div>

@@ -108,7 +108,7 @@ $(document).on('click','#main-dashboard-sidebar-nav-item-handler',function(){
     }
 })
 
-/* 05. Handle modal 
+/* 04. Handle modal 
  ------------------------------------------------ */
 
 var url = ""
@@ -119,10 +119,10 @@ $(document).on('click','#btn-list-delete',function(event){
     var felem = parent.children(":first")
     var name_prod = felem.text()
     $('.modal-title').text('DELETE '+name_prod)
-    $('#myModal').modal('show');
+    $('#modalErase').modal('show');
 });
 
-// on load of modal
+// on load of modal erase all
 $(document).on('show.bs.modal',function(){
     var htmlForm = document.getElementById('eraseForm')
     if(htmlForm){
@@ -130,7 +130,17 @@ $(document).on('show.bs.modal',function(){
     }
 })
 
-/* 04. Utility Scripts
+$(document).on('click','#btn-detail-delete',function(event){
+    // event.preventDefault()
+    // url = $(this).attr('href');
+    // var parent = $(this).parent().parent()
+    // var felem = parent.children(":first")
+    // var name_prod = felem.text()
+    // $('.modal-title').text('DELETE '+name_prod)
+    $('#modalHistory').modal('show');
+});
+
+/* 05. Utility Scripts
  ------------------------------------------------ */
 function setCssProperty(elem1, elem2, css){
 

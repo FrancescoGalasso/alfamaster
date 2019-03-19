@@ -196,6 +196,30 @@ h1 a:hover{
     margin-left: 150px; 
 }
 
+/* 3.4.2 Component - Button - detail.html */
+
+#main-dashboard-detailpage-btn-container {
+    margin-bottom: 20px;
+}
+
+#main-dashboard-detailpage-btn-container button{
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+#main-dashboard-detailpage-btn-container .btn-detail-update{
+    color: black;
+    font-weight: bold;
+}
+
+#main-dashboard-detailpage-btn-container .btn-detail-delete{
+    font-weight: bold;
+}
+
+#main-dashboard-detailpage-btn-container .btn-detail-export{
+    font-weight: bold;
+}
+
 /* 3.5 Component - Modal Setting */
 
 .modal-header{
@@ -231,15 +255,6 @@ h1 a:hover{
 
 #generateBtn {
     margin-top: 10px;
-}
-
-#divBtns {
-    margin-bottom: 20px;
-}
-
-#divBtns button{
-    margin-right: 15px;
-    margin-left: 15px;
 }
 
 .main {
