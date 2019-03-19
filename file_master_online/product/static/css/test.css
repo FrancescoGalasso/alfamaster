@@ -21,7 +21,7 @@
     3.3 Component - Table Elements
     3.4 Component - Button
         3.4.1 Component - Button - list.html
-
+    3.5 Component - Modal Setting
 */
 
 /* -------------------------------
@@ -194,6 +194,31 @@ h1 a:hover{
     float: left; 
     margin-top: 7px; 
     margin-left: 150px; 
+}
+
+/* 3.5 Component - Modal Setting */
+
+.modal-header{
+    background-color: black;
+    color: red;
+}
+
+.modal-header h4 {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.modal-header .close{
+    color: #fff !important; 
+    opacity: 1;
+}
+
+.modal-body{
+    text-align: center;
+}
+
+.modal-body p:last-child{
+    font-weight: bold;
 }
 
 /**********************/
