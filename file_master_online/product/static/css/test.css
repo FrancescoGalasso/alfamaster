@@ -50,7 +50,13 @@ h1 a:hover{
     color: inherit;
 }
 
+.header::after {
+    font-weight: bold;
+}
 
+td {
+    min-width: 80px;
+}
 
 /* -------------------------------
    2.0 Page Structure Settings
@@ -169,6 +175,16 @@ h1 a:hover{
    3.0 Component Setting
 ------------------------------- */
 
+/* 3.1 Component - Form Elements */
+
+#save {
+    display:none;   
+}
+
+#main-dashboard-form-save {
+    display:none;   
+}
+
 /* 3.2 Component - Imput Elements */
 
   #main-dashboard-listpage-input{
@@ -177,15 +193,15 @@ h1 a:hover{
 
 /* 3.3 Component - Table Elements */
 
- #main-dashboard-listpage-table tr{
+#main-dashboard-listpage-table tr{
     border-bottom: 1px solid gray;
- }
+}
 
- .main-dashboard-listpage-table-td-owner{
+.main-dashboard-listpage-table-td-owner{
     float: left;
     margin-top: 25px;
     margin-left: 350px;
- }
+}
 
 /* 3.4 Component - Button */
 
@@ -244,6 +260,10 @@ h1 a:hover{
 
 .modal-body p:last-child{
     font-weight: bold;
+}
+
+div.modal-footer form {
+    float: left;
 }
 
 /**********************/
@@ -314,13 +334,13 @@ input[type="number"] {
 *   css table generated
 */
 
-.header::after {
+/* .header::after {
     font-weight: bold;
 }
 
 td {
     min-width: 80px;
-}
+} */
 
 /*
 *   stuffs
@@ -389,18 +409,6 @@ td {
     pointer-events: none;
 }
 
-/*
-*   css modal
-*/
-
-div.modal-footer form {
-    float: left;
-}
-
-
-#save {
-    display:none;   
-}
 
 /*
 *   test on develop
