@@ -29,7 +29,7 @@ function generateTable(id){
         clean_after_wrong_input()
         return;
     }
-    if (num_bases < 2 || num_raw_material < 4 || num_bases == "" || num_raw_material == ""){
+    if (num_bases < 2 || num_raw_material < 5 || num_bases == "" || num_raw_material == ""){
         var msg = "OPS! You left some field blank or you typed a lower number for generate Raw Materials or Bases"
         $("#msg-modal").html(msg)
         $("#myModal").modal()
@@ -100,7 +100,7 @@ function creationTHead(tr_head, list_of_thead){
 }
 
 function creationTBody(num_raw_material, tableBody){
-    var defaultRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>', 'Ext TiO<sub>2</sub>']
+    var defaultRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>', 'Binder 2', 'TiO<sub>2</sub> 2', 'Ext TiO<sub>2</sub> 3' ]
 
     var indexInput=[1,2,3]
     for(var q = 0; q<global_num_bases; q++){
@@ -116,12 +116,12 @@ function creationTBody(num_raw_material, tableBody){
             var td = document.createElement('TD')
             td.style.height = "30px"
 
-            if (j == 0 && i < 4){
+            if (j == 0 && i < 5){
                 td.innerHTML = defaultRawMaterial[i]
                 td.contentEditable = false
                 td.style.backgroundColor = "transparent";
             }
-            if (indexInput.indexOf(j) > -1 || (j == 0 && i >= 4)){
+            if (indexInput.indexOf(j) > -1 || (j == 0 && i >= 5)){
                 td.contentEditable = true
                 td.style.backgroundColor = "#ffff00"  
             }
@@ -159,12 +159,6 @@ function creationTFoot(tableFoot, tr_foot){
             tr_foot.appendChild(th)
         }
     }
-
-    // for (var i=3; i < counter; i++){
-    //     var th = document.createElement('th')
-    //     th.className = list[i-3]
-    //     tr_foot.appendChild(th)
-    // }
 }
 
 async function generateTableFillLvl(){
@@ -725,9 +719,8 @@ function generateDataMaster(){
     var sum_test = 0
     var sum_ww = 0
     var sum_fcost = 0
-    var swExt = 0
-    var resExt = 0
     var tio2add = 0
+    var add2water = 0
     var listofSolidRawMat = []
 
     for (var j=2; j < 12; j++){
@@ -737,10 +730,6 @@ function generateDataMaster(){
                 if(cells[i].innerText){
                     list_vv_b1.push(cells[i].innerText)
                 }
-            } else if(j==2){
-                console.log(cells[index2cells])
-                swExt = cells[index2cells].innerText
-                break
             }else if(j==11) {
                 if(cells[i].innerText){
                     list_vv_ti.push(cells[i].innerText)
@@ -761,7 +750,7 @@ function generateDataMaster(){
             indexMaster = parseInt(indexMaster)+1
         }
         var idx = parseInt(i)+1
-        if(i==2){   //Ti not calculated for MASTER
+        if(i==2 || i==4){   //TiO2 not calculated for MASTER
             res = 0
         } else{
             // res_tableNew = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
@@ -770,24 +759,22 @@ function generateDataMaster(){
             _op2 = list_vv_ti[i]*((100-defLvl)/100)
             _op3 = defLvl/100
 
-            if(i==3 && swExt <= 2){
-                res = 0
-                resExt = (_op1 - _op2)/_op3
-            }else{
                 // Normal working behaviour
                 res = (_op1 - _op2)/_op3
 
-                // TODO check for solid raw material
-                if (i > 3){
+                // check for solid raw material
+                if (i > 5){
                     var specificWeight = $('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(1)').text()
                     res = (_op1 - _op2)/_op3
+
+                    var wwB1 = parseFloat($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(3)').text())
+                    var lengthRow = $('#'+table_id+' >tbody >tr:first>td').length
+                    lengthRow -= 5
+                    var wwBN = parseFloat($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq('+lengthRow+')').text())
+                    var diff = Math.abs(wwBN - wwB1)
+                    var limit = wwB1*10/100
+
                     if(parseFloat(specificWeight) >= 2.000){
-                        var wwB1 = parseFloat($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(3)').text())
-                        var lengthRow = $('#'+table_id+' >tbody >tr:first>td').length
-                        lengthRow -= 5
-                        var wwBN = parseFloat($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq('+lengthRow+')').text())
-                        var diff = Math.abs(wwBN - wwB1)
-                        var limit = wwB1*10/100
 
                         if(wwB1 <= wwBN && diff <= limit){
                             console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" is a RAW MATERIAL SOLID\nadd to rawMatSolid list")
@@ -813,18 +800,32 @@ function generateDataMaster(){
                             console.log("calculated res to add to RAW MAT SOLID -> "+calculated_res)
                             tio2add += calculated_res
                         }
+                    } else{ // specificWeight < 2.000
+                        if (wwB1 > wwBN && diff > limit){
+                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" be calculated to ZERO on MASTER TABLE.\nAdd calculated value to h2o")
+                            res = 0
+                            calculated_res = (_op1 - _op2)/_op3
+                            console.log("calculated res to add to RAW MAT SOLID -> "+calculated_res)
+                            add2water += calculated_res
+                        } else {
+                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" nothing to DO")
+                        }
                     }
                 }
 
-            }
+            
         }
         list_tiRemoving.push(res)
+        var t = $('#generatedTableMaster tbody td:nth-child(0) td:eq('+i+')').text()
+        console.log(t)
+        console.log("sum_tiRemoving -> "+sum_tiRemoving +" + res-> "+res)
         sum_tiRemoving += res
+        console.log(sum_tiRemoving)
     }
 
-    if (resExt != 0){
-        sum_tiRemoving += resExt
-    }
+    // if (resExt != 0){
+    //     sum_tiRemoving += resExt
+    // }
 
     if(tio2add > 0){
 
@@ -851,6 +852,7 @@ function generateDataMaster(){
             number_of_elements_to_remove = 1
 
         list_tiRemoving.splice(start_index, number_of_elements_to_remove, valueAtIndex);
+        sum_tiRemoving += tio2add
     }
 
     console.log("sum_tiRemoving : "+sum_tiRemoving)
@@ -858,9 +860,9 @@ function generateDataMaster(){
     for (var i = 0; i < global_num_raw_material; i++){
         tmp = document.getElementsByClassName('tirem_m')[i+1]
         var _op = list_tiRemoving[i]
-        if( i == 0 && resExt !=0){
-            _op += parseFloat(resExt)
-        }
+        // if( i == 0 && resExt !=0){
+        //     _op += parseFloat(resExt)
+        // }
         var op = parseFloat(_op).toFixed(3)
         tmp.innerHTML = op
         tmp.classList.add("to_update")
@@ -883,7 +885,7 @@ function generateDataMaster(){
             var index = i+1
             var _lista = []
             var result = []
-            if(i == 2){
+            if(i == 2 || i == 4){
                 tmp.innerHTML = parseFloat(0).toFixed(3)
                 tmp.classList.add("to_update") 
                 continue
@@ -942,12 +944,12 @@ function generateDataMaster(){
                     var rightBound = parseFloat(base1) + parseFloat(base1*margin)  
 
                     if(op > leftBound && op < rightBound){
-                        // console.log("op > leftBound && op < rightBound")
+                        console.log("op > leftBound && op < rightBound")
                         tmp.innerHTML = op                      // populate the cell
                         tmp.style.backgroundColor = "blue";
                         sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
                     }else{
-                        // console.log("****   NO **** op > leftBound && op < rightBound")
+                        console.log("****   NO **** op > leftBound && op < rightBound")
                         // mostro contenuto vvB1 al posto del valore calcolato
                         tmp.innerHTML=_lista[0]
                         tmp.style.backgroundColor = "yellow";
@@ -982,6 +984,7 @@ function generateDataMaster(){
             });
 
     }
+    // insert single datum for cell h2o with className 'vv_m'
     // ricalcola 1st row (h2o) sulla base della somma degli altri valori
     $('#generatedTableMaster tbody tr:nth-child(1)').each(function() {
             var _h2o = 100.00-parseFloat(sum_vv_m)
@@ -990,7 +993,9 @@ function generateDataMaster(){
             sum_vv_m = parseFloat(sum_vv_m)+parseFloat(_h2o)
     });
 
-
+    if(add2water > 0 ){
+        alert("devi aggiungermi a water, STUPID!")
+    }
     
 
         // insert sum of data for cell Total %v/v
@@ -1062,7 +1067,7 @@ function generateDataMaster(){
     }
 
 
-    if(prod_admin !== "undefined"){
+    if(typeof prod_admin !== "undefined"){
         if(prod_admin == "False"){
             showLessDetailsMaster()
         }
