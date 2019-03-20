@@ -3,14 +3,19 @@
 {% block content %}
 {% load staticfiles %}
 
-<script src="{% static 'js/loadingOverlay.js' %}"></script>
-
+<!-- ================== BEGIN PAGE CSS STYLE ================== -->
 <style>
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
     }
-  </style>
+</style>
+<!-- ================== END PAGE CSS STYLE ================== -->
+
+<!-- ================== BEGIN BASE JS ================== -->
+<script src="{% static 'js/loadingOverlay.js' %}"></script>
+<script src="{% static 'js/grid.js' %}"></script>  
+<!-- ================== END BASE JS ================== -->
 
 <div id=tips>
     <div>
@@ -35,7 +40,6 @@
 
 
 <div id="myGeneratedTable"></div>
-<script src="{% static 'js/grid.js' %}"></script>  
 <br>
 <div id="addorRemoveRawMat">
     <button type="button" class="btn btn-info btn-xs" id="addRawMat" onclick="addMoreLines()">

@@ -131,12 +131,6 @@ $(document).on('show.bs.modal',function(){
 })
 
 $(document).on('click','#btn-detail-delete',function(event){
-    // event.preventDefault()
-    // url = $(this).attr('href');
-    // var parent = $(this).parent().parent()
-    // var felem = parent.children(":first")
-    // var name_prod = felem.text()
-    // $('.modal-title').text('DELETE '+name_prod)
     $('#modalHistory').modal('show');
 });
 
