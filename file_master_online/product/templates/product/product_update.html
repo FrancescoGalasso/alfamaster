@@ -2,9 +2,23 @@
 {% block content %}
 {% load staticfiles %}
 
-<script src="https://cdn.rawgit.com/katmore/gpu-loading-overlay/master/src/loadingOverlay.js"></script>
+<!-- ================== BEGIN PAGE CSS STYLE ================== -->
+<style>
+  table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+  }
+</style>
+<!-- ================== END PAGE CSS STYLE ================== -->
 
-<!-- script -->
+<!-- ================== BEGIN BASE JS ================== -->
+<script src="{% static 'js/loadingOverlay.js' %}"></script>
+<!-- <script src="{% static 'js/update.js' %}"></script>   -->
+<script src="{% static 'js/grid.js' %}"></script>  
+<script src="{% static 'js/utils.js' %}"></script>  
+<!-- ================== END BASE JS ================== -->
+
+<!-- ================== BEGIN PAGE JS ================== -->
 <script type="text/javascript">
   var foo = [];
   var foo2 = [];
@@ -17,15 +31,8 @@
   var prod_currency = '{{prod_currency}}'
   var prod_admin = '{{prod_admin}}'
   var lvl_fill_prod = '{{prod_lvl_fill}}'
-  console.log(lvl_fill_prod)
 </script>
-
-<style>
-  table, th, td {
-      border: 1px solid black;
-      border-collapse: collapse;
-  }
-</style>
+<!-- ================== END PAGE JS ================== -->
 
 <div class="main">
   <h2>{{prod_name}}</h2>
@@ -60,9 +67,7 @@
                       <script type="text/javascript"> 
                         a = "{{v|length}}";
                         foo2.push(a);
-                        // console.log("foo2 "+foo2);
                         max_of_array = Math.max.apply(Math, foo2);
-                        // console.log("max_of_array "+max_of_array);
                       </script>
                     {% endif %}
                   {% endfor %}
@@ -131,7 +136,7 @@
 
   <hr/>
 
-  <form action='/product/save/' method='POST' id="save"> {% csrf_token %}
+  <form action='/product/save/' method='POST' id="main-dashboard-form-save"> {% csrf_token %}
       <!-- <input type='hidden' name='name' /> -->
       <input type='hidden' name='pk' />
       <input type='hidden' name='data' />
@@ -147,8 +152,6 @@
     $("tr:nth-child(1)").first().append("<th colspan='5'>"+element_name[i]+"</th>");
   }
 </script>
-<script src="{% static 'js/grid.js' %}"></script>  
-<script src="{% static 'js/utils.js' %}"></script>  
-<script src="{% static 'js/update.js' %}"></script>  
+
 
 {% endblock %}
