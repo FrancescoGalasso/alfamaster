@@ -60,6 +60,19 @@
             </div>
             <div id="main-dashboard-header-logo"> </div>​
             <div id="main-dashboard-header-version">AlfaMaster Alpha release</div>
+            <div id="main-dashboard-header-user" class="dropdown">
+            <button class="dropdown-toggle main-dashboard-header-user-btn" type="button" data-toggle="dropdown">
+                <img id="main-dashboard-header-user-pic" src="/static/img/user-default.png">
+                {{user}}
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a href="#">item1</a></li>
+                  <li><a href="#">item2</a></li>
+                  <li><a href="#">item3</a></li>
+                  <li class="divider"></li>
+                  <li><a href="/logout">Log out</a></li>
+                </ul>
+            </div>
         </div>
         <div id="main-dashboard-sidebar">
             <div class="main-dashboard-sidebar-nav">
