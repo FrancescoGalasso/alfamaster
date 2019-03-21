@@ -813,7 +813,7 @@ function generateDataMaster(){
                             console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" be calculated to ZERO on MASTER TABLE.\nAdd calculated value to h2o")
                             res = 0
                             calculated_res = (_op1 - _op2)/_op3
-                            console.log("calculated res to add to RAW MAT SOLID -> "+calculated_res)
+                            console.log("calculated res to add to WATER -> "+calculated_res)
                             add2water += calculated_res
                         } else {
                             console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" nothing to DO")
@@ -1002,7 +1002,11 @@ function generateDataMaster(){
     });
 
     if(add2water > 0 ){
-        alert("devi aggiungermi a water, STUPID!")
+        // alert("devi aggiungermi a water, STUPID!")
+        var h2oCurrentVal = $('#generatedTableMaster tbody tr:nth-child(1) td:nth-child(2)').text()
+        console.log("pre adding h2o value : "+h2oCurrentVal)
+        h2oCurrentVal = parseFloat(h2oCurrentVal) + parseFloat(add2water)
+        $('#generatedTableMaster tbody tr:nth-child(1) td:nth-child(2)').text(h2oCurrentVal.toFixed(3))
     }
     
 
