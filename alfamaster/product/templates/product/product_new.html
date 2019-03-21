@@ -1,0 +1,107 @@
+{% extends 'product/base.html' %}
+
+{% block content %}
+{% load staticfiles %}
+
+<!-- ================== BEGIN PAGE CSS STYLE ================== -->
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+<!-- ================== END PAGE CSS STYLE ================== -->
+
+<!-- ================== BEGIN BASE JS ================== -->
+<script src="{% static 'js/loadingOverlay.js' %}"></script>
+<script src="{% static 'js/grid.js' %}"></script>  
+<!-- ================== END BASE JS ================== -->
+
+<div id=tips>
+    <div>
+        <h5 style="font-weight: bold">TIPS</h5>
+        <p>If your product does not contain the raw material Ext TiO2, it is recommended to set its specific gravity to 1 and all other values to 0, otherwise it will not be possible to continue.
+        </p>
+        <p>Insert the values into the yellow editable cells</p>
+    </div>
+</div>
+<div class="grid_generator">
+    <div>Insert number of raw materials<input type="number" id="input_grid" placeholder="Insert number - min num 5"></div>
+    <div>Insert number of bases<input type="number" id="input_grid2" placeholder="Insert number - min num 2"></div>
+    <button id="generateBtn" type="button" class="btn btn-primary" onclick=generateTable()>Generate table</button>
+    <hr>
+
+</div>
+
+<input id="nameProduct" type="text" name="firstname" placeholder="Type product's name"><br>
+<div id = "money">Select your currencies  <select id="currencies">
+    </select></div>
+<br>
+
+
+<div id="myGeneratedTable"></div>
+<br>
+<div id="addorRemoveRawMat">
+    <button type="button" class="btn btn-info btn-xs" id="addRawMat" onclick="addMoreLines()">
+        <span class="glyphicon glyphicon-plus"></span>
+         raw material
+    </button>
+    <button type="button" class="btn btn-info btn-xs" id="removeRawMat" onclick="removeLastRawMatAdded()">
+        <span class="glyphicon glyphicon-minus"></span>
+         last raw material
+    </button>
+</div>
+<button id = "btn_calculate" type="button" class="btn btn-sm" onclick=generateData()>Calculate</button>
+<br>
+<div id="container">
+    <div id="tableFillCalculation" style = "display: inline-grid;"></div>
+    <div id="startTest" style = "display: inline-grid; padding-left:220;">
+            <p>Acceptability range for COLOR STRENGTH</p>
+            <div class="grid_generator">
+                <div>Inferior Range<input id="rangeinf" type="number" style="margin-left:29px; width: 51 !important;text-align: center;" value=98 placeholder="98" readonly></div>
+                <div>Superior Range<input id="rangesup" type="number" style="margin-left:20px; width: 51 !important;text-align: center;" value=102 placeholder="102" readonly></div>
+            </div>
+            <div>Laboratory Test</div>
+            <button id="verify" onclick="startLabTest()">Start</button>
+    </div>
+    <div id="checkTest" style = "display: inline-grid; padding-left:150;">
+        <p>Insert result of Laboratory Test</p>
+    </div>
+</div>
+<br>
+<div id="tableMaster"></div>
+<br>
+
+<div id="save">
+    <form action='.' method='POST'> {% csrf_token %}
+        <input type='hidden' name='name' />
+        <input type='hidden' name='data' />
+        <input type='hidden' name='currency' />
+        <input type='hidden' name='lvl_fill' />
+        <input type='submit' onclick=saveProduct() value='Save' />
+    </form>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">ERROR</h4>
+        </div>
+        <div class="modal-body">
+            <p id="msg-modal"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+        
+    </div>
+</div>
+<br>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>AlfaMaster</title>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/accounts.js' %}"></script>
+
+
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
+
+    </head>
+    <body id="login-dashboard">
+        <div id="login-dashboard-inner">
+            <div id="login-dashboard-inner-form">
+                <div id="login-dashboard-inner-logo"></div>​
+                {% block content %}
+                {% endblock %}   
+            </div>
+        </div> 
+    </body>
+</html>

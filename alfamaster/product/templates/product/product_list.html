@@ -1,0 +1,23 @@
+{% extends 'product/base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    {% if user.is_superuser %}
+    <input type="text" id="main-dashboard-listpage-input" onkeyup="seekingForOwner()" placeholder="Search for owners ..">
+    {% endif %}
+    <table id = "main-dashboard-listpage-table">
+    {% for product in products %}
+    <tr>
+        <td><h1><a id="product" href="{% url 'product_detail' pk=product.pk %}">{{ product.name }}</a></h1></td>
+        {% if user.is_superuser %}
+        <td class="main-dashboard-listpage-table-td-owner">{{product.owner}}</td>
+        {% endif %}
+        <td><button type="button" id="btn-list-delete" class="btn btn-danger btn-list-delete" href= "{% url 'product_erase' pk=product.pk %}">Delete </button></td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+
+{% include 'product/modal_erase_all.html' %}
+{% endblock %}

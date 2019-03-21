@@ -1,0 +1,105 @@
+{% load staticfiles %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="description" content="AlfaMaster creator site">
+        <meta name="keywords" content="Alfa, master system, paint dispenser">
+        <meta name="author" content="Francesco Galasso"/>
+
+        <title>AlfaMaster Creator</title>
+
+        <!-- ================== BEGIN BASE JS ================== -->
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/index.js' %}"></script>
+        <!-- ================== END BASE JS ================== -->
+
+        <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+        <script>
+            setTimeout(function(){
+                if ($('#main-dashboard-header-message').length > 0) {
+                    $('#main-dashboard-header-message').remove();
+                }
+            }, 5000)
+        </script>
+        <!-- ================== END PAGE LEVEL JS ================== -->
+
+        <!-- ================== BEGIN BASE CSS STYLE ================== -->
+        <link rel="stylesheet" href="{% static 'css/test.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
+
+        <style>
+            th, td {
+                padding: 5px;
+                text-align: left;    
+            }
+            .testimonial-group > .row {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .testimonial-group > .row > .col-xs-4 {
+            display: inline-block;
+            float: none;
+            margin-left: 1%;
+            }
+            /* Decorations */
+            .col-xs-4 { color: #fff; font-size: 48px; padding-bottom: 20px; padding-top: 18px; }
+        </style>
+        <!-- ================== END BASE CSS STYLE ================== -->
+
+    </head>
+    <body class="disableScroll">
+        <div id="main-dashboard-header">
+            <div id="main-dashboard-header-messages-container">
+                {% if messages %}
+                {% for message in messages %}
+                <div id="main-dashboard-header-message" class="alert {% if message.tags %}alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"{% endif %}>{{message}}</div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div id="main-dashboard-header-logo"> </div>​
+            <div id="main-dashboard-header-version">AlfaMaster Alpha release</div>
+            <div id="main-dashboard-header-user" class="dropdown">
+            <button class="dropdown-toggle main-dashboard-header-user-btn" type="button" data-toggle="dropdown">
+                <img id="main-dashboard-header-user-pic" src="/static/img/user-default.png">
+                {{user}}
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a href="#">item1</a></li>
+                  <li><a href="#">item2</a></li>
+                  <li><a href="#">item3</a></li>
+                  <li class="divider"></li>
+                  <li><a href="/logout">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="main-dashboard-sidebar">
+            <div class="main-dashboard-sidebar-nav">
+                <li class='list-group-item main-dashboard-sidebar-nav-list'>
+                    <div class='row col-md8 main-dashboard-sidebar-nav-item'>
+                        <a href='/'><div class="main-dashboard-sidebar-nav-item-glyphicon"><span class='glyphicon glyphicon-home'></span></div>Dashboard</a>
+                    </div>
+                    <div class='row col-md8 main-dashboard-sidebar-nav-item'>
+                            <a href='/product/new'><div class="main-dashboard-sidebar-nav-item-glyphicon"><span class='glyphicon glyphicon-tint'></span></div>Create</a>
+                        </div>
+                    <div class='row col-md8 main-dashboard-sidebar-nav-item' style="pointer-events:none;">
+                        <span class='glyphicon'></span>
+                        <a><br></a>
+                    </div>
+                        <div class='row col-md8 main-dashboard-sidebar-nav-item' id="main-dashboard-sidebar-nav-item-handler">
+                        <span class='glyphicon glyphicon-menu-left'></span>
+                        <a><br></a>
+                    </div>
+                </li>
+            </div>
+        </div>
+        <div id="main-dashboard-container">
+            <div id="main-dashboard">
+                {% block content %}
+                {% endblock %}    
+            </div>
+        </div>
+
+    </body>
+</html>

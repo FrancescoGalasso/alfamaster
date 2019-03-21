@@ -1,0 +1,16 @@
+{% extends 'accounts/base.html' %} 
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div id="login-dashboard-inner-form-container-login-container">
+            <div id="login-dashboard-inner-form-pwdreset-containter" class="login-dashboard-inner-form-container-login-containe-inline">
+                    <div>Forgot your password?</div>
+                    <a id="login-dashboard-inner-form-pwdreset" href="{% url 'password_reset' %}">Click HERE</a>
+            </div>
+            <input id="login-dashboard-inner-form-btn-login" class="login-dashboard-inner-form-container-login-containe-inline" type="submit" value="LOG IN" /><br />
+            <!-- <a href="{% url 'signup' %}">New to AlfaMaster Online? Sign up</a> -->
+        </div>
+    </form>
+{% endblock %}

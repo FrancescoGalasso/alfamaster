@@ -1,0 +1,453 @@
+/*   
+ Template Name: AlfaMaster - No Responsive Dashboard Template
+ Version: Alpha release
+ Author: Francesco Galasso
+
+::  1.0 General Reset & Setup
+-------------------------------------------
+    1.1 Reset and overrides
+        
+::  2.0 Page Structure Settings
+-------------------------------------------
+    2.1 Header & header elements
+    2.2 Sidebar & sidebar elements
+    2.3 Dashboard & dashboard elements
+    2.4 Footer & footer elements
+    
+::  3.0 Component Setting
+-------------------------------------------
+    3.1 Component - Form Elements
+    3.2 Component - Imput Elements
+    3.3 Component - Table Elements
+    3.4 Component - Button
+        3.4.1 Component - Button - list.html
+        3.4.2 Component - Button - detail.html 
+    3.5 Component - Modal Setting
+*/
+
+/* -------------------------------
+   1.0 General reset & setup
+------------------------------- */
+
+body {
+    padding-left: 15px;
+}
+.disableScroll{
+    overflow: hidden;
+}
+
+/* override per migliorare la visualizzazione della lista dei prodotti/formula in list.html */
+h1 a {
+    color: #FCA205 !important; /*override hover color change*/
+    /* override colore polpetta*/
+    color: #4286f4 !important;
+    display: inline-block;
+    /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
+}
+
+h1 a:hover{
+    text-decoration: none;
+    color: inherit;
+}
+
+.header::after {
+    font-weight: bold;
+}
+
+td {
+    min-width: 80px;
+}
+
+/* -------------------------------
+   2.0 Page Structure Settings
+------------------------------- */
+
+/* 2.1 Header & header elements */
+
+#main-dashboard-header{
+    padding-left: 10;
+}
+
+#main-dashboard-header-messages-container{
+    height: 50;
+    width: 460px;
+    margin-left: 250px;
+    margin-top: 20px;
+}
+
+#main-dashboard-header-logo{
+    content:url("/static/img/alfa-logo-black.png");
+    width: 150;
+    max-width: 210;
+    max-height: 100px;
+    margin-top: -70px;
+}
+
+#main-dashboard-header-version{
+    margin-top: -17px;
+    color:#A9A9A9;
+    font-weight: bold;
+}
+
+#main-dashboard-header-user{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+#main-dashboard-header-user-pic{
+    height: 30px;
+    width: 30px;
+    margin-right: 10px;
+}
+
+.main-dashboard-header-user-btn{
+    border: none;
+    background-color: transparent;
+}
+
+.main-dashboard-header-user-btn:hover{
+    opacity: 0.7;
+}
+
+/* 2.2 Sidebar & sidebar elements */
+
+.main-dashboard-sidebar-nav {
+    width: 210px;
+    position: fixed;
+    z-index: 1;
+    top: 100;
+    left: 0;
+    bottom: 0;
+    background: #2d353c;
+    padding-top: 20px;
+  }
+
+.main-dashboard-sidebar-nav-list {
+    background: #2d353c !important;
+    border: 0 !important;
+}
+
+.main-dashboard-sidebar-nav-item{
+    cursor: pointer;
+    opacity: .9;
+    background: #2d353c;
+    padding-left: -8px !important;  /* forse da cambiare!*/
+}
+
+.main-dashboard-sidebar-nav-item:last-child{
+    margin-left: 120px;
+}
+
+.main-dashboard-sidebar-nav-item-glyphicon{
+    display: inline-block;
+    margin-right: 20;
+}
+
+.main-dashboard-sidebar-nav-item span {
+    margin-left: 20px;
+    font-size: 25px;
+    color: #818181;
+}
+
+.main-dashboard-sidebar-nav-item a {
+    padding: 6px 8px 6px 0px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: inline-block;
+}
+
+.main-dashboard-sidebar-nav-item:hover{
+    background-color: #818181
+}
+
+.main-dashboard-sidebar-nav-item:hover > a{
+    color: #2d353c;
+    text-decoration: none;
+}
+
+.main-dashboard-sidebar-nav-item:hover span{
+    color: #2d353c;
+}
+
+
+/* 2.3 Dashboard & Dashboard elements */
+
+#main-dashboard-container{
+    border-top: 2px solid black;
+    background-color: #efefef;
+    margin-top: 6px;
+  }
+
+#main-dashboard{
+    margin-left: 200px; 
+    padding: 6px 10px;
+    /* https://stackoverflow.com/questions/3452950/fixed-width-div-losing-its-background-color-upon-resizing-the-browser-window */
+    min-width: 1150px;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    max-height: 450px;
+}
+
+
+
+/* -------------------------------
+   3.0 Component Setting
+------------------------------- */
+
+/* 3.1 Component - Form Elements */
+
+#save {
+    display:none;   
+}
+
+#main-dashboard-form-save {
+    display:none;   
+}
+
+/* 3.2 Component - Imput Elements */
+
+  #main-dashboard-listpage-input{
+    margin-top: 10px;
+  }
+
+/* 3.3 Component - Table Elements */
+
+#main-dashboard-listpage-table tr{
+    border-bottom: 1px solid gray;
+}
+
+.main-dashboard-listpage-table-td-owner{
+    float: left;
+    margin-top: 25px;
+    margin-left: 350px;
+}
+
+/* 3.4 Component - Button */
+
+/* 3.4.1 Component - Button - list.html */
+
+.btn-list-delete{
+    float: left; 
+    margin-top: 7px; 
+    margin-left: 150px; 
+}
+
+/* 3.4.2 Component - Button - detail.html */
+
+#main-dashboard-detailpage-btn-container {
+    margin-bottom: 20px;
+}
+
+#main-dashboard-detailpage-btn-container button{
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+#main-dashboard-detailpage-btn-container .btn-detail-update{
+    color: black;
+    font-weight: bold;
+}
+
+#main-dashboard-detailpage-btn-container .btn-detail-delete{
+    font-weight: bold;
+}
+
+#main-dashboard-detailpage-btn-container .btn-detail-export{
+    font-weight: bold;
+}
+
+/* 3.5 Component - Modal Setting */
+
+.modal-header{
+    background-color: black;
+    color: red;
+}
+
+.modal-header h4 {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.modal-header .close{
+    color: #fff !important; 
+    opacity: 1;
+}
+
+.modal-body{
+    text-align: center;
+}
+
+.modal-body p:last-child{
+    font-weight: bold;
+}
+
+div.modal-footer form {
+    float: left;
+}
+
+/**********************/
+
+
+#nameProduct{
+    display:none;
+    margin-top: 30px;
+}
+
+#generateBtn {
+    margin-top: 10px;
+}
+
+.main {
+    /* display: none; */
+    visibility: hidden;
+}
+
+.login-adv{
+    font-weight: bold; 
+    padding-bottom:20px; 
+    font-size: large;
+}
+
+.login-frm{
+    padding-left: 15px;
+}
+
+.login-frm input[type="submit"]{
+    margin-top: 10px;
+    margin-left: 135px;
+}
+
+.login-frm a:not(.signin){
+    display: block;
+    margin-top: 14px;
+    margin-left: 43px;
+}
+
+/* 
+*   css inside <div class="grid_generator">
+*/
+#input_grid { 
+    background-color: yellow;
+    margin-left: 15px;
+}
+
+#input_grid2 { 
+    background-color: yellow;
+    margin-left: 65px;
+}
+
+input[type="number"] {
+    width: 200px;
+}
+
+/* select first 2 div inside class grid_generator*/
+.grid_generator div:nth-child(-n+3){
+    font-weight: bold;
+}
+
+.grid_generator{
+    margin-top: 30px;
+}
+
+/*
+*   css table generated
+*/
+
+/* .header::after {
+    font-weight: bold;
+}
+
+td {
+    min-width: 80px;
+} */
+
+/*
+*   stuffs
+*/
+#btn_calculate {
+    display:none;
+    margin-top: 55px;
+}
+
+#slurry-div {
+    display:none;
+}
+
+#money{
+    display:none;
+}
+
+#currencies{
+    margin-left: 65px;
+    height: 25px;
+}
+
+#products{
+    font-size: 17px;
+    width: 180px;
+}
+
+#search button{
+    margin-left: 10;
+}
+
+#startTest{
+    visibility: hidden;
+}
+
+#checkTest{
+    visibility: hidden;
+}
+
+#tips{
+    border: 1px solid black;
+    width: 1150px;
+    background-color: lightyellow;
+}
+
+#tips div {
+    padding-top: 15px;
+    padding-left: 15;
+}
+/*
+*   css for div & btn add/remove raw mat during creation
+*/
+#addorRemoveRawMat{
+    float: left;
+    display:none;
+}
+
+#addorRemoveRawMat button:first-child{
+    display: inline-block;
+}
+
+#addorRemoveRawMat button:last-child{
+    display: inline-block;
+    opacity: 0.65;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+
+/*
+*   test on develop
+*/
+
+/* #tableFillCalculation{
+    background-color: aqua
+}
+
+#startTest{
+    background-color: beige
+
+}
+
+#checkTest{
+    background-color: thistle
+}
+
+#container{
+    background-color: yellow
+} */

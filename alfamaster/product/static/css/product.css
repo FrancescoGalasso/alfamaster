@@ -1,0 +1,191 @@
+h1 a {
+    color: #FCA205;
+    display: inline-block;
+}
+
+body {
+    padding-left: 15px;
+}
+
+#nameProduct{
+    display:none;
+    margin-top: 30px;
+}
+
+#generateBtn {
+    margin-top: 10px;
+}
+
+#divBtns {
+    margin-bottom: 20px;
+}
+
+#divBtns button{
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.main {
+    /* display: none; */
+    visibility: hidden;
+}
+
+.login-adv{
+    font-weight: bold; 
+    padding-bottom:20px; 
+    font-size: large;
+}
+
+.login-frm{
+    padding-left: 15px;
+}
+
+.login-frm input[type="submit"]{
+    margin-top: 10px;
+    margin-left: 135px;
+}
+
+.login-frm a:not(.signin){
+    display: block;
+    margin-top: 14px;
+    margin-left: 43px;
+}
+
+/* 
+*   css inside <div class="grid_generator">
+*/
+#input_grid { 
+    background-color: yellow;
+    margin-left: 15px;
+}
+
+#input_grid2 { 
+    background-color: yellow;
+    margin-left: 65px;
+}
+
+input[type="number"] {
+    width: 200px;
+}
+
+/* select first 2 div inside class grid_generator*/
+.grid_generator div:nth-child(-n+3){
+    font-weight: bold;
+}
+
+.grid_generator{
+    margin-top: 30px;
+}
+
+/*
+*   css table generated
+*/
+
+.header::after {
+    font-weight: bold;
+}
+
+td {
+    min-width: 80px;
+}
+
+/*
+*   stuffs
+*/
+#btn_calculate {
+    display:none;
+    margin-top: 55px;
+}
+
+#slurry-div {
+    display:none;
+}
+
+#money{
+    display:none;
+}
+
+#currencies{
+    margin-left: 65px;
+    height: 25px;
+}
+
+#products{
+    font-size: 17px;
+    width: 180px;
+}
+
+#search button{
+    margin-left: 10;
+}
+
+#startTest{
+    visibility: hidden;
+}
+
+#checkTest{
+    visibility: hidden;
+}
+
+#tips{
+    border: 1px solid black;
+    width: 1150px;
+    background-color: lightyellow;
+}
+
+#tips div {
+    padding-top: 15px;
+    padding-left: 15;
+}
+/*
+*   css for div & btn add/remove raw mat during creation
+*/
+#addorRemoveRawMat{
+    float: left;
+    display:none;
+}
+
+#addorRemoveRawMat button:first-child{
+    display: inline-block;
+}
+
+#addorRemoveRawMat button:last-child{
+    display: inline-block;
+    opacity: 0.65;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/*
+*   css modal
+*/
+
+div.modal-footer form {
+    float: left;
+}
+
+
+#save {
+    display:none;   
+}
+
+/*
+*   test on develop
+*/
+
+/* #tableFillCalculation{
+    background-color: aqua
+}
+
+#startTest{
+    background-color: beige
+
+}
+
+#checkTest{
+    background-color: thistle
+}
+
+#container{
+    background-color: yellow
+} */
