@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 # framework messages
 from django.contrib import messages
-
+from .utils import list2html
 
 # Python logging package
 import logging
@@ -26,7 +26,7 @@ def product_detail(request, pk):
         history= History.objects.filter(product=pk).latest('revision')
 
         data = history.data
-        if isinstance(data, basestring):
+        if isinstance(data, str):
             _data = json.loads(data)
         else:
             _data = data
@@ -41,7 +41,7 @@ def product_detail(request, pk):
         stdlogger.debug("       *** [debug] product_owner: "+ prod_owner)
         prod_rev = str(history.revision)
         stdlogger.debug("       *** [debug] product history_revision: "+ prod_rev)
-        prod_currency = unicode(product.currencies)
+        prod_currency = str(product.currencies)
         stdlogger.debug("       *** [debug] product_currency: "+ prod_currency)
         prod_admin = ""
 
@@ -53,15 +53,28 @@ def product_detail(request, pk):
                 stdlogger.debug("       *** [debug] product history_data: {}".format(lista))
             except:
                 import traceback
-                print traceback.format_exc()
+                print(traceback.format_exc())
                 lista = { }
 
             if request.user.username == "admin":
                 prod_admin = True
             else:
                 prod_admin = False
-
-            return render(request, 'product/product_detail.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':prod_rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin, 'history_id':history_id, 'prod_lvl_fill':prod_lvl_fill})    
+            matrixList = list2html(lista, prod_currency)
+            nbases = int( (len(matrixList[3]) - 3 ) / 5)
+            print("nbases -> {}".format(nbases))
+            print("matrixList -> {}".format(matrixList))
+            return render(request, 'product/product_detail.html', {
+                'list': matrixList,
+                'prod_name': prod_name,
+                'prod_pk': prod_pk,
+                'prod_rev': prod_rev,
+                'prod_currency': prod_currency,
+                'prod_admin': prod_admin,
+                'history_id': history_id,
+                'prod_lvl_fill': prod_lvl_fill,
+                'bases_num': nbases,
+                })
             # return render(request, 'product/product_detail.html')
         else:
             stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
@@ -97,7 +110,7 @@ def product_new(request):
         my_product_rev = request.POST.get('revision')
         my_product_currency= request.POST.get('currency')
         my_product_lvl_fill = request.POST.get('lvl_fill')
-        my_product_lvl_fill = map(int, my_product_lvl_fill.split(" "))
+        my_product_lvl_fill = list(map(int, my_product_lvl_fill.split(" ")))
         if(my_product_rev):
             print("revision -> "+str(my_product_rev))
         elif (my_product_rev is None):
@@ -107,10 +120,18 @@ def product_new(request):
         if request.user.is_authenticated():
             username = request.user.username
 
-        my_product = Product.objects.create(name=my_product_name, owner=username, currencies=my_product_currency)
-        my_product.save()
-        History.objects.create(data=my_product_data, revision=my_product_rev, product_id=my_product.id,lvl_fill=my_product_lvl_fill)
-        messages.success(request, "The product %s has been successfully created" % my_product.name.upper())
+        try:
+            my_product = Product.objects.create(name=my_product_name, owner=username, currencies=my_product_currency)
+            my_product.save()
+            History.objects.create(data=my_product_data, revision=my_product_rev, product_id=my_product.id,lvl_fill=my_product_lvl_fill)
+            messages.success(request, "The product %s has been successfully created" % my_product.name.upper())
+        except Exception as e:
+            import traceback
+            stdlogger.warning("        +++ [warning] Exception raised!")
+            stdlogger.warning("type error: " + str(e))
+            stdlogger.warning("traceback :\n"+traceback.format_exc())
+            my_product_just_created = Product.objects.latest('id')
+            my_product_just_created.delete()
             # redirect to HOME
         return HttpResponseRedirect("/")
 
@@ -138,7 +159,7 @@ def product_save(request):
         # if request.user.is_authenticated():
         #     username = request.user.username
         stdlogger.info("        +++ [info] new History object created")
-        lvl_fill = map(int, my_product_lvl_fill.split(" "))
+        lvl_fill = list(map(int, my_product_lvl_fill.split(" ")))
         History.objects.create(data=data, revision=my_product_rev, product_id=my_product_pk, lvl_fill=lvl_fill)
         obj = Product.objects.get(pk=my_product_pk)
         messages.info(request, "The product %s has been successfully updated" % obj.name.upper())
@@ -197,7 +218,7 @@ def product_update(request, pk):
     product = get_object_or_404(Product, pk=pk)
     history= History.objects.filter(product=pk).latest('revision')
     data =history.data
-    if isinstance(data, basestring):
+    if isinstance(data, str):
         _data = json.loads(data)
     else:
         _data = data
@@ -207,7 +228,7 @@ def product_update(request, pk):
     # stdlogger.debug("       *** [debug] product name: "+ prod_name)
     prod_owner = product.owner
     stdlogger.debug("       *** [debug] product owner: "+ prod_owner)
-    prod_currency = unicode(product.currencies)
+    prod_currency = str(product.currencies)
     stdlogger.debug("       *** [debug] product currency: "+ prod_currency)
     prod_admin = ""
     prod_lvl_fill = history.lvl_fill
@@ -219,7 +240,7 @@ def product_update(request, pk):
             
         except:
             import traceback
-            print traceback.format_exc()
+            print(traceback.format_exc())
             lista = { }
 
         if request.user.username == "admin":

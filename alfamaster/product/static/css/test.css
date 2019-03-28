@@ -224,6 +224,11 @@ td {
     margin-left: 350px;
 }
 
+#main-dashboard-inner-detailpage-table-bases tfoot{
+    border: 3px solid black;
+    font-weight: bold;
+}
+
 /* 3.4 Component - Button */
 
 /* 3.4.1 Component - Button - list.html */

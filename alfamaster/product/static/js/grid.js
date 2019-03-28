@@ -396,7 +396,7 @@ function generateData(){
     console.log("btnDisabled -> " + btnDisabled)
     if(!btnDisabled){
         $(".main").css("visibility", "visible"); //correct one
-        var spinHandle = loadingOverlay.activate();
+        // var spinHandle = loadingOverlay.activate();
     }
 
     // var form_update_save = document.getElementById("save")
