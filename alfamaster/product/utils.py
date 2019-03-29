@@ -1,6 +1,6 @@
 totalArray = []
 
-def list2html(lista, currency):
+def basesListToHtml(lista, currency):
     # lista [
     #   {'bases': [{'g_100g': '25'}, {'g_100g': '5'}, {'g_100g': '0'}],
     #    'RM_cost': '0',
@@ -210,10 +210,20 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
     numofRawMat = len(matrixFormula)
 
     # ! ~~ create empty matrix containter
-    matrix = []
+    '''
+        eg matrix
+        [
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+    '''
+    emptyMatrixContainer = []
     for i in range(numofRawMat):
         tmp = []
-        matrix.append(tmp)
+        emptyMatrixContainer.append(tmp)
 
     # ! ~~ populate empty matrix with values
     '''
@@ -234,10 +244,10 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
             if idx == 0:
                 if k < nbases:
                     # print("k {} -> v {}".format(k,matrixCalculatedValuesTransposed[v]))
-                    matrix[i].extend(matrixCalculatedValuesTransposed[v])
+                    emptyMatrixContainer[i].extend(matrixCalculatedValuesTransposed[v])
             elif k>=idx and k < (idx + nbases ) :
                 # print("k {} -> v {}".format(k,matrixCalculatedValuesTransposed[v]))
-                matrix[i].extend(matrixCalculatedValuesTransposed[v])
+                emptyMatrixContainer[i].extend(matrixCalculatedValuesTransposed[v])
 
 
     # ! ~~ substitute None with specific values from matrix
@@ -248,8 +258,7 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
                 idxNone = array.index(v)
                 # print("spotted a None at index : {}".format(idxNone))
                 # print("specific value -> {}".format(matrix[idx].pop(0)))
-                array[idxNone] = matrix[idx].pop(0)
-
+                array[idxNone] = emptyMatrixContainer[idx].pop(0)
 
     return matrixFormula
 
@@ -258,4 +267,141 @@ def populateFormulaFooter(tfooter):
     for v in tfooter:
         if v is None:
             idxNone = tfooter.index(v)
-            tfooter[idxNone] = innerTotalArray.pop(0)
+            tfooter[idxNone] = float(innerTotalArray.pop(0))
+
+def calculateFillToHtml(lista):
+    listofFillCalculated = []
+
+    operand1 = lista[4][5]
+    operand2 = lista[4][10]
+    value1 = round((float(operand1) * 100) / float(operand2))
+    value2 = 100 - value1
+    value3 = value2
+    # print("value1 : {} | value2 {} | value3: {}".format(value1, value2, value3))
+
+    return listofFillCalculated
+
+def calculateMasterToHtml(lista, listofFillvl, nbases):
+
+    defLvl = listofFillvl[2]
+    print("defLvl : {}".format(defLvl))
+    _lista = lista[2:-1]
+    matrixTransposed = [[_lista[j][i] for j in range(len(_lista))] for i in range(len(_lista[0]))] 
+
+    matrixofVV = []
+    listofRawMatNames = []
+    listofSpecificWeight = []
+    listofRawMatCost = []
+    limitCycle = len(matrixTransposed) - 1
+    masterMatrix = []
+
+    for idx,v in enumerate(matrixTransposed):
+        if idx == 0:
+            # print("mat names : {}".format(v))
+            listofRawMatNames = v
+        elif idx%5 == 0:
+            # print("vv bases: {}".format(v))
+            matrixofVV.append(v)
+        elif idx == 1:
+            # print("sw : {}".format(v))
+            listofSpecificWeight = v
+        elif idx == 2:
+            # print("rmcost : {}".format(v))
+            listofRawMatCost = v
+        elif idx == limitCycle:
+
+            listofBase1VV = matrixofVV[0]
+            listofTiVV = matrixofVV[1]
+
+            listofTiRemoving = []
+            sumofTiRemoving = 0.000
+            for k,v in enumerate(listofBase1VV):
+                res = 0.000
+                if k != 2 and k != 4 :
+                    res = (float(listofBase1VV[k]) - float(listofTiVV[k])*((100-defLvl)/100))/(defLvl/100)
+
+                    # TODO: add check for solid raw material
+                    if k > 4:
+                        print("TODO: check for solid raw material")
+
+                res = "{:.3f}".format(res)
+                listofTiRemoving.append(float(res))
+                sumofTiRemoving += float(res)
+            
+            listofVV = []
+            sumofVV = 0.000
+            for k,v in enumerate(listofTiRemoving):
+                operand1_vv = listofTiRemoving[k]
+                res = (100 * float(operand1_vv)) / sumofTiRemoving
+                res = "{:.3f}".format(res)
+                res = float(res)
+
+                # TODO: check for res <= 1
+                if res <= 1:
+                    print("TODO: check which value of VV insert")
+
+                listofVV.append(res)
+                sumofVV += res
+
+            listof100ml = []
+            sumof100ml = 0.000
+            for k,v in enumerate(listofVV):
+                operand1_g100mL = listofVV[k]
+                operand2_g100mL = listofSpecificWeight[k]
+
+                res = float(operand1_g100mL) * float(operand2_g100mL)
+                res = "{:.3f}".format(res)
+                res = float(res)
+
+                listof100ml.append(res)
+                sumof100ml += res    
+
+
+            listofWW = []
+            sumofWW = 0.000
+            for k,v in enumerate(listof100ml):
+                operand1_ww = listof100ml[k]
+                operand2_ww = sumof100ml
+
+                res = (float(operand1_ww) * 100 ) / float(operand2_ww)
+                res = "{:.3f}".format(res)
+                res = float(res)
+
+                listofWW.append(res)
+                sumofWW += res                  
+
+            listofCost = []
+            sumofCost = 0.000
+            for k,v in enumerate(listofVV):
+                operand1_cost = listofSpecificWeight[k]
+                operand2_cost = listofRawMatCost[k]
+                res = ((float(operand1_cost) * float(operand2_cost) * 10) / 1000 ) * listofVV[k]
+                res = "{:.3f}".format(res)
+                res = float(res)
+                listofCost.append(res)
+                sumofCost += res
+
+            totalArrayMaster = ['Total', sumofTiRemoving, sumofVV, sumof100ml, sumofWW, sumofCost]
+
+            masterMatrixTransposed = [listofRawMatNames,listofTiRemoving, listofVV, listof100ml, listofWW, listofCost]
+            global masterMatrix
+            masterMatrix = [[masterMatrixTransposed[j][i] for j in range(len(masterMatrixTransposed))] for i in range(len(masterMatrixTransposed[0]))] 
+            masterMatrix.extend([totalArrayMaster])
+
+            # ! ~~ testing print
+            print("******\listofTiRemoving : {}".format(listofTiRemoving))
+            print("******\sumofTiRemoving : {}".format(sumofTiRemoving))
+            print("******\listofVV : {}".format(listofVV))
+            print("******\sumofVV : {}".format(sumofVV))
+            print("******\listof100ml : {}".format(listof100ml))
+            print("******\sumof100ml : {}".format(sumof100ml))
+            print("******\listofWW : {}".format(listofWW))
+            print("******\sumofWW : {}".format(sumofWW))
+            print("******\listofCost : {}".format(listofCost))
+            print("******\sumofCost : {}".format(sumofCost))
+            print("\n masterMatrix:\n{}".format(masterMatrix))
+
+        
+        # ! ~~ end of calculation
+    # ! ~~ end of loop
+    return masterMatrix

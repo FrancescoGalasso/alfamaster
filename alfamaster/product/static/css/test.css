@@ -224,9 +224,23 @@ td {
     margin-left: 350px;
 }
 
+#main-dashboard-inner-detailpage-table-bases{
+    width: 100%;
+    margin-top: 20;
+}
+
 #main-dashboard-inner-detailpage-table-bases tfoot{
     border: 3px solid black;
     font-weight: bold;
+}
+
+#main-dashboard-inner-detailpage-table-fillvl caption, #main-dashboard-inner-detailpage-table-master caption{
+    font-weight: bold;
+    text-align: center;
+}
+
+#main-dashboard-inner-detailpage-table-fillvl tbody tr td{
+    text-align: center !important;
 }
 
 /* 3.4 Component - Button */

@@ -34,7 +34,7 @@
 	var currency = '{{prod_currency}}'
 	var prod_admin = '{{prod_admin}}'
 	var history_id = '{{history_id}}'
-	var lvl_fill_prod = '{{prod_lvl_fill}}'
+	// var lvl_fill_prod = '{{prod_lvl_fill}}'
 </script>
 <!-- ================== END PAGE LEVEL JS ================== -->
 
@@ -42,7 +42,7 @@
 	<h2>{{prod_name}}</h2>
 	<h4>revision: {{prod_rev}}</h4>
 
-	<table id="main-dashboard-inner-detailpage-table-bases" style="width:100%">   
+	<table id="main-dashboard-inner-detailpage-table-bases">   
 		<thead>
 			{% for itemlists in list %}
 				{% if forloop.counter0 <= 1 %}
@@ -101,9 +101,48 @@
 	</table>
 
 	<div id="myGeneratedTable" style="margin-top: 20;"></div>
-	<div id="tableFillCalculation"></div>
+	<div id="main-dashboard-inner-detailpage-table-fillvl">
+		<table>
+			<caption>Fill level calculation</caption>
+			<thead>
+				<th>Volume TiO<sub>2</sub> Slurry (%<sub>v/v</sub>)</th>
+				<th>Fill level (%<sub>v/v</sub>)</th>
+				<th>Definitive fill level</th>
+			</thead>
+			<tbody>
+				<tr>
+					{% for item in prod_lvl_fill %}
+					<td>
+						{{item}}
+					</td>
+					{% endfor %}
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<br>
-	<div id="tableMaster"></div>
+	<div id="main-dashboard-inner-detailpage-table-master">
+			<table>
+				<caption>MASTER</caption>
+				<thead>
+					<th>Raw material</th>
+					<th>TiO<sub>2</sub> removing [ml]</th>
+					<th>%<sub>v/v</sub></th>
+					<th>g/100mL</th>
+					<th>%<sub>w/w</sub></th>
+					<th style="width: 125px;">Formula Cost [{{prod_currency}}]</th>
+				</thead>
+				<tbody>
+					{% for items in master %}
+					<tr>
+						{% for item in items %}
+						<td>{{item}}</td>
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	<br>
 
 	<script>
@@ -111,6 +150,7 @@
 		for(var i=3; i<bases_num+3; i++){
 			$('#main-dashboard-inner-detailpage-table-bases thead tr:nth-child(1) th:eq('+i+')').attr('colspan', '5')
 			$('#main-dashboard-inner-detailpage-table-bases thead tr:nth-child(1) th:eq('+i+')').css('text-align', 'center');
+			$('#main-dashboard-inner-detailpage-table-bases thead tr:nth-child(1) th:eq('+i+')').css('font-size', 'larger');
 		}
 	</script>
 	<hr/>

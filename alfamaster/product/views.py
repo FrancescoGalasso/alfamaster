@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 # framework messages
 from django.contrib import messages
-from .utils import list2html
+from .utils import basesListToHtml, calculateFillToHtml, calculateMasterToHtml
 
 # Python logging package
 import logging
@@ -60,12 +60,17 @@ def product_detail(request, pk):
                 prod_admin = True
             else:
                 prod_admin = False
-            matrixList = list2html(lista, prod_currency)
+
+            matrixList = basesListToHtml(lista, prod_currency)
             nbases = int( (len(matrixList[3]) - 3 ) / 5)
             print("nbases -> {}".format(nbases))
             print("matrixList -> {}".format(matrixList))
+
+            master = calculateMasterToHtml(matrixList, prod_lvl_fill, nbases)
+
             return render(request, 'product/product_detail.html', {
                 'list': matrixList,
+                'master': master,
                 'prod_name': prod_name,
                 'prod_pk': prod_pk,
                 'prod_rev': prod_rev,
