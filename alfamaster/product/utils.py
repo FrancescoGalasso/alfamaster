@@ -94,14 +94,12 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
     vvArray = []
     ml1000gArray = []
     fcostArray = []
-    # totalArray = []
 
     for array in matrixFormula:
         swArray.append(array[1])
         rmcostArray.append(array[2])
 
     for i in range(nbases):
-        # print("i:{} in range{}".format(i, nbases))
         sumofMl100g = 0.0
         sumofVv = 0.0
         sumofMl1000g = 0.0
@@ -111,19 +109,14 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
         for array in matrixFormula:
             index = i*5
             ww = array[3+index]
-            # ww = "{:.3f}".format(operand1_ww)
-            # print("ww : {}".format(operand1_ww))
             sumofWW += float(ww)
-        # wwArray.append(sumofWW)
 
         for array in matrixFormula:
             index = i*5
             operand1_ml100g = array[3+index]
             operand2_ml100g = array[1]
-            # print("{} / {}".format(operand1_ml100g, operand2_ml100g))
             _ml100g = float(operand1_ml100g)/float(operand2_ml100g)
             ml100g = "{:.3f}".format(_ml100g)
-            # print("ml100g : {}".format(ml100g))
             sumofMl100g += float(ml100g)
             ml100gArray.append(ml100g)
 
@@ -133,50 +126,41 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
             index = i*5
             operand1_vv = ml100gArray[idx+index]
             operand2_vv = sumofMl100g
-            # print("operand1_vv:{} / operand2_vv:{}".format(operand1_vv, operand2_vv))
             _vv = (float(operand1_vv)*100)/float(operand2_vv)
             vv = "{:.3f}".format(_vv)
-            # print("vv : {}".format(vv))
             sumofVv += float(vv)
             vvArray.append(vv)
 
         for idx,array in enumerate(matrixFormula):
             index = i*5
             operand1_ml1000g = vvArray[idx+index]
-            # print("operand1_ml1000g: {}".format(operand1_ml1000g))
             _ml1000g = float(operand1_ml1000g)*10
             ml1000g = "{:.3f}".format(_ml1000g)
-            # print("vv : {}".format(vv))
             sumofMl1000g += float(ml1000g)
             ml1000gArray.append(ml1000g)
 
         for idx,array in enumerate(matrixFormula):
             index = i*5
-            # print("         swArray[idx] -> {}".format(swArray[idx]))
             operand1_fcost = swArray[idx]
             operand2_fcost = rmcostArray[idx]
             operand3_fcost = vvArray[idx+index]
-            # print("operand1_vv:{} / operand2_vv:{}".format(operand1_vv, operand2_vv))
             _fcost = ((float(operand1_fcost)*float(operand2_fcost))/1000)*(float(operand3_fcost))
             fcost = "{:.3f}".format(_fcost)
-            # print("vv : {}".format(vv))
             sumofFcost += float(fcost)
             fcostArray.append(fcost)
 
         totalArray.extend([sumofWW,sumofMl100g , sumofVv, sumofMl1000g, sumofFcost])
 
-        print("sumofMl100g -> {}".format(sumofMl100g))
-        print("ml100gArray -> {}".format(ml100gArray))
-        print("vvArray -> {}".format(vvArray))
-        print("ml1000gArray -> {}".format(ml1000gArray))
-        print("fcostArray -> {}".format(fcostArray))
-        print("totalArray -> {}".format(totalArray))
-        print(".")
+        # print("sumofMl100g -> {}".format(sumofMl100g))
+        # print("ml100gArray -> {}".format(ml100gArray))
+        # print("vvArray -> {}".format(vvArray))
+        # print("ml1000gArray -> {}".format(ml1000gArray))
+        # print("fcostArray -> {}".format(fcostArray))
+        # print("totalArray -> {}".format(totalArray))
+        # print(".")
 
     matrixCalculatedValues = [ml100gArray, vvArray, ml1000gArray, fcostArray]
     matrixCalculatedValuesTransposed = [[matrixCalculatedValues[j][i] for j in range(len(matrixCalculatedValues))] for i in range(len(matrixCalculatedValues[0]))] 
-    # print("matrixCalculatedValuesTransposed :\n{}".format(matrixCalculatedValuesTransposed))
-    # print("matrixCalculatedValues :\n{}".format(matrixCalculatedValues))
 
 
     # ! ~~ create base listofIndex depending on base's number
@@ -239,14 +223,11 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
     counter = 0
     for i in range(numofRawMat):
         idx = i + (2*i)
-        # print("idx -> {}".format(idx))
         for k,v in enumerate(listofIndex):
             if idx == 0:
                 if k < nbases:
-                    # print("k {} -> v {}".format(k,matrixCalculatedValuesTransposed[v]))
                     emptyMatrixContainer[i].extend(matrixCalculatedValuesTransposed[v])
             elif k>=idx and k < (idx + nbases ) :
-                # print("k {} -> v {}".format(k,matrixCalculatedValuesTransposed[v]))
                 emptyMatrixContainer[i].extend(matrixCalculatedValuesTransposed[v])
 
 
@@ -277,7 +258,6 @@ def calculateFillToHtml(lista):
     value1 = round((float(operand1) * 100) / float(operand2))
     value2 = 100 - value1
     value3 = value2
-    # print("value1 : {} | value2 {} | value3: {}".format(value1, value2, value3))
 
     return listofFillCalculated
 
@@ -297,16 +277,12 @@ def calculateMasterToHtml(lista, listofFillvl, nbases):
 
     for idx,v in enumerate(matrixTransposed):
         if idx == 0:
-            # print("mat names : {}".format(v))
             listofRawMatNames = v
         elif idx%5 == 0:
-            # print("vv bases: {}".format(v))
             matrixofVV.append(v)
         elif idx == 1:
-            # print("sw : {}".format(v))
             listofSpecificWeight = v
         elif idx == 2:
-            # print("rmcost : {}".format(v))
             listofRawMatCost = v
         elif idx == limitCycle:
 
@@ -389,17 +365,17 @@ def calculateMasterToHtml(lista, listofFillvl, nbases):
             masterMatrix.extend([totalArrayMaster])
 
             # ! ~~ testing print
-            print("******\listofTiRemoving : {}".format(listofTiRemoving))
-            print("******\sumofTiRemoving : {}".format(sumofTiRemoving))
-            print("******\listofVV : {}".format(listofVV))
-            print("******\sumofVV : {}".format(sumofVV))
-            print("******\listof100ml : {}".format(listof100ml))
-            print("******\sumof100ml : {}".format(sumof100ml))
-            print("******\listofWW : {}".format(listofWW))
-            print("******\sumofWW : {}".format(sumofWW))
-            print("******\listofCost : {}".format(listofCost))
-            print("******\sumofCost : {}".format(sumofCost))
-            print("\n masterMatrix:\n{}".format(masterMatrix))
+            # print("******\listofTiRemoving : {}".format(listofTiRemoving))
+            # print("******\sumofTiRemoving : {}".format(sumofTiRemoving))
+            # print("******\listofVV : {}".format(listofVV))
+            # print("******\sumofVV : {}".format(sumofVV))
+            # print("******\listof100ml : {}".format(listof100ml))
+            # print("******\sumof100ml : {}".format(sumof100ml))
+            # print("******\listofWW : {}".format(listofWW))
+            # print("******\sumofWW : {}".format(sumofWW))
+            # print("******\listofCost : {}".format(listofCost))
+            # print("******\sumofCost : {}".format(sumofCost))
+            # print("\n masterMatrix:\n{}".format(masterMatrix))
 
         
         # ! ~~ end of calculation
