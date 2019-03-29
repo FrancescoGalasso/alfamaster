@@ -312,9 +312,12 @@ def calculateMasterToHtml(lista, listofFillvl, nbases):
                 res = "{:.3f}".format(res)
                 res = float(res)
 
-                # TODO: check for res <= 1
-                if res <= 1:
-                    print("TODO: check which value of VV insert")
+                if k == 2 or k == 4:
+                    res = 0.000
+                else:
+                    # TODO: check for res <= 1
+                    if res <= 1:
+                        print("TODO: check which value of VV insert")
 
                 listofVV.append(res)
                 sumofVV += res
