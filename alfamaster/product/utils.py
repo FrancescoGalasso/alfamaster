@@ -1,6 +1,6 @@
 totalArray = []
 
-def basesListToHtml(lista, currency):
+def basesListToHtml(lista, currency = ""):
     # lista [
     #   {'bases': [{'g_100g': '25'}, {'g_100g': '5'}, {'g_100g': '0'}],
     #    'RM_cost': '0',
@@ -151,14 +151,6 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
         totalArray.extend([sumofWW,sumofMl100g , sumofVv, sumofMl1000g, sumofFcost])
 
-        # print("sumofMl100g -> {}".format(sumofMl100g))
-        # print("ml100gArray -> {}".format(ml100gArray))
-        # print("vvArray -> {}".format(vvArray))
-        # print("ml1000gArray -> {}".format(ml1000gArray))
-        # print("fcostArray -> {}".format(fcostArray))
-        # print("totalArray -> {}".format(totalArray))
-        # print(".")
-
     matrixCalculatedValues = [ml100gArray, vvArray, ml1000gArray, fcostArray]
     matrixCalculatedValuesTransposed = [[matrixCalculatedValues[j][i] for j in range(len(matrixCalculatedValues))] for i in range(len(matrixCalculatedValues[0]))] 
 
@@ -232,6 +224,19 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
 
     # ! ~~ substitute None with specific values from matrix
+    '''
+        eg starting matrix
+        [
+            ['25.000', None, None, None, '5.000', None, None, None, '0.000', None, None, None],
+            ...
+        ]
+
+        eg matrix after substitution
+        [
+            ['25.000', '44.117', '441.170', '0.000', '5.000', '12.500', '125.000', '0.000', '0.000', '0.000', '0.000', '0.000'],
+            ...
+        ]
+    '''
     for idx, array in enumerate(matrixFormula):
         counter = 0
         for v in array:
@@ -265,7 +270,7 @@ def calculateMasterToHtml(lista, listofFillvl, nbases):
 
     defLvl = listofFillvl[2]
     print("defLvl : {}".format(defLvl))
-    _lista = lista[2:-1]
+    _lista = lista[2:-1]    # no op on header and footer arrays
     matrixTransposed = [[_lista[j][i] for j in range(len(_lista))] for i in range(len(_lista[0]))] 
 
     matrixofVV = []
