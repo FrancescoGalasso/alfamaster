@@ -265,12 +265,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def retrieveBasesAndFillvl(request):
-    # username = request.GET.get('username', None)
-    # data = {
-    #     'is_taken': User.objects.filter(username__iexact=username).exists()
-    # }
-    # if data['is_taken']:
-    #     data['error_message'] = 'A user with this username already exists.'
     # import pdb; pdb.set_trace()
     print(request.POST.keys())
     if request.method == 'POST' and 'payload' in request.POST.keys():

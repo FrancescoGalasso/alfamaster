@@ -1860,7 +1860,6 @@ $( document ).ready(function() {
 
 
 function generateDataFromServer(){
-    var myArr = [];
 
     var nofRawMat = $("#generatedTable > tbody > tr").length
 
@@ -1876,27 +1875,21 @@ function generateDataFromServer(){
     inputMatrix.push(rowsData)
     }
 
-    console.log(JSON.stringify(inputMatrix, undefined, 2))
     var matrix = JSON.stringify(inputMatrix, undefined, 2)
     var payload = {'payload':matrix}
     $.ajax({
         url: '/bases/',
         type: 'POST',
-        // data: JSON.stringify(inputMatrix, undefined, 2),
-        // data:{'bases': inputMatrix},
         data: payload,
-        // // csrfmiddlewaretoken: csrftoken
-        // // datatype: 'json'
     })
     .done(function (data) {
-        //  successFunction(data); 
-        console.log("callback")
-        // console.log(data)
+        console.log("SUCCESS callback")
         var payload = data['payload']
         console.log(payload)
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
         //  serrorFunction();
+        console.log("ERROR callback")
         alert("ERROR!") }
     );
 }
