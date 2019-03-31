@@ -9,7 +9,8 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 # framework messages
 from django.contrib import messages
-from .utils import basesListToHtml, calculateFillToHtml, calculateMasterToHtml
+# from .utils import basesListToHtml, calculateFillToHtml, calculateMasterToHtml, populateMatrixFormulaBody
+from .utils import *
 
 # Python logging package
 import logging
@@ -257,3 +258,39 @@ def product_update(request, pk):
     else:
         stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
         return render(request, 'product/error.html')
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def retrieveBasesAndFillvl(request):
+    # username = request.GET.get('username', None)
+    # data = {
+    #     'is_taken': User.objects.filter(username__iexact=username).exists()
+    # }
+    # if data['is_taken']:
+    #     data['error_message'] = 'A user with this username already exists.'
+    # import pdb; pdb.set_trace()
+    print(request.POST.keys())
+    if request.method == 'POST' and 'payload' in request.POST.keys():
+        print("server side!")
+        _payload = request.POST['payload']
+        payload = json.loads(_payload)
+
+        for array in payload:
+            for k,item in enumerate(array):
+                if not item:
+                    print("empty item? {}:{}".format(k,item))
+                    array[k] = None
+
+        nbases = int( (len(payload[0]) - 3 ) / 5)
+
+        calculatedPayload = populateMatrixFormulaBody(payload, nbases)
+        print("calculatedPayload:\n{}".format(calculatedPayload))
+
+        data = {'payload': calculatedPayload}
+    else:
+        data = {'payload': 'KO'}
+
+    return JsonResponse(data)

@@ -1858,3 +1858,46 @@ $( document ).ready(function() {
     }
 });
 
+
+function generateDataFromServer(){
+    var myArr = [];
+
+    var nofRawMat = $("#generatedTable > tbody > tr").length
+
+    inputMatrix = []
+    for (var i=0; i < nofRawMat; i++) {
+        rowsData = []
+        var colValue = $("#generatedTable tbody tr:eq("+i+")");
+        var numofCellsRow = colValue.find('td').length
+        for (var j=0; j < numofCellsRow; j++) {
+            value = colValue.find('td:eq('+j+')')
+            rowsData.push(value.text())
+        }
+    inputMatrix.push(rowsData)
+    }
+
+    console.log(JSON.stringify(inputMatrix, undefined, 2))
+    var matrix = JSON.stringify(inputMatrix, undefined, 2)
+    var payload = {'payload':matrix}
+    $.ajax({
+        url: '/bases/',
+        type: 'POST',
+        // data: JSON.stringify(inputMatrix, undefined, 2),
+        // data:{'bases': inputMatrix},
+        data: payload,
+        // // csrfmiddlewaretoken: csrftoken
+        // // datatype: 'json'
+    })
+    .done(function (data) {
+        //  successFunction(data); 
+        console.log("callback")
+        // console.log(data)
+        var payload = data['payload']
+        console.log(payload)
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+        //  serrorFunction();
+        alert("ERROR!") }
+    );
+}
+

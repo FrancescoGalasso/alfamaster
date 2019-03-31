@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^erase/(?P<pk>[0-9]+)/$', views.product_erase, name='product_erase'),
     url(r'^', include('accounts.urls')),
     # url(r'^product/csv/$', views.download_csv, name='download_csv'),
-
+    url(r'^bases/$', views.retrieveBasesAndFillvl, name='retrieveBasesAndFillvl'),
 ]
