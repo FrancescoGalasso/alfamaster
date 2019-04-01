@@ -127,7 +127,6 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
         tmpVV = []
         for idx,array in enumerate(matrixFormula):
-            # index = i*5
             index = i*numofRawMat
             operand1_vv = ml100gArray[idx+index]
             operand2_vv = sumofMl100g
@@ -139,13 +138,11 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
         tmpMl1000g = []
         for idx,array in enumerate(matrixFormula):
-            # index = i*5
             index = i*numofRawMat           
             operand1_ml1000g = vvArray[idx+index]
             _ml1000g = float(operand1_ml1000g)*10
             ml1000g = "{:.3f}".format(_ml1000g)
             sumofMl1000g += float(ml1000g)
-            # ml1000gArray.append(ml1000g)
             tmpMl1000g.append(ml1000g)
         ml1000gArray.extend(tmpMl1000g)
 
@@ -185,19 +182,6 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
 
     # ! ~~ create base listofIndex depending on base's number
-    # listofIndex = [0,5,10]
-    # if nbases > 3:
-    #     nbasesDefault = len(listofIndex)
-    #     missingIndex = nbases - nbasesDefault
-    #     for i in range(missingIndex):
-    #         try:
-    #             lastVal = listofIndex[-1]
-    #             lastVal += 5
-    #             listofIndex.append(lastVal)
-    #         except:
-    #             print(" @ exception @")
-    #             break
-    
     listofIndex = [0,numofRawMat,numofRawMat*2]
     if nbases > 3:
         nbasesDefault = len(listofIndex)
@@ -212,20 +196,6 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
                 break
 
     # ! ~~ create calcuted listofIndex based on [ml100gArray, vvArray, ml1000gArray, fcostArray]
-    # lunghezza = len(matrixCalculatedValues)
-    # print("lunghezza : {}".format(lunghezza))
-    # listofIndexCalculated = []
-    # for i in range(lunghezza):
-    #     for idx,v in enumerate(listofIndex):
-    #         val = listofIndex[idx]
-    #         val += 1+i
-    #         limit = listofIndex[-1] + (numofRawMat-1)
-    #         if val <= limit:
-    #             listofIndexCalculated.append(val)        
-    # listofIndex.extend(listofIndexCalculated)
-    # print("listofIndex :\n{}".format(listofIndex))
-    # [0, 5, 10, 1, 6, 11, 2, 7, 12, 3, 8, 13, 4, 9, 14]
-
     for n in range(numofRawMat):
         if n > 0:
             tmp = []
@@ -237,7 +207,6 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
             listofIndex.extend(tmp)
 
-    # numofRawMat = len(matrixFormula)
 
     # ! ~~ create empty matrix containter
     '''
