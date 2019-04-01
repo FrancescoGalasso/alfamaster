@@ -234,12 +234,14 @@ td {
     font-weight: bold;
 }
 
-#main-dashboard-inner-detailpage-table-fillvl caption, #main-dashboard-inner-detailpage-table-master caption{
+/* #main-dashboard-inner-detailpage-table-fillvl caption, #main-dashboard-inner-detailpage-table-master caption{ */
+.table-caption {
     font-weight: bold;
     text-align: center;
 }
 
-#main-dashboard-inner-detailpage-table-fillvl tbody tr td{
+/* #main-dashboard-inner-detailpage-table-fillvl tbody tr td{ */
+.table-body > tr > td {
     text-align: center !important;
 }
 
