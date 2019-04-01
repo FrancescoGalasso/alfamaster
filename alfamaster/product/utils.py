@@ -95,6 +95,9 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
     ml1000gArray = []
     fcostArray = []
 
+    numofRawMat = len(matrixFormula)
+    # print("numofRawMat -> {}".format(numofRawMat))
+
     for array in matrixFormula:
         swArray.append(array[1])
         rmcostArray.append(array[2])
@@ -111,6 +114,7 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
             ww = array[3+index]
             sumofWW += float(ww)
 
+        tmpMl100g = []
         for array in matrixFormula:
             index = i*5
             operand1_ml100g = array[3+index]
@@ -118,27 +122,34 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
             _ml100g = float(operand1_ml100g)/float(operand2_ml100g)
             ml100g = "{:.3f}".format(_ml100g)
             sumofMl100g += float(ml100g)
-            ml100gArray.append(ml100g)
+            tmpMl100g.append(ml100g)
+        ml100gArray.extend(tmpMl100g)
 
-
-        # for array in matrixFormula:
+        tmpVV = []
         for idx,array in enumerate(matrixFormula):
-            index = i*5
+            # index = i*5
+            index = i*numofRawMat
             operand1_vv = ml100gArray[idx+index]
             operand2_vv = sumofMl100g
             _vv = (float(operand1_vv)*100)/float(operand2_vv)
             vv = "{:.3f}".format(_vv)
             sumofVv += float(vv)
-            vvArray.append(vv)
+            tmpVV.append(vv)
+        vvArray.extend(tmpVV)
 
+        tmpMl1000g = []
         for idx,array in enumerate(matrixFormula):
-            index = i*5
+            # index = i*5
+            index = i*numofRawMat           
             operand1_ml1000g = vvArray[idx+index]
             _ml1000g = float(operand1_ml1000g)*10
             ml1000g = "{:.3f}".format(_ml1000g)
             sumofMl1000g += float(ml1000g)
-            ml1000gArray.append(ml1000g)
+            # ml1000gArray.append(ml1000g)
+            tmpMl1000g.append(ml1000g)
+        ml1000gArray.extend(tmpMl1000g)
 
+        tmpFcost = []
         for idx,array in enumerate(matrixFormula):
             index = i*5
             operand1_fcost = swArray[idx]
@@ -147,43 +158,86 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
             _fcost = ((float(operand1_fcost)*float(operand2_fcost))/1000)*(float(operand3_fcost))
             fcost = "{:.3f}".format(_fcost)
             sumofFcost += float(fcost)
-            fcostArray.append(fcost)
+            tmpFcost.append(fcost)
+        fcostArray.extend(tmpFcost)
 
         totalArray.extend([sumofWW,sumofMl100g , sumofVv, sumofMl1000g, sumofFcost])
 
+        # print("sumofWW: {}".format(sumofWW))
+        # print("sumofMl100g: {}".format(sumofMl100g))
+        # print("ml100gArray: {}".format(ml100gArray))
+        # print("sumofVv: {}".format(sumofVv))
+        # print("vvArray: {}".format(vvArray))
+        # print("sumofMl1000g: {}".format(sumofMl1000g))
+        # print("ml1000gArray: {}".format(ml1000gArray))
+        # print("sumofFcost:{}".format(fcostArray))
+        print("::::::::")
+
     matrixCalculatedValues = [ml100gArray, vvArray, ml1000gArray, fcostArray]
-    matrixCalculatedValuesTransposed = [[matrixCalculatedValues[j][i] for j in range(len(matrixCalculatedValues))] for i in range(len(matrixCalculatedValues[0]))] 
+    matrixCalculatedValuesTransposed = [[matrixCalculatedValues[j][i]
+                                        for j in
+                                        range(len(matrixCalculatedValues))]
+                                        for i in
+                                        range(len(matrixCalculatedValues[0]))]
+
+    print("matrixCalculatedValues:\n{}".format(matrixCalculatedValues))
+    print("matrixCalculatedValuesTransposed:\n{}".format(matrixCalculatedValuesTransposed))
 
 
     # ! ~~ create base listofIndex depending on base's number
-    listofIndex = [0,5,10]
+    # listofIndex = [0,5,10]
+    # if nbases > 3:
+    #     nbasesDefault = len(listofIndex)
+    #     missingIndex = nbases - nbasesDefault
+    #     for i in range(missingIndex):
+    #         try:
+    #             lastVal = listofIndex[-1]
+    #             lastVal += 5
+    #             listofIndex.append(lastVal)
+    #         except:
+    #             print(" @ exception @")
+    #             break
+    
+    listofIndex = [0,numofRawMat,numofRawMat*2]
     if nbases > 3:
         nbasesDefault = len(listofIndex)
         missingIndex = nbases - nbasesDefault
         for i in range(missingIndex):
             try:
                 lastVal = listofIndex[-1]
-                lastVal += 5
+                lastVal += int(numofRawMat)
                 listofIndex.append(lastVal)
             except:
                 print(" @ exception @")
                 break
 
     # ! ~~ create calcuted listofIndex based on [ml100gArray, vvArray, ml1000gArray, fcostArray]
-    lunghezza = len(matrixCalculatedValues)
-    listofIndexCalculated = []
-    for i in range(lunghezza):
-        for idx,v in enumerate(listofIndex):
-            val = listofIndex[idx]
-            val += 1+i
-            limit = listofIndex[-1] + 4
-            if val <= limit:
-                listofIndexCalculated.append(val)        
-    listofIndex.extend(listofIndexCalculated)
+    # lunghezza = len(matrixCalculatedValues)
+    # print("lunghezza : {}".format(lunghezza))
+    # listofIndexCalculated = []
+    # for i in range(lunghezza):
+    #     for idx,v in enumerate(listofIndex):
+    #         val = listofIndex[idx]
+    #         val += 1+i
+    #         limit = listofIndex[-1] + (numofRawMat-1)
+    #         if val <= limit:
+    #             listofIndexCalculated.append(val)        
+    # listofIndex.extend(listofIndexCalculated)
     # print("listofIndex :\n{}".format(listofIndex))
     # [0, 5, 10, 1, 6, 11, 2, 7, 12, 3, 8, 13, 4, 9, 14]
 
-    numofRawMat = len(matrixFormula)
+    for n in range(numofRawMat):
+        if n > 0:
+            tmp = []
+            for k,v in enumerate(listofIndex):
+                if k < 3:
+                    value = listofIndex[k]
+                    value += n                    
+                    tmp.append(value)
+
+            listofIndex.extend(tmp)
+
+    # numofRawMat = len(matrixFormula)
 
     # ! ~~ create empty matrix containter
     '''

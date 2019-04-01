@@ -275,11 +275,13 @@ def retrieveBasesAndFillvl(request):
         for array in payload:
             for k,item in enumerate(array):
                 if not item:
-                    print("empty item? {}:{}".format(k,item))
+                    # print("empty item? {}:{}".format(k,item))
                     array[k] = None
 
         nbases = int( (len(payload[0]) - 3 ) / 5)
 
+        print("nbases: {}".format(nbases))
+        print("payload:\n{}".format(payload))
         calculatedPayload = populateMatrixFormulaBody(payload, nbases)
         print("calculatedPayload:\n{}".format(calculatedPayload))
 

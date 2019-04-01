@@ -1863,6 +1863,7 @@ function generateDataFromServer(){
 
     var nofRawMat = $("#generatedTable > tbody > tr").length
 
+    console.log("nofRawMat: "+toString(nofRawMat))
     inputMatrix = []
     for (var i=0; i < nofRawMat; i++) {
         rowsData = []
@@ -1877,6 +1878,8 @@ function generateDataFromServer(){
 
     var matrix = JSON.stringify(inputMatrix, undefined, 2)
     var payload = {'payload':matrix}
+    console.log("payload")
+    console.log(payload)
     $.ajax({
         url: '/bases/',
         type: 'POST',
@@ -1886,11 +1889,28 @@ function generateDataFromServer(){
         console.log("SUCCESS callback")
         var payload = data['payload']
         console.log(payload)
+        populateTableBasesNewWithDataFromServer(payload)
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
         //  serrorFunction();
         console.log("ERROR callback")
         alert("ERROR!") }
     );
+}
+
+function populateTableBasesNewWithDataFromServer(payload){
+
+    var nofRawMat = $("#generatedTable > tbody > tr").length
+
+    for (var i=0; i < nofRawMat; i++) {
+        var colValue = $("#generatedTable tbody tr:eq("+i+")");
+        var numofCellsRow = colValue.find('td').length
+        for (var j=0; j < numofCellsRow; j++) {
+            // oldValue = colValue.find('td:eq('+j+')')
+            newValue = payload[i][j]
+            colValue.find('td:eq('+j+')').text(newValue)
+        }
+    }
+
 }
 
