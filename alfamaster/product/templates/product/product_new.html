@@ -54,7 +54,24 @@
 <button id = "btn_calculate" type="button" class="btn btn-sm" onclick=generateDataFromServer()>Calculate</button>
 <br>
 <div id="container">
-    <div id="tableFillCalculation" style = "display: inline-grid;"></div>
+    <!-- <div id="main-dashboard-inner-newpage-table-fillcalculation" style = "display: inline-grid;"> -->
+    <div id="main-dashboard-inner-newpage-table-fillcalculation" style = "display: none;">
+        <table>
+			<caption>Fill level calculation</caption>
+			<thead>
+				<tr><th>Volume TiO<sub>2</sub> Slurry (%<sub>v/v</sub>)</th>
+				<th>Fill level (%<sub>v/v</sub>)</th>
+				<th>Definitive fill level</th>
+			</tr></thead>
+			<tbody>
+				<tr>
+                    <td></td>
+                    <td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+    </div>
     <div id="startTest" style = "display: inline-grid; padding-left:220;">
             <p>Acceptability range for COLOR STRENGTH</p>
             <div class="grid_generator">

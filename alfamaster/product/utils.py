@@ -148,11 +148,11 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
         tmpFcost = []
         for idx,array in enumerate(matrixFormula):
-            index = i*5
+            index = i*numofRawMat
             operand1_fcost = swArray[idx]
             operand2_fcost = rmcostArray[idx]
             operand3_fcost = vvArray[idx+index]
-            _fcost = ((float(operand1_fcost)*float(operand2_fcost))/1000)*(float(operand3_fcost))
+            _fcost = ((float(operand1_fcost)*float(operand2_fcost)*10)/1000)*(float(operand3_fcost))
             fcost = "{:.3f}".format(_fcost)
             sumofFcost += float(fcost)
             tmpFcost.append(fcost)
@@ -281,11 +281,13 @@ def populateFormulaFooter(tfooter):
 def calculateFillToHtml(lista):
     listofFillCalculated = []
 
-    operand1 = lista[4][5]
-    operand2 = lista[4][10]
+    print("lista:\n{}".format(lista))
+    operand1 = lista[2][5]
+    operand2 = lista[2][10]
     value1 = round((float(operand1) * 100) / float(operand2))
     value2 = 100 - value1
     value3 = value2
+    listofFillCalculated.extend([value1, value2, value3])
 
     return listofFillCalculated
 

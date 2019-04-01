@@ -282,10 +282,12 @@ def retrieveBasesAndFillvl(request):
 
         print("nbases: {}".format(nbases))
         print("payload:\n{}".format(payload))
-        calculatedPayload = populateMatrixFormulaBody(payload, nbases)
-        print("calculatedPayload:\n{}".format(calculatedPayload))
+        calculatedPayloadBases = populateMatrixFormulaBody(payload, nbases)
+        print("calculatedPayload:\n{}".format(calculatedPayloadBases))
+        calculatedPayloadFillvl = calculateFillToHtml(payload)
+        print("calculatedPayloadFillvl:\n{}".format(calculatedPayloadFillvl))
 
-        data = {'payload': calculatedPayload}
+        data = {'payloadBases': calculatedPayloadBases, 'payloadFillvl': calculatedPayloadFillvl}
     else:
         data = {'payload': 'KO'}
 

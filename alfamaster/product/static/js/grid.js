@@ -1859,7 +1859,7 @@ $( document ).ready(function() {
 });
 
 
-function generateDataFromServer(){
+function generateDataFromServer() {
 
     var nofRawMat = $("#generatedTable > tbody > tr").length
 
@@ -1878,8 +1878,7 @@ function generateDataFromServer(){
 
     var matrix = JSON.stringify(inputMatrix, undefined, 2)
     var payload = {'payload':matrix}
-    console.log("payload")
-    console.log(payload)
+
     $.ajax({
         url: '/bases/',
         type: 'POST',
@@ -1887,9 +1886,10 @@ function generateDataFromServer(){
     })
     .done(function (data) {
         console.log("SUCCESS callback")
-        var payload = data['payload']
-        console.log(payload)
-        populateTableBasesNewWithDataFromServer(payload)
+        var payloadBases = data['payloadBases']
+        populateTableBasesWithDataFromServer(payloadBases)
+        var payloadFillvl = data['payloadFillvl']
+        populateTableFillvlWithDataFromServer(payloadFillvl)
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
         //  serrorFunction();
@@ -1898,10 +1898,8 @@ function generateDataFromServer(){
     );
 }
 
-function populateTableBasesNewWithDataFromServer(payload){
-
+function populateTableBasesWithDataFromServer(payload) {
     var nofRawMat = $("#generatedTable > tbody > tr").length
-
     for (var i=0; i < nofRawMat; i++) {
         var colValue = $("#generatedTable tbody tr:eq("+i+")");
         var numofCellsRow = colValue.find('td').length
@@ -1911,6 +1909,14 @@ function populateTableBasesNewWithDataFromServer(payload){
             colValue.find('td:eq('+j+')').text(newValue)
         }
     }
-
 }
 
+function populateTableFillvlWithDataFromServer(payload) {
+    $("#main-dashboard-inner-newpage-table-fillcalculation").css("display", "inline-grid")
+    var colValue = $("#main-dashboard-inner-newpage-table-fillcalculation > table > tbody > tr:eq(0)");
+    var numofCellsRow = colValue.find('td').length
+    for (var j=0; j < numofCellsRow; j++) {
+        newValue = payload[j]
+        colValue.find('td:eq('+j+')').text(newValue)
+    }
+}
