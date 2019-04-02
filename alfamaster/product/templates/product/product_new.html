@@ -25,9 +25,9 @@
         <p>Insert the values into the yellow editable cells</p>
     </div>
 </div>
-<div class="grid_generator">
-    <div>Insert number of raw materials<input type="number" id="input_grid" placeholder="Insert number - min num 5"></div>
-    <div>Insert number of bases<input type="number" id="input_grid2" placeholder="Insert number - min num 2"></div>
+<div class="main-dashboard-inner-grid-container">
+    <div>Insert number of raw materials<input type="number" id="main-dashboard-inner-grid-input-1" placeholder="Insert number - min num 5"></div>
+    <div>Insert number of bases<input type="number" id="main-dashboard-inner-grid-input-2" placeholder="Insert number - min num 2"></div>
     <button id="generateBtn" type="button" class="btn btn-primary" onclick=generateTable()>Generate table</button>
     <hr>
 
@@ -54,8 +54,7 @@
 <button id = "btn_calculate" type="button" class="btn btn-sm" onclick=generateDataFromServer()>Calculate</button>
 <br>
 <div id="container">
-    <!-- <div id="main-dashboard-inner-newpage-table-fillcalculation" style = "display: inline-grid;"> -->
-    <div id="main-dashboard-inner-newpage-table-fillcalculation" style = "display: none;">
+    <div id="main-dashboard-inner-newpage-table-fillcalculation">
         <table>
 			<caption class="table-caption">Fill level calculation</caption>
 			<thead>
@@ -72,16 +71,16 @@
 			</tbody>
 		</table>
     </div>
-    <div id="startTest" style = "display: inline-grid; padding-left:220;">
-            <p>Acceptability range for COLOR STRENGTH</p>
-            <div class="grid_generator">
-                <div>Inferior Range<input id="rangeinf" type="number" style="margin-left:29px; width: 51 !important;text-align: center;" value=98 placeholder="98" readonly></div>
-                <div>Superior Range<input id="rangesup" type="number" style="margin-left:20px; width: 51 !important;text-align: center;" value=102 placeholder="102" readonly></div>
+    <div id="main-dashboard-inner-colorstrength">
+            <p>Acceptability range for <b>COLOR STRENGTH</b></p>
+            <div class="main-dashboard-inner-grid-container-colorstrength">
+                <div>Inferior Range<input id="main-dashboard-inner-grid-input-3" type="number" value=98 placeholder="98" readonly></div>
+                <div>Superior Range<input id="main-dashboard-inner-grid-input-4" type="number" value=102 placeholder="102" readonly></div>
             </div>
-            <div>Laboratory Test</div>
-            <button id="verify" onclick="startLabTest()">Start</button>
+            <br>
+            <button id="main-dashboard-inner-colorstrength-btn-verify" onclick="startLabTest()">Start Laboratory Test</button>
     </div>
-    <div id="checkTest" style = "display: inline-grid; padding-left:150;">
+    <div id="main-dashboard-inner-colorstrength-checktest">
         <p>Insert result of Laboratory Test</p>
     </div>
 </div>

@@ -15,8 +15,8 @@ var show_save_form = false
 function generateTable(id){
     showGenerateBtn()
 
-    var num_raw_material = document.getElementById('input_grid').value
-    var num_bases = document.getElementById('input_grid2').value
+    var num_raw_material = document.getElementById('main-dashboard-inner-grid-input-1').value
+    var num_bases = document.getElementById('main-dashboard-inner-grid-input-2').value
     global_num_raw_material = num_raw_material
     global_num_bases = num_bases
 
@@ -241,10 +241,10 @@ async function generateTableFillLvl(){
     if(window.location.href.indexOf("update") > -1){
         console.log("URL UPDATE")
         if(global_colorStrength){
-            $('#startTest').css("visibility", "visible");
+            $('#main-dashboard-inner-colorstrength').css("visibility", "visible");
         }else if(global_popupNewProd){
             alert("DEVI CREARE NUOVO PRODOTTO!")
-            $('#startTest').css("visibility", "hidden");
+            $('#main-dashboard-inner-colorstrength').css("visibility", "hidden");
             return
         } else {
             if(typeof show_save_form !== "undefined" && show_save_form == true){
@@ -253,7 +253,7 @@ async function generateTableFillLvl(){
             }          
         }
     }else{
-        $('#startTest').css("visibility", "visible");
+        $('#main-dashboard-inner-colorstrength').css("visibility", "visible");
     }
 
     generateTableMaster()
@@ -376,715 +376,6 @@ function creationTFootMaster(tableFoot, tr_foot){
     }
 }
 
-/*
-*
-*               Logic concerning data generations into the table 
-*
-*/
-
-function generateData(){
-        
-    global_colorStrength = false
-    global_popupNewProd = false
-
-    if( $('#updateCalculateBtn').length ){
-        // visibility:hidden
-        // $(".main").css("display", "block");
-        $(".main").css("visibility", "visible");
-    }
-    var btnDisabled = $("#updateCalculateBtn").is(":disabled")
-    console.log("btnDisabled -> " + btnDisabled)
-    if(!btnDisabled){
-        $(".main").css("visibility", "visible"); //correct one
-        // var spinHandle = loadingOverlay.activate();
-    }
-
-    // var form_update_save = document.getElementById("save")
-    // if(form_update_save){
-    //     form_update_save.style.display = "none"
-    // }
-
-    if($("#main-dashboard-form-save").length){
-        $('#main-dashboard-form-save').css("display", "none")
-    }
-
-    // stuff for checkTest
-    testOK = false
-    up = false
-    $("#checkTest").css("visibility", "hidden"); 
-    var verifyBtn = $('#verify')
-    verifyBtn.css("cursor", "auto")
-    verifyBtn.css("pointer-events", "auto")
-    verifyBtn.css("opacity", 1)
-
-    var sum_ml100g = 0
-    var sum_vv = 0
-    var sum_ml1000g = 0
-    var sum_fcost = 0
-    var baseClassName = generate_baseClassName() //[_b1, _ti, _b2 ...]
-    var list_sum = []
-    var ww = []
-    var sw = []
-
-    var inputClassNameWeight = '.ww'
-    var listofInputClassNames = ['.rm_cost', '.sw']
-    var listofWeightClassNames = returnInputWeightClassNames(inputClassNameWeight, baseClassName) // example [".ww_b1", ".ww_ti", ".ww_b2" ...]
-    listofInputClassNames.push(...listofWeightClassNames)
-    var numofWeightClassNames = listofWeightClassNames.length
-
-    var emptyNameInput = false
-    var comma = false
-    var char = false
-    var empty = false
-    var noRawName = false
-    var swZero = false
-    var minus = false
-    var matrixWeightInput = createMatrixInputValue(listofWeightClassNames)
-    // inputClassNames example -> [".rm_cost", ".sw", ".ww_b1", ".ww_ti" ...]
-    for (var i = 0; i < listofInputClassNames.length; i++){
-        var tmp = 0;
-        var sum = 0;
-        $(listofInputClassNames[i]).each(function(){
-            var id_table = $(this).closest('table').attr('id')
-            if(id_table == "tdetail" || id_table == "generatedTable"){
-                if ($(this).attr('class').indexOf('_m') > -1) {
-                    return false        // exit from loop
-                }
-                var input = $(this).text()
-                if(input.indexOf('-') > -1){
-                    minus = true
-                }
-                if($.isNumeric(input)){
-                    if (listofInputClassNames[i] == '.sw'){
-                        sw.push(parseFloat(input))
-                    } else if (listofInputClassNames[i] != '.rm_cost'){ //ww_b1 ww_ti ww_b2 ...
-                        for (var j=0; j< listofWeightClassNames.length; j++ ){
-                            if(listofInputClassNames[i] == listofWeightClassNames[j]){
-                                matrixWeightInput[j].push(parseFloat(input))
-                                sum += parseFloat(input)
-                            }
-                        }
-                    }
-                }else{
-                    if (input.indexOf(',') > -1){
-                        comma = true
-                    }else if (input != ""){
-                        char = true
-                    } else if( input == null || input.length == 0){
-                        empty = true
-                    }
-                }
-            }
-        });
-        // console.log("tot sum -> "+sum)
-        list_sum.push(sum)
-    }
-
-    $('#generatedTable tbody td:first-child').each(function() {
-        console.log($(this).text());
-        if($(this).text() == ""){
-            noRawName = true
-        }
-    });
-
-    var productInput = document.getElementById('nameProduct')
-    if(productInput){
-        productInputValue = productInput.value
-        if(productInputValue == ""){
-            emptyNameInput = true
-        }
-    }
-    for (let switem of sw){
-        if (switem == 0){
-            swZero = true
-        }
-    }
-    var msg=""
-    if (emptyNameInput || empty || comma || char || noRawName || swZero || minus){
-        if(emptyNameInput && empty){
-            msg = "OPS! You must fill all the empty yellow fields and the Product name field.."
-        }
-        else if(emptyNameInput){
-            msg = "OPS! You must fill the Product name field.."
-        }
-        else if(empty){
-            msg = "OPS! You must fill all the empty yellow fields.."
-        }
-        else if (comma && char){
-            msg = "OPS! character detected inside some fields..<br>Floating point numbers need a dot and not a comma.."
-        }
-        else if (comma){
-            msg = "OPS! Floating point numbers need a dot and not a comma..<br>e.g<br>This number is valid -> 1.2<br>This number is invalid -> 1,2"
-        }
-        else if (char){
-            msg = "OPS! character detected inside some fields.."
-        }else if (noRawName){
-            msg = "OPS! One or more missing Raw material names.."
-        }else if (swZero){
-            msg="OPS! You have entered a value of 0 in a Specific Weight field..Change it to continue.."
-        }else if(comma && minus){
-            msg = "OPS! One or more negative floating numbers detected..<br>Floating point numbers need a dot and not a comma..<br>e.g<br>This number is valid -> 1.2<br>This number is invalid -> 1,2"
-        }else if(minus){
-            msg = "OPS! One or more negative integer numbers detected.."
-        }
-        else{
-            msg = "OPS! UNKNOWN ERROR.."
-        }
-        loadingOverlay.cancel(spinHandle);
-        $("#msg-modal").html(msg)
-        $("#myModal").modal()
-        return
-    }
-    
-    var listofUpdatedInputB1 = []
-    var updatedInputB1 = $("#tdetail tbody tr td:nth-child(4)")
-    for (var i=0; i< updatedInputB1.length; i++){
-        if(i<4){
-            var tmp = updatedInputB1[i].textContent
-            listofUpdatedInputB1.push(tmp)
-        }
-    }
-    
-    for (var i in global_inputValues) {
-        if(i !=0){
-            if(listofUpdatedInputB1[i] != global_inputValues[i]){
-                console.log(listofUpdatedInputB1[i])
-                console.log(global_inputValues[i])
-    
-                var old_value = global_inputValues[i]
-                var new_value = listofUpdatedInputB1[i]
-    
-                var op =  Math.abs(new_value - old_value);
-                var gap = 3*parseFloat(old_value)/100
-                console.log("op " +op)
-                console.log("gap "+gap)
-                var upperBound = parseFloat(old_value) + parseFloat(gap)
-                var lowerBound = parseFloat(old_value) - parseFloat(gap)
-                if(new_value <= upperBound && new_value >= lowerBound){
-                    console.log("Perform ColorStrength ")
-                    global_colorStrength = true
-                } else {
-                    console.log("popup Create new Product")
-                    global_popupNewProd = true
-                }
-            }
-        }
-    }
-
-    //
-    //  here the logic to populate the table
-    //
-
-    var baseClassName = generate_baseClassName()                // baseClassName -> ["_b1", "_ti" ...]
-    var table = document.getElementById('tdetail')              // table from product/update/pk
-    if(table){
-        var rowCount = $('#tdetail >tbody >tr').length;
-        global_num_raw_material = rowCount                    // override for update action
-    }
-
-    var counterWeightClassName = 2
-    for(var q=0; q< baseClassName.length; q++){
-        sum_ml100g = 0
-        sum_vv = 0
-        sum_ml1000g = 0
-        sum_fcost = 0
-
-            // insert sum of data for cell Total ww
-        tmp = document.getElementsByClassName('totalww'+baseClassName[q])[0]
-        // dynamic refactor
-        if(q < numofWeightClassNames){
-            var tmp_value = list_sum[counterWeightClassName]
-            var value = parseFloat(tmp_value).toFixed(2)
-            tmp.innerHTML = value
-            counterWeightClassName ++
-        }
-
-
-            // insert single data for the cell mL/100g
-        for (var i = 0; i < global_num_raw_material; i++){
-            tmp = document.getElementsByClassName('ml100g'+baseClassName[q])[i]
-            var a = matrixWeightInput[q][i]
-            var b = sw[i]
-            var division = a/b
-            var op = parseFloat(division).toFixed(3)
-            tmp.innerHTML = op
-            sum_ml100g += parseFloat(op)
-        }
-
-            // insert sum of data for cell Total mL/100g
-        tmp = document.getElementsByClassName('totalml100g'+baseClassName[q])[0]
-        tmp.innerHTML = parseFloat(sum_ml100g).toFixed(2)
-
-            // insert single data for the cell %v/v
-        for (var i = 0; i < global_num_raw_material; i++){
-            var tmp = document.getElementsByClassName('vv'+baseClassName[q])[i]
-
-            var elems = document.getElementsByClassName("ml100g"+baseClassName[q]);
-
-            var elem = elems[i].innerText
-            var op = (100*elem)/sum_ml100g
-            var _op = parseFloat(op).toFixed(3)
-            tmp.innerHTML = _op
-            sum_vv += parseFloat(_op)
-        }
-
-            // insert sum of data for cell Total %v/v
-        tmp = document.getElementsByClassName('totalvv'+baseClassName[q])[0]
-        tmp.innerHTML = parseFloat(sum_vv).toFixed(2)
-
-            // insert single data for the cell mL/1000g
-        for (var i = 0; i < global_num_raw_material; i++){
-            var tmp = document.getElementsByClassName('ml1000g'+baseClassName[q])[i]
-
-            var elems = document.getElementsByClassName("vv"+baseClassName[q]);
-
-            var elem = elems[i].innerText
-            var op = (10*elem)
-            var _op = parseFloat(op).toFixed(2)
-            tmp.innerHTML = _op
-            sum_ml1000g += parseFloat(_op)
-        }
-
-            // insert sum of data for cell Total mL/1000g
-        tmp = document.getElementsByClassName('totalml1000g'+baseClassName[q])[0]
-        tmp.innerHTML = parseFloat(sum_ml1000g).toFixed(0)
-
-            // insert single data for the cell Formula Cost
-        for (var i = 0; i < global_num_raw_material; i++){
-            var tmp = document.getElementsByClassName('fcost'+baseClassName[q])[i]
-
-            var elems_sw = document.getElementsByClassName("sw")
-            var elems_rmcost = document.getElementsByClassName("rm_cost")
-            var elems_vv = document.getElementsByClassName("vv"+baseClassName[q])
-
-
-            var elem_vv = elems_vv[i].innerText
-            var elem_sw = elems_sw[i].innerText
-            var elem_rmcost = elems_rmcost[i].innerText 
-
-            var op1 = elem_sw*elem_rmcost
-            var _op = (parseFloat(op1)/1000)*elem_vv*10
-            tmp.innerHTML = parseFloat(_op).toFixed(2)
-            sum_fcost += parseFloat(_op)
-        }
-
-            // insert sum of data for cell Total Formula Cost
-        tmp = document.getElementsByClassName('totalfcost'+baseClassName[q])[0]
-        tmp.innerHTML = parseFloat(sum_fcost).toFixed(2)
-    }
-    
-    global_sw = sw
-    generateTableFillLvl()
-
-    if(typeof prod_admin !== "undefined"){
-        if(prod_admin == "False"){
-            var table_update = document.getElementsByClassName("btn btn-warning")[0]
-            var action = ""
-            if(table_update){
-                action = "detail"
-            } else{
-                action = "update"
-            }
-            showLessDetails(action)
-        }
-    }
-
-    if(!btnDisabled){
-        setTimeout(function() {
-            loadingOverlay.cancel(spinHandle);
-            $(".main").css("visibility", "visible");
-            // $(".main").css("display", "block");
-        },1600);
-    }
-}
-
-function generateDataMaster(){
-
-    _sum_ti = 0.0
-    var table_new = document.getElementById("generatedTable")
-    var table_update = document.getElementById("tdetail")
-    var tableInput = ''
-    var index = ''
-    var index2cells = ''
-    var table_id = ''
-    if(table_new){
-        tableInput = table_new
-        index = 1
-        index2cells = 5
-        table_id = "generatedTable"
-    } else if (table_update){
-        tableInput = table_update
-        index = 0
-        table_id = "tdetail"
-        index2cells = 3
-    }
-    var tableFillLvl = document.getElementById("generatedTableFillLvl")
-    var list_vv_ti = []
-    var list_vv_b1 = []
-    var list_tiRemoving = []
-    var sum_tiRemoving = 0
-    var sum_vv_m = 0.0
-    var sum_test = 0
-    var sum_ww = 0
-    var sum_fcost = 0
-    var tio2add = 0
-    var add2water = 0
-    var listofSolidRawMat = []
-
-    for (var j=2; j < 12; j++){
-        var cells = tableInput.querySelectorAll('td:nth-child('+j+')')
-        for(var i = index ; i < cells.length ; i++) {
-            if(j == 6){
-                if(cells[i].innerText){
-                    list_vv_b1.push(cells[i].innerText)
-                }
-            }else if(j==11) {
-                if(cells[i].innerText){
-                    list_vv_ti.push(cells[i].innerText)
-                }
-            }
-        }
-    }
-
-    var cell = tableFillLvl.querySelectorAll('td:nth-child(3)')
-    var defLvl = cell[cell.length-1].innerHTML
-    console.log("defLvl : "+defLvl)
-
-        // calculate data for cell with className 'tirem_m'
-    for(var i=0; i < global_num_raw_material; i++){
-        var res = ''
-        var indexMaster = i
-        if(table_new){
-            indexMaster = parseInt(indexMaster)+1
-        }
-        var idx = parseInt(i)+1
-        if(i==2 || i==4){   //TiO2 not calculated for MASTER
-            res = 0
-        } else{
-            // res_tableNew = (list_vv_b1[i+1] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
-            // res_tableUpdate = (list_vv_b1[i] - list_vv_ti[i]*((100-defLvl)/100))/(defLvl/100)
-            _op1 = list_vv_b1[indexMaster]
-            _op2 = list_vv_ti[i]*((100-defLvl)/100)
-            _op3 = defLvl/100
-
-                // Normal working behaviour
-                res = (_op1 - _op2)/_op3
-
-                // check for solid raw material
-                if (i > 5){
-                    var specificWeight = $('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(1)').text()
-                    res = (_op1 - _op2)/_op3
-
-                    var wwB1 = parseFloat($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(3)').text())
-                    var lengthRow = $('#'+table_id+' >tbody >tr:first>td').length
-                    lengthRow -= 5
-                    var wwBN = parseFloat($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq('+lengthRow+')').text())
-                    var diff = Math.abs(wwBN - wwB1)
-                    var limit = wwB1*10/100
-
-                    if(parseFloat(specificWeight) >= 2.000){
-
-                        if(wwB1 <= wwBN && diff <= limit){
-                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" is a RAW MATERIAL SOLID\nadd to rawMatSolid list")
-                            console.log("wwB1 of "+$('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text()+ " : "+wwB1)
-                            var rawMatSolid = []
-                            rawMatSolid.push(parseFloat(wwB1), i)
-                            listofSolidRawMat.push(rawMatSolid)
-                            res = (_op1 - _op2)/_op3
-                        } else  if(wwB1 <= wwBN && diff > limit){
-                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" is calculated NORMALLY")
-                            res = (_op1 - _op2)/_op3
-                        } else if (wwB1 > wwBN && diff <= limit){
-                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" is a RAW MATERIAL SOLID\nadd to rawMatSolid list")
-                            console.log("wwB1 of "+$('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text()+ " : "+wwB1)
-                            var rawMatSolid = []
-                            rawMatSolid.push(parseFloat(wwB1), i)
-                            listofSolidRawMat.push(rawMatSolid)
-                            res = (_op1 - _op2)/_op3
-                        } else if (wwB1 > wwBN && diff > limit){
-                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" be calculated to ZERO on MASTER TABLE")
-                            res = 0
-                            calculated_res = (_op1 - _op2)/_op3
-                            console.log("calculated res to add to RAW MAT SOLID -> "+calculated_res)
-                            tio2add += calculated_res
-                        }
-                    } else{ // specificWeight < 2.000
-                        if (wwB1 > wwBN && diff > limit){
-                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" be calculated to ZERO on MASTER TABLE.\nAdd calculated value to h2o")
-                            res = 0
-                            calculated_res = (_op1 - _op2)/_op3
-                            console.log("calculated res to add to WATER -> "+calculated_res)
-                            add2water += calculated_res
-                        } else {
-                            console.log($('#'+table_id+' tbody tr:nth-child('+idx+') td:eq(0)').text() +" nothing to DO")
-                        }
-                    }
-                }
-
-            
-        }
-        list_tiRemoving.push(res)
-        var t = $('#generatedTableMaster tbody td:nth-child(0) td:eq('+i+')').text()
-        console.log(t)
-        console.log("sum_tiRemoving -> "+sum_tiRemoving +" + res-> "+res)
-        sum_tiRemoving += res
-        console.log(sum_tiRemoving)
-    }
-
-    // if (resExt != 0){
-    //     sum_tiRemoving += resExt
-    // }
-
-    if(tio2add > 0){
-
-        // TODO
-        // check if exists multiple max values and choose the one with the greater diff(wwB1 - wwBN)
-        console.log("tio2add : "+tio2add)
-        console.log(listofSolidRawMat)
-        var max = -Infinity;
-        var index = -1;
-        listofSolidRawMat.forEach(function(a, i){
-            if(a[0]>max){
-                max = a[0]
-                index = a[1]
-            }
-        });
-
-        console.log("max: "+max + " ; index: "+index)
-        console.log("tio2add : "+tio2add)
-        var valueAtIndex = list_tiRemoving[index]
-        console.log("valueAtIndex -> "+valueAtIndex)
-        valueAtIndex += tio2add
-        console.log("valueAtIndex modified -> "+valueAtIndex)
-        var start_index = parseInt(index),
-            number_of_elements_to_remove = 1
-
-        list_tiRemoving.splice(start_index, number_of_elements_to_remove, valueAtIndex);
-        sum_tiRemoving += tio2add
-    }
-
-    console.log("sum_tiRemoving : "+sum_tiRemoving)
-        // insert single datum for cell with className 'tirem_m'
-    for (var i = 0; i < global_num_raw_material; i++){
-        tmp = document.getElementsByClassName('tirem_m')[i+1]
-        var _op = list_tiRemoving[i]
-        // if( i == 0 && resExt !=0){
-        //     _op += parseFloat(resExt)
-        // }
-        var op = parseFloat(_op).toFixed(3)
-        tmp.innerHTML = op
-        tmp.classList.add("to_update")
-
-    }
-
-        // insert sum of data for cell Total TiO2 removing
-    tmp = document.getElementsByClassName('totalrem')[0]
-    tmp.innerHTML = parseFloat(sum_tiRemoving).toFixed(3)
-
-        // insert single datum for cell with className 'vv_m'
-    for (var i = 0; i < global_num_raw_material; i++){
-        tmp = document.getElementsByClassName('vv_m')[i+1] //list cell with classname 'vv_m'
-        tmp2 = document.getElementsByClassName('tirem_m')[i+1]
-        var _tmp2 = parseFloat(tmp2.innerText).toFixed(3)
-
-        var _op = (100*_tmp2)/sum_tiRemoving
-        var op = parseFloat(_op).toFixed(3)
-
-            var index = i+1
-            var _lista = []
-            var result = []
-            if(i == 2 || i == 4){
-                tmp.innerHTML = parseFloat(0).toFixed(3)
-                tmp.classList.add("to_update") 
-                continue
-            }
-            console.log("op ->"+op)
-            if(op <= 1){
-                $('#'+table_id+' tbody tr:nth-child('+index+')').each(function() {
-                    // for(var i=1; i< global_num_bases; i++){
-                    var max = 0
-                    if(global_num_bases == 1){
-                        max = global_num_bases+1
-                    }else{
-                        max=global_num_bases
-                    }
-                    for(var i=1; i< global_num_bases; i++){
-                        var value = $(this).find(".vv_b"+i).html();  
-                        // console.log("testo  vv_b"+i+"    -->     "+value)
-                        _lista.push(value)
-                    }
-                    });
-                //          [val1, val2, val3, val4, ... , valn]
-                //          |val1 - val2| < 10% di val1
-                //          |val2 - val3| < 10% di val1
-                //          ....
-                //          |valn - val1| < 10% di val1
-                for(var k=0; k< _lista.length; k++){
-                    var p1 = _lista[k]
-                    var p2 = 0
-                    var index2 = k+1
-                    // console.log("index2 ---> "+index2)
-                    if(index2 >= _lista.length){
-                        p2 = _lista[0]
-                    }else{
-                        p2 = _lista[index2]
-                    }
-
-                    var calc = Math.abs(p1-p2)
-                    var margin = 0.1*_lista[0]
-                    if(calc < margin){
-                        result.push(1)          // correct 
-                        // console.log("calc < margin")
-                    } else{
-                        result.push(0)          // uncorrect
-                        // console.log("calc > margin")
-                    }
-                }
-
-                var check_uncorrect = $.inArray(0, result)
-                if(check_uncorrect == -1){
-                    // tutto è vero result -> [1,1,1,1]; cerco MASTER 'vv_m'
-                    // se  base1-10% < VALUE < base1+10%
-                    // print VALUE
-                    var base1 = _lista[0]
-                    var margin = 0.1
-                    var leftBound = parseFloat(base1) - parseFloat(base1*margin)
-                    var rightBound = parseFloat(base1) + parseFloat(base1*margin)  
-
-                    if(op > leftBound && op < rightBound){
-                        console.log("op > leftBound && op < rightBound")
-                        tmp.innerHTML = op                      // populate the cell
-                        tmp.style.backgroundColor = "blue";
-                        sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
-                    }else{
-                        console.log("****   NO **** op > leftBound && op < rightBound")
-                        // mostro contenuto vvB1 al posto del valore calcolato
-                        tmp.innerHTML=_lista[0]
-                        tmp.style.backgroundColor = "yellow";
-                        sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(_lista[0])
-                    }
-                }else{
-                    // result -> [1,1,0,1]
-                    // non rispetto base1-10% < VALUE < base1+10%
-                    tmp.innerHTML= op
-                    tmp.style.backgroundColor = "gray";
-                    sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
-                }
-
-            }else{  // se op >1     | op-> valore calcolato
-                tmp.innerHTML= op
-                tmp.style.backgroundColor = "lightblue";
-                sum_vv_m =  parseFloat(sum_vv_m) + parseFloat(op)
-            }
-
-        tmp.classList.add("to_update") 
-
-        $('#generatedTableMaster tbody tr:nth-child('+index+')').each(function() {
-                var value = $(this).find(".vv_m").html();  
-                if(index == 1){
-                    h2o = value
-                } else {
-                    _sum_ti = parseFloat(_sum_ti) + parseFloat(value)
-                }
-                // update the total sum of %v/v of Master Table
-                sum_vv_m = _sum_ti
-
-            });
-
-    }
-    // insert single datum for cell h2o with className 'vv_m'
-    // ricalcola 1st row (h2o) sulla base della somma degli altri valori
-    $('#generatedTableMaster tbody tr:nth-child(1)').each(function() {
-            var _h2o = 100.00-parseFloat(sum_vv_m)
-            _h2o = parseFloat(_h2o).toFixed(3)
-            $(this).find(".vv_m").html(_h2o); 
-            sum_vv_m = parseFloat(sum_vv_m)+parseFloat(_h2o)
-    });
-
-    if(add2water > 0 ){
-        // alert("devi aggiungermi a water, STUPID!")
-        var h2oCurrentVal = $('#generatedTableMaster tbody tr:nth-child(1) td:nth-child(2)').text()
-        console.log("pre adding h2o value : "+h2oCurrentVal)
-        h2oCurrentVal = parseFloat(h2oCurrentVal) + parseFloat(add2water)
-        $('#generatedTableMaster tbody tr:nth-child(1) td:nth-child(2)').text(h2oCurrentVal.toFixed(3))
-    }
-    
-
-        // insert sum of data for cell Total %v/v
-    tmp = document.getElementsByClassName('totalvv')[0]
-    tmp.innerHTML = parseFloat(sum_vv_m).toFixed(3)
-
-        // insert single datum for cell with className 'g100ml_m'
-    for (var i = 0; i < global_num_raw_material; i++){
-        tmp = document.getElementsByClassName('g100ml_m')[i+1]
-        tmp2 = document.getElementsByClassName('vv_m')[i+1]
-        var _tmp2 = parseFloat(tmp2.innerText).toFixed(3)
-        var _op = (tmp2.innerText*global_sw[i])
-        var op = parseFloat(_op).toFixed(3)
-        tmp.innerHTML = op
-        tmp.classList.add("to_update")
-
-        sum_test =  parseFloat(sum_test) + parseFloat(op)
-    }
-
-        // insert sum of data for cell Total g/100mL
-    tmp = document.getElementsByClassName('totalg100ml')[0]
-    tmp.innerHTML = parseFloat(sum_test).toFixed(3)
-
-    // insert single datum for cell with className 'ww_m'
-    for (var i = 0; i < global_num_raw_material; i++){
-        var tmp = document.getElementsByClassName('ww_m')[i+1]
-        var tmp2 = document.getElementsByClassName('g100ml_m')[i+1]
-        // var _op = (tmp2.innerText*global_sw[i]*100)/(sum_test)
-        var _op = (tmp2.innerText*100)/(sum_test)
-        var op = parseFloat(_op).toFixed(2)
-        // var op = parseFloat(_op)
-        tmp.innerHTML = op
-        tmp.classList.add("to_update")
-
-        sum_ww =  parseFloat(sum_ww) + parseFloat(op)        
-    }
-
-        // insert sum of data for cell Total %w/w
-    tmp = document.getElementsByClassName('totalww')[0]
-    var somma = parseFloat(sum_ww).toFixed(2)
-    tmp.innerHTML = Math.round(somma).toFixed(2)    // round up
-
-        // insert single datum for cell with className 'fc_m'
-    for (var i = 0; i < global_num_raw_material; i++){
-        var tmp = document.getElementsByClassName('fc_m')[i+1]
-        var tmp2 = document.getElementsByClassName('vv_m')[i+1]
-        var tmp3 = document.getElementsByClassName('rm_cost')
-        var _op = ((global_sw[i]*tmp3[i].innerText)/1000)*tmp2.innerText*10
-        var op = parseFloat(_op).toFixed(2)
-        tmp.innerHTML = op
-        tmp.classList.add("to_update")
-
-        sum_fcost =  parseFloat(sum_fcost) + parseFloat(op)        
-    }
-
-        // insert sum of data for cell Total Formula Cost
-    tmp = document.getElementsByClassName('totalfcost')[0]
-    tmp.innerHTML = parseFloat(sum_fcost).toFixed(2)
-    tmp.classList.add("to_update")
-
-
-    // pre refactor for product update
-    var table_detail = document.getElementById("tdetail")
-    if(table_detail){
-        var form_update_save = document.getElementById("save")
-        if(form_update_save){
-            form_update_save.style.display = "block"
-        }
-    }
-
-
-    if(typeof prod_admin !== "undefined"){
-        if(prod_admin == "False"){
-            showLessDetailsMaster()
-        }
-    }
-}
 
 /*
 *
@@ -1118,7 +409,7 @@ function returnTheadList(thead_col, thead_col_base){
 }
 
 function hideGridGenerator(){
-    var grid = document.getElementsByClassName("grid_generator")[0]
+    var grid = document.getElementsByClassName("main-dashboard-inner-grid-container")[0]
     grid.style.display = "none"
 }
 
@@ -1138,27 +429,6 @@ function clean_after_wrong_input(){
 
 }
 
-/**
- * 
- * Given in input a list containing classname of the bases, a matrix is generated
- * 
- * e.g.
- *  [Array(0), Array(0), Array(0)]
- *  [[8, 8, 8], [8, 8, 8], [8, 8, 8]]
- * 
- * @param  {Array<String>} listofWeightClassNames list containing generated classname for each base
- * @return  {Array<Array<String>>} matrix returned
- */
-function createMatrixInputValue(listofWeightClassNames) {
-    var _length = listofWeightClassNames.length
-    var lista = []
-    for (var i=0; i< _length; i++){
-        var list2 = []
-        lista.push(list2)
-    }
-
-    return lista
-}
 
 /**
  * 
@@ -1650,29 +920,31 @@ var testOK = false
 var up = false
 
 function startLabTest(){
-    supInput = $('#rangesup').val()
-    infInput = $('#rangeinf').val() 
+    infInput = $('#main-dashboard-inner-grid-input-3').val()
+    supInput = $('#main-dashboard-inner-grid-input-4').val()
+ 
 
     if(supInput == "" || infInput == ""){
         alert("fill all the input fields")
     }else{
-        $('#checkTest').css("visibility", "visible");
+        $('#main-dashboard-inner-colorstrength-checktest').css("visibility", "visible");
     }
     counterTest = 2
 
-    var verifyBtn = $('#verify')
+    var verifyBtn = $('#main-dashboard-inner-colorstrength-btn-verify')
     verifyBtn.css("cursor", "not-allowed")
     verifyBtn.css("pointer-events", "none")
     verifyBtn.css("opacity", 0.65)
 
     $( ".test" ).remove();
-    var divCheckTest = $('#checkTest')
+    var divCheckTest = $('#main-dashboard-inner-colorstrength-checktest')
     divCheckTest.append('<div class="test">Test result n°1 <input id="r1" type="number" style="margin-left:20px; width: 51 !important;text-align: center;"> <button style="margin-left:1;" onclick="verify(event)">Verify</button></div>')
 }
 
 function verify(event){
-    var resultTest = $("#checkTest input:last")
-
+    var resultTest = $("#main-dashboard-inner-colorstrength-checktest input:last")
+    console.log("resultTest")
+    console.log(resultTest)
     if(resultTest.val() != ""){
         if(resultTest.val() <= parseInt(supInput) && resultTest.val() >= parseInt(infInput)){
             testOK=true
@@ -1683,8 +955,8 @@ function verify(event){
             testOK=false
         }
 
-        var check = $('#checkTest')
-        var row = $('#checkTest').find("div:last")
+        var check = $('#main-dashboard-inner-colorstrength-checktest')
+        var row = $('#main-dashboard-inner-colorstrength-checktest').find("div:last")
         if(!testOK){
             var newRow = row.clone()
     
@@ -1701,13 +973,13 @@ function verify(event){
             check.append(newRow)
             row.append("    TEST FAILED")
 
-            var rowtableFillCalculation = $('#tableFillCalculation tr:last')
-            var text1 = $('#tableFillCalculation tr:last td:nth-child(1)').text()
-            var text2 = $('#tableFillCalculation tr:last td:nth-child(2)').text()
-            var text3 = $('#tableFillCalculation tr:last td:nth-child(3)').text()
+            // var rowtableFillCalculation = $('#tableFillCalculation tr:last')
+            var text1 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(1)').text()
+            var text2 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(2)').text()
+            var text3 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(3)').text()
 
-            $('#generatedTableFillLvl tr:last').remove();
-            $("#generatedTableFillLvl").append('<tr><td><del>'+text1+'</del></td><td><del>'+text2+'</del></td><td><del>'+text3+'</del></td></tr>');
+            $('#main-dashboard-inner-newpage-table-fillcalculation tr:last').remove();
+            $("#main-dashboard-inner-newpage-table-fillcalculation table tbody").append('<tr><td><del>'+text1+'</del></td><td><del>'+text2+'</del></td><td><del>'+text3+'</del></td></tr>');
 
             if(up){
                 text1 = parseInt(text1) + 1
@@ -1718,11 +990,11 @@ function verify(event){
                 text2 = parseInt(text2) + 1
                 text3 = text2
             }
-            $("#generatedTableFillLvl").append('<tr><td>'+text1+'</td><td>'+text2+'</td><td>'+text3+'</td></tr>');
+            $("#main-dashboard-inner-newpage-table-fillcalculation table tbody").append('<tr><td>'+text1+'</td><td>'+text2+'</td><td>'+text3+'</td></tr>');
 
             counterTest++
             flag = false
-            generateDataMaster()
+            // generateDataMaster()
         }else{
             $(event.target).css("opacity", 0.65)    
             $(event.target).css("pointer-events", "none")
@@ -1744,7 +1016,7 @@ function verify(event){
 
 $( document ).ready(function() {
 
-    var numbers = [
+    var coinages = [
         'EUR - €',
         'NOK - kr',
         'USD - $',
@@ -1766,8 +1038,8 @@ $( document ).ready(function() {
     ];
 
     var option = '';
-    for (var i=0;i<numbers.length;i++){
-       option += '<option value="'+ numbers[i] + '">' + numbers[i] + '</option>';
+    for (var i=0;i<coinages.length;i++){
+       option += '<option value="'+ coinages[i] + '">' + coinages[i] + '</option>';
     }
     $('#currencies').append(option);
 
@@ -1852,7 +1124,7 @@ $( document ).ready(function() {
         }    
     }); 
 
-    $('#startTest').css("visibility", "hidden");
+    $('#main-dashboard-inner-colorstrength').css("visibility", "hidden");
     $('#btn_update_save').css("visibility", "hidden");
     var keyupAction = false
     }
@@ -1863,7 +1135,6 @@ function generateDataFromServer() {
 
     var nofRawMat = $("#generatedTable > tbody > tr").length
 
-    console.log("nofRawMat: "+toString(nofRawMat))
     inputMatrix = []
     for (var i=0; i < nofRawMat; i++) {
         rowsData = []
@@ -1890,6 +1161,9 @@ function generateDataFromServer() {
         populateTableBasesWithDataFromServer(payloadBases)
         var payloadFillvl = data['payloadFillvl']
         populateTableFillvlWithDataFromServer(payloadFillvl)
+
+        // TODO: check if this must be moved outsite in some specific function
+        $('#main-dashboard-inner-colorstrength').css("visibility", "visible")
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
         //  serrorFunction();

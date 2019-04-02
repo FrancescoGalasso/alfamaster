@@ -23,6 +23,7 @@
         3.4.1 Component - Button - list.html
         3.4.2 Component - Button - detail.html 
     3.5 Component - Modal Setting
+    3.6 Component - Color Strength Setting
 */
 
 /* -------------------------------
@@ -208,9 +209,53 @@ td {
 
 /* 3.2 Component - Imput Elements */
 
-  #main-dashboard-listpage-input{
+#main-dashboard-listpage-input{
     margin-top: 10px;
-  }
+}
+
+/* select first 2 div inside class */
+.main-dashboard-inner-grid-container div:nth-child(-n+3), .main-dashboard-inner-grid-container-colorstrength div {
+    font-weight: bold;
+}
+
+.main-dashboard-inner-grid-container {
+    margin-top: 30px;
+}
+
+#main-dashboard-inner-grid-input-1 { 
+    background-color: yellow;
+    margin-left: 15px;
+    text-align: center;
+}
+
+#main-dashboard-inner-grid-input-2 { 
+    background-color: yellow;
+    margin-left: 65px;
+    text-align: center;
+}
+
+input[type="number"] {
+    width: 200px;
+}
+
+.main-dashboard-inner-grid-container-colorstrength div input {
+    width: 51 !important;
+    text-align: center;
+}
+
+#main-dashboard-inner-grid-input-3 {
+    margin-left:29px; 
+}
+
+#main-dashboard-inner-grid-input-4 {
+    margin-left:20px; 
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
 
 /* 3.3 Component - Table Elements */
 
@@ -234,13 +279,16 @@ td {
     font-weight: bold;
 }
 
-/* #main-dashboard-inner-detailpage-table-fillvl caption, #main-dashboard-inner-detailpage-table-master caption{ */
+#main-dashboard-inner-newpage-table-fillcalculation{
+    display: none;
+    /* display: inline-grid; */
+}
+
 .table-caption {
     font-weight: bold;
     text-align: center;
 }
 
-/* #main-dashboard-inner-detailpage-table-fillvl tbody tr td{ */
 .table-body > tr > td {
     text-align: center !important;
 }
@@ -279,6 +327,14 @@ td {
     font-weight: bold;
 }
 
+/* 3.4.2 Component - Button - new.html update.html */
+
+/* #main-dashboard-inner-colorstrength-btn-verify:active {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.65;
+} */
+
 /* 3.5 Component - Modal Setting */
 
 .modal-header{
@@ -306,6 +362,28 @@ td {
 
 div.modal-footer form {
     float: left;
+}
+
+/* 3.6 Component - Color Strength Setting */
+
+#main-dashboard-inner-colorstrength {
+    /* old css */
+    display: inline-grid;
+    padding-left:220;
+    visibility: hidden;
+
+    /* padding-left: 580;
+    visibility: hidden;
+    margin-top: -105px; */
+}
+
+#main-dashboard-inner-colorstrength-checktest {
+    visibility: hidden;
+    /* display: inline-grid;  */
+    /* padding-left: 940px;
+    margin-top: -128px; */
+    display: inline-grid; 
+    padding-left:220;
 }
 
 /**********************/
@@ -346,43 +424,6 @@ div.modal-footer form {
     margin-left: 43px;
 }
 
-/* 
-*   css inside <div class="grid_generator">
-*/
-#input_grid { 
-    background-color: yellow;
-    margin-left: 15px;
-}
-
-#input_grid2 { 
-    background-color: yellow;
-    margin-left: 65px;
-}
-
-input[type="number"] {
-    width: 200px;
-}
-
-/* select first 2 div inside class grid_generator*/
-.grid_generator div:nth-child(-n+3){
-    font-weight: bold;
-}
-
-.grid_generator{
-    margin-top: 30px;
-}
-
-/*
-*   css table generated
-*/
-
-/* .header::after {
-    font-weight: bold;
-}
-
-td {
-    min-width: 80px;
-} */
 
 /*
 *   stuffs
@@ -414,13 +455,6 @@ td {
     margin-left: 10;
 }
 
-#startTest{
-    visibility: hidden;
-}
-
-#checkTest{
-    visibility: hidden;
-}
 
 #tips{
     border: 1px solid black;
