@@ -998,9 +998,9 @@ function verify(event){
             $(event.target).css("pointer-events", "none")
             row.append("    TEST PASSED")
 
-            $('#main-dashboard-inner-newpage-table-master').css("display", "inline")
-            // $('#btn_update_save').css("visibility", "visible");
-            $('#main-dashboard-form-save').css('display', 'inline')
+            // // $('#main-dashboard-inner-newpage-table-master').css("display", "inline")
+            // // $('#btn_update_save').css("visibility", "visible");
+            // // $('#main-dashboard-form-save').css('display', 'inline')
             generateDataMasterFromServer()
         }
     }
@@ -1226,9 +1226,16 @@ function generateDataMasterFromServer() {
         data: payload,
     })
     .done(function (data) {
-        console.log("SUCCESS Master callback")
         var reply = data['replyFromServer']
-        populateTableMasterWithDataFromServer(reply)
+        if ( reply.length > 0 ) {
+            console.log("SUCCESS Master callback")
+            $('#main-dashboard-inner-newpage-table-master').css("display", "inline")
+            // $('#btn_update_save').css("visibility", "visible");
+            $('#main-dashboard-form-save').css('display', 'inline')
+            populateTableMasterWithDataFromServer(reply)
+        } else {
+            alert("ERROR on calc MASTER values ...")
+        }
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
         //  serrorFunction();
@@ -1262,17 +1269,6 @@ function populateTableFillvlWithDataFromServer(payload) {
 
 function populateTableMasterWithDataFromServer(reply) {
     // tabella -> #main-dashboard-inner-newpage-table-master
-    // var colValue = $("#main-dashboard-inner-newpage-table-fillcalculation > table > tbody > tr:eq(0)");
-    // var numofCellsRow = colValue.find('td').length
-    // for (var j=0; j < numofCellsRow; j++) {
-    //     newValue = payload[j]
-    //     colValue.find('td:eq('+j+')').text(newValue)
-    // }
-
-    // for (var i = 0; i < reply[0].length; i ++){
-    //     for (var j = 0; j < reply[0].)
-    // }
-
     $.each(reply, function(index, array) { // This each iterates over the arrays.
         $('#main-dashboard-inner-newpage-table-master tbody').append('<tr></tr>')
         $.each(array, function(subindex, value) { // This each iterates over the individual values.

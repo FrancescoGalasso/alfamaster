@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # from .utils import basesListToHtml, calculateFillToHtml, calculateMasterToHtml, populateMatrixFormulaBody
 from .utils import *
+import traceback
 
 # Python logging package
 import logging
@@ -53,7 +54,6 @@ def product_detail(request, pk):
                 lista = _data['data']
                 stdlogger.debug("       *** [debug] product history_data: {}".format(lista))
             except:
-                import traceback
                 print(traceback.format_exc())
                 lista = { }
 
@@ -312,7 +312,12 @@ def retrieveMaster(request):
                     array[k] = None
 
         nbases = int( (len(payload1[0]) - 3 ) / 5)
-        calculatedPayloadMaster = calculateMasterToHtml(payload1, payload2, nbases)
+
+        try:
+            calculatedPayloadMaster = calculateMasterToHtml(payload1, payload2, nbases)
+        except Exception as e:
+            print(traceback.format_exc())
+            calculatedPayloadMaster = []
 
         print("calculatedPayloadMaster:\n{}".format(calculatedPayloadMaster))
         data = {'replyFromServer': calculatedPayloadMaster}
