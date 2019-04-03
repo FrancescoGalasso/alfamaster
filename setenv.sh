@@ -2,5 +2,5 @@
 
 echo 'launching venv...'
 #echo 'source /home/galasso/Documents/p27env/bin/activate'
-source ./myenv/bin/activate
-cd file_master_online/
+source ./masterenvpy3/bin/activate
+cd alfamaster/
