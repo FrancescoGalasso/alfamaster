@@ -293,3 +293,30 @@ def retrieveBasesAndFillvl(request):
         data = {'payload': 'KO'}
 
     return JsonResponse(data)
+
+@csrf_exempt
+def retrieveMaster(request):
+    print(request.POST.keys())
+    if request.method == 'POST' and ( 'payloadBases' and 'payloadLvl' in request.POST.keys() ) :
+        print("server side!")
+        _payload1 = request.POST['payloadBases']
+        payload1 = json.loads(_payload1)
+        _payload2 = request.POST['payloadLvl']
+        payload2 = json.loads(_payload2)
+        print(payload1)
+        print(payload2)
+
+        for array in payload1:
+            for k,item in enumerate(array):
+                if not item:
+                    array[k] = None
+
+        nbases = int( (len(payload1[0]) - 3 ) / 5)
+        calculatedPayloadMaster = calculateMasterToHtml(payload1, payload2, nbases)
+
+        print("calculatedPayloadMaster:\n{}".format(calculatedPayloadMaster))
+        data = {'replyFromServer': calculatedPayloadMaster}
+    else:
+        data = {'payload': 'KO'}
+
+    return JsonResponse(data)

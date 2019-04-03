@@ -291,9 +291,9 @@ def calculateFillToHtml(lista):
 
     return listofFillCalculated
 
-def calculateMasterToHtml(lista, listofFillvl, nbases):
+def calculateMasterToHtml(lista, Fillvl, nbases):
 
-    defLvl = listofFillvl[2]
+    defLvl = Fillvl
     print("defLvl : {}".format(defLvl))
     matrixTransposed = [[lista[j][i] for j in range(len(lista))] for i in range(len(lista[0]))] 
 

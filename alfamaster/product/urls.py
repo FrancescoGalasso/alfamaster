@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^', include('accounts.urls')),
     # url(r'^product/csv/$', views.download_csv, name='download_csv'),
     url(r'^bases/$', views.retrieveBasesAndFillvl, name='retrieveBasesAndFillvl'),
+    url(r'^master/$', views.retrieveMaster, name='retrieveMaster'),
 ]

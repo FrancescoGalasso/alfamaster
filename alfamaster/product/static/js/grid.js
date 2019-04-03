@@ -1001,6 +1001,7 @@ function verify(event){
             $('#main-dashboard-inner-newpage-table-master').css("display", "inline")
             // $('#btn_update_save').css("visibility", "visible");
             $('#main-dashboard-form-save').css('display', 'inline')
+            generateDataMasterFromServer()
         }
     }
 }
@@ -1137,6 +1138,7 @@ function hideOrShowElements(action){
             $('#main-dashboard-inner-newpage-table-fillcalculation tbody').empty()
             $('#main-dashboard-inner-newpage-table-fillcalculation tbody').append('<tr><td></td><td></td><td></td></tr>')
             $('#main-dashboard-inner-newpage-table-master').css('display', 'none')
+            $('#main-dashboard-inner-newpage-table-master tbody').empty()
             $("#main-dashboard-inner-colorstrength-btn-verify").css({ 'cursor' : '', 'pointer-events' : '' , 'opacity' : ''});
             $('#main-dashboard-form-save').css('display', 'none')
           break;
@@ -1147,9 +1149,7 @@ function hideOrShowElements(action){
       }
 }
 
-function generateDataFromServer() {
-
-    hideOrShowElements("calculateBases")
+function retrivePayloadFromTableBases() {
 
     var nofRawMat = $("#generatedTable > tbody > tr").length
 
@@ -1165,7 +1165,30 @@ function generateDataFromServer() {
     inputMatrix.push(rowsData)
     }
 
-    var matrix = JSON.stringify(inputMatrix, undefined, 2)
+    return JSON.stringify(inputMatrix, undefined, 2)
+
+}
+
+function generateDataFromServer() {
+
+    hideOrShowElements("calculateBases")
+
+    // var nofRawMat = $("#generatedTable > tbody > tr").length
+
+    // inputMatrix = []
+    // for (var i=0; i < nofRawMat; i++) {
+    //     rowsData = []
+    //     var colValue = $("#generatedTable tbody tr:eq("+i+")");
+    //     var numofCellsRow = colValue.find('td').length
+    //     for (var j=0; j < numofCellsRow; j++) {
+    //         value = colValue.find('td:eq('+j+')')
+    //         rowsData.push(value.text())
+    //     }
+    // inputMatrix.push(rowsData)
+    // }
+
+    // var matrix = JSON.stringify(inputMatrix, undefined, 2)
+    var matrix = retrivePayloadFromTableBases()
     var payload = {'payload':matrix}
 
     $.ajax({
@@ -1182,6 +1205,30 @@ function generateDataFromServer() {
 
         // TODO: check if this must be moved outsite in some specific function
         $('#main-dashboard-inner-colorstrength').css("visibility", "visible")
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+        //  serrorFunction();
+        console.log("ERROR callback")
+        alert("ERROR!") }
+    );
+}
+
+function generateDataMasterFromServer() {
+
+    var matrix = retrivePayloadFromTableBases()
+    var defLvl = $('#main-dashboard-inner-newpage-table-fillcalculation tbody tr:last td:nth-child(3)').text()
+    console.log(defLvl)
+    var payload = {'payloadBases': matrix, 'payloadLvl': defLvl}
+
+    $.ajax({
+        url: '/master/',
+        type: 'POST',
+        data: payload,
+    })
+    .done(function (data) {
+        console.log("SUCCESS Master callback")
+        var reply = data['replyFromServer']
+        populateTableMasterWithDataFromServer(reply)
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
         //  serrorFunction();
@@ -1211,4 +1258,28 @@ function populateTableFillvlWithDataFromServer(payload) {
         newValue = payload[j]
         colValue.find('td:eq('+j+')').text(newValue)
     }
+}
+
+function populateTableMasterWithDataFromServer(reply) {
+    // tabella -> #main-dashboard-inner-newpage-table-master
+    // var colValue = $("#main-dashboard-inner-newpage-table-fillcalculation > table > tbody > tr:eq(0)");
+    // var numofCellsRow = colValue.find('td').length
+    // for (var j=0; j < numofCellsRow; j++) {
+    //     newValue = payload[j]
+    //     colValue.find('td:eq('+j+')').text(newValue)
+    // }
+
+    // for (var i = 0; i < reply[0].length; i ++){
+    //     for (var j = 0; j < reply[0].)
+    // }
+
+    $.each(reply, function(index, array) { // This each iterates over the arrays.
+        $('#main-dashboard-inner-newpage-table-master tbody').append('<tr></tr>')
+        $.each(array, function(subindex, value) { // This each iterates over the individual values.
+          console.log(value); // Logs the individual values.
+          $row = $('#main-dashboard-inner-newpage-table-master tbody tr:last')
+          $row.append('<td>'+value+'</td>')
+        });
+        console.log("...")
+    });
 }
