@@ -67,7 +67,8 @@ def product_detail(request, pk):
             print("nbases -> {}".format(nbases))
             print("matrixList -> {}".format(matrixList))
 
-            master = calculateMasterToHtml(matrixList, prod_lvl_fill, nbases)
+            _lista = matrixList[2:-1]    # no op on header and footer arrays
+            master = calculateMasterToHtml(_lista, prod_lvl_fill, nbases)
 
             return render(request, 'product/product_detail.html', {
                 'list': matrixList,

@@ -295,8 +295,7 @@ def calculateMasterToHtml(lista, listofFillvl, nbases):
 
     defLvl = listofFillvl[2]
     print("defLvl : {}".format(defLvl))
-    _lista = lista[2:-1]    # no op on header and footer arrays
-    matrixTransposed = [[_lista[j][i] for j in range(len(_lista))] for i in range(len(_lista[0]))] 
+    matrixTransposed = [[lista[j][i] for j in range(len(lista))] for i in range(len(lista[0]))] 
 
     matrixofVV = []
     listofRawMatNames = []
