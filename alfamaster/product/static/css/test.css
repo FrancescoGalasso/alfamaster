@@ -293,6 +293,10 @@ input[type=number]::-webkit-outer-spin-button {
     text-align: center !important;
 }
 
+#main-dashboard-inner-newpage-table-master {
+    display: none;
+}
+
 /* 3.4 Component - Button */
 
 /* 3.4.1 Component - Button - list.html */

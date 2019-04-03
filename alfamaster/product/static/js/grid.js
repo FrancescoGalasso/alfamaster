@@ -943,8 +943,6 @@ function startLabTest(){
 
 function verify(event){
     var resultTest = $("#main-dashboard-inner-colorstrength-checktest input:last")
-    console.log("resultTest")
-    console.log(resultTest)
     if(resultTest.val() != ""){
         if(resultTest.val() <= parseInt(supInput) && resultTest.val() >= parseInt(infInput)){
             testOK=true
@@ -1000,14 +998,13 @@ function verify(event){
             $(event.target).css("pointer-events", "none")
             row.append("    TEST PASSED")
 
-            var form_update_save = document.getElementById("save")
-            if(form_update_save){
-                form_update_save.style.display = "block"
-            }
-            $('#btn_update_save').css("visibility", "visible");
+            $('#main-dashboard-inner-newpage-table-master').css("display", "inline")
+            // $('#btn_update_save').css("visibility", "visible");
+            $('#main-dashboard-form-save').css('display', 'inline')
         }
     }
 }
+
 /*
 *
 *               Document ready 
@@ -1130,8 +1127,29 @@ $( document ).ready(function() {
     }
 });
 
+function hideOrShowElements(action){
+
+    switch(action) {
+        case "calculateBases":
+            $("#main-dashboard-inner-newpage-table-fillcalculation").css("display", "none")
+            $('#main-dashboard-inner-colorstrength').css("visibility", "hidden")
+            $('#main-dashboard-inner-colorstrength-checktest').css("visibility", "hidden")
+            $('#main-dashboard-inner-newpage-table-fillcalculation tbody').empty()
+            $('#main-dashboard-inner-newpage-table-fillcalculation tbody').append('<tr><td></td><td></td><td></td></tr>')
+            $('#main-dashboard-inner-newpage-table-master').css('display', 'none')
+            $("#main-dashboard-inner-colorstrength-btn-verify").css({ 'cursor' : '', 'pointer-events' : '' , 'opacity' : ''});
+            $('#main-dashboard-form-save').css('display', 'none')
+          break;
+        default:
+          // code block
+          alert("default")
+
+      }
+}
 
 function generateDataFromServer() {
+
+    hideOrShowElements("calculateBases")
 
     var nofRawMat = $("#generatedTable > tbody > tr").length
 

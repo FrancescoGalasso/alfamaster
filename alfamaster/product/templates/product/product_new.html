@@ -85,10 +85,25 @@
     </div>
 </div>
 <br>
-<div id="tableMaster"></div>
+<div id="main-dashboard-inner-newpage-table-master">
+    <table>
+        <caption class="table-caption">MASTER</caption>
+        <thead>
+            <tr><th>Raw material</th>
+            <th>TiO<sub>2</sub> removing [ml]</th>
+            <th>%<sub>v/v</sub></th>
+            <th>g/100mL</th>
+            <th>%<sub>w/w</sub></th>
+            <th style="width: 125px;">Formula Cost</th>
+        </tr></thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
 <br>
 
-<div id="save">
+<!-- <div id="save"> -->
+<div id="main-dashboard-form-save">
     <form action='.' method='POST'> {% csrf_token %}
         <input type='hidden' name='name' />
         <input type='hidden' name='data' />
