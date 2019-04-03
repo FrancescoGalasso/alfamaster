@@ -971,7 +971,6 @@ function verify(event){
             check.append(newRow)
             row.append("    TEST FAILED")
 
-            // var rowtableFillCalculation = $('#tableFillCalculation tr:last')
             var text1 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(1)').text()
             var text2 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(2)').text()
             var text3 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(3)').text()
@@ -992,15 +991,10 @@ function verify(event){
 
             counterTest++
             flag = false
-            // generateDataMaster()
         }else{
             $(event.target).css("opacity", 0.65)    
             $(event.target).css("pointer-events", "none")
             row.append("    TEST PASSED")
-
-            // // $('#main-dashboard-inner-newpage-table-master').css("display", "inline")
-            // // $('#btn_update_save').css("visibility", "visible");
-            // // $('#main-dashboard-form-save').css('display', 'inline')
             generateDataMasterFromServer()
         }
     }
@@ -1268,14 +1262,11 @@ function populateTableFillvlWithDataFromServer(payload) {
 }
 
 function populateTableMasterWithDataFromServer(reply) {
-    // tabella -> #main-dashboard-inner-newpage-table-master
-    $.each(reply, function(index, array) { // This each iterates over the arrays.
+    $.each(reply, function(index, array) {
         $('#main-dashboard-inner-newpage-table-master tbody').append('<tr></tr>')
-        $.each(array, function(subindex, value) { // This each iterates over the individual values.
-          console.log(value); // Logs the individual values.
+        $.each(array, function(subindex, value) {
           $row = $('#main-dashboard-inner-newpage-table-master tbody tr:last')
           $row.append('<td>'+value+'</td>')
         });
-        console.log("...")
     });
 }
