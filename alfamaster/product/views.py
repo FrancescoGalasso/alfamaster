@@ -112,35 +112,40 @@ def product_new(request):
     print(request.GET)
     print(request.POST)
     if request.method == "POST":
-        # import pdb; pdb.set_trace()
-        my_product_name = request.POST.get('name')
-        my_product_data = request.POST.get('data')
-        my_product_rev = request.POST.get('revision')
-        my_product_currency= request.POST.get('currency')
-        my_product_lvl_fill = request.POST.get('lvl_fill')
-        my_product_lvl_fill = list(map(int, my_product_lvl_fill.split(" ")))
-        if(my_product_rev):
-            print("revision -> "+str(my_product_rev))
-        elif (my_product_rev is None):
-            my_product_rev = 0
 
-        data = json.loads(my_product_data)
+        formula_name = request.POST.get('main-dashboard-form-save-input-name')
+        formula_data = request.POST.get('main-dashboard-form-save-input-data')
+        formula_currency = request.POST.get('main-dashboard-form-save-input-currency')
+        formula_fillvl = request.POST.get('main-dashboard-form-save-input-fillvl')
+        formula_revision = request.POST.get('main-dashboard-form-save-input-revision')
+        formula_pk = request.POST.get('main-dashboard-form-save-input-pk')
+
+        # print("{}, {}, {}, {}, {}, {}".format(formula_name, formula_data, formula_currency, formula_fillvl, formula_revision, formula_pk))
+
+        _formula_revision = int(formula_revision)
+        if(_formula_revision > 0):
+            _formula_revision += 1
+
+        _data = json.loads(formula_data)
+        data = convertMatrixToBasesList(_data)
+
         if request.user.is_authenticated():
             username = request.user.username
 
         try:
-            my_product = Product.objects.create(name=my_product_name, owner=username, currencies=my_product_currency)
+            my_product = Product.objects.create(name=formula_name, owner=username, currencies=formula_currency)
             my_product.save()
-            History.objects.create(data=my_product_data, revision=my_product_rev, product_id=my_product.id,lvl_fill=my_product_lvl_fill)
+            _formula_fillvl = list(map(int, formula_fillvl.split(" ")))
+            History.objects.create(data=data, revision=formula_revision, product_id=my_product.id,lvl_fill=_formula_fillvl)
             messages.success(request, "The product %s has been successfully created" % my_product.name.upper())
         except Exception as e:
             import traceback
             stdlogger.warning("        +++ [warning] Exception raised!")
             stdlogger.warning("type error: " + str(e))
             stdlogger.warning("traceback :\n"+traceback.format_exc())
-            my_product_just_created = Product.objects.latest('id')
-            my_product_just_created.delete()
-            # redirect to HOME
+            formula_just_created = Product.objects.latest('id')
+            formula_just_created.delete()
+        # redirect to HOME
         return HttpResponseRedirect("/")
 
     return render(request, "product/product_new.html")
@@ -151,25 +156,26 @@ def product_save(request):
     print(request.GET)
     print(request.POST)
     if request.method == "POST":
-        my_product_pk = request.POST.get('pk')
-        my_product_data = request.POST.get('data')
-        my_product_rev = request.POST.get('revision')
-        my_product_lvl_fill = request.POST.get('lvl_fill')
+
+        print(request.POST.keys())
+
+        formula_name = request.POST.get('main-dashboard-form-save-input-name')
+        formula_data = request.POST.get('main-dashboard-form-save-input-data')
+        formula_currency = request.POST.get('main-dashboard-form-save-input-currency')
+        formula_fillvl = request.POST.get('main-dashboard-form-save-input-fillvl')
+        formula_revision = request.POST.get('main-dashboard-form-save-input-revision')
+        formula_pk = request.POST.get('main-dashboard-form-save-input-pk')
 
         # my_product_currency= request.POST.get('currency')
 
-        if(my_product_rev):
-            print("revision -> "+str(my_product_rev))
-        elif (my_product_rev is None):
-            my_product_rev = 0
+        if(int(formula_revision) > 0):
+            formula_revision += 1
 
-        data = json.loads(my_product_data)
-        # if request.user.is_authenticated():
-        #     username = request.user.username
+        data = json.loads(formula_data)
         stdlogger.info("        +++ [info] new History object created")
         lvl_fill = list(map(int, my_product_lvl_fill.split(" ")))
-        History.objects.create(data=data, revision=my_product_rev, product_id=my_product_pk, lvl_fill=lvl_fill)
-        obj = Product.objects.get(pk=my_product_pk)
+        History.objects.create(data=formula_data, revision=formula_revision, product_id=formula_pk, lvl_fill=formula_fillvl)
+        obj = Product.objects.get(pk=formula_pk)
         messages.info(request, "The product %s has been successfully updated" % obj.name.upper())
             # redirect to HOME
         return HttpResponseRedirect("/")
@@ -267,17 +273,14 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def retrieveBasesAndFillvl(request):
-    # import pdb; pdb.set_trace()
     print(request.POST.keys())
     if request.method == 'POST' and 'payload' in request.POST.keys():
-        print("server side!")
         _payload = request.POST['payload']
         payload = json.loads(_payload)
 
         for array in payload:
             for k,item in enumerate(array):
                 if not item:
-                    # print("empty item? {}:{}".format(k,item))
                     array[k] = None
 
         nbases = int( (len(payload[0]) - 3 ) / 5)
@@ -299,13 +302,10 @@ def retrieveBasesAndFillvl(request):
 def retrieveMaster(request):
     print(request.POST.keys())
     if request.method == 'POST' and ( 'payloadBases' and 'payloadLvl' in request.POST.keys() ) :
-        print("server side!")
         _payload1 = request.POST['payloadBases']
         payload1 = json.loads(_payload1)
         _payload2 = request.POST['payloadLvl']
         payload2 = json.loads(_payload2)
-        print(payload1)
-        print(payload2)
 
         for array in payload1:
             for k,item in enumerate(array):

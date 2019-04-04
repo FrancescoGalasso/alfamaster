@@ -33,13 +33,13 @@
 
 </div>
 
-<input id="nameProduct" type="text" name="firstname" placeholder="Type product's name"><br>
-<div id = "money">Select your currencies  <select id="currencies">
+<input id="main-dashboard-inner-grid-container-input-formula-name" type="text" name="firstname" placeholder="Type product's name"><br>
+<div id = "money">Select your currencies  <select id="main-dashboard-inner-grid-container-select-formula-currency">
     </select></div>
 <br>
 
 
-<div id="myGeneratedTable"></div>
+<div id="main-dashboard-inner-table-bases"></div>
 <br>
 <div id="addorRemoveRawMat">
     <button type="button" class="btn btn-info btn-xs" id="addRawMat" onclick="addMoreLines()">
@@ -105,10 +105,12 @@
 <!-- <div id="save"> -->
 <div id="main-dashboard-form-save">
     <form action='.' method='POST'> {% csrf_token %}
-        <input type='hidden' name='name' />
-        <input type='hidden' name='data' />
-        <input type='hidden' name='currency' />
-        <input type='hidden' name='lvl_fill' />
+        <input type='hidden' name='main-dashboard-form-save-input-name' />
+        <input type='hidden' name='main-dashboard-form-save-input-data' />
+        <input type='hidden' name='main-dashboard-form-save-input-currency' />
+        <input type='hidden' name='main-dashboard-form-save-input-fillvl' />
+        <input type='hidden' name='main-dashboard-form-save-input-revision'/>
+        <input type='hidden' name='main-dashboard-form-save-input-pk' />
         <input type='submit' onclick=saveProduct() value='Save' />
     </form>
 </div>

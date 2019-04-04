@@ -81,6 +81,60 @@ def convertBasesListToArray(bases):
 
     return basesListToArray
 
+def convertMatrixToBasesList(matrix):
+
+    # data : [ {
+    # "raw_material" :
+    # "specific_weight" :
+    # "RM_cost" :
+    # "bases" : [ ... ]
+    # } ]
+
+    listofIndexs = [0,1,2,3,8,13]
+    print("len(matrix[0]) : {}".format(len(matrix[0])))
+    nbases = (len(matrix[0]) - 3) / 5
+    print("nbases : {}".format(nbases))
+
+    if nbases > 3:
+        nbasesDefault = len(listofIndexs)
+        missingIndex = nbases - nbasesDefault
+        for i in range(missingIndex):
+            try:
+                lastVal = listofIndex[-1]
+                lastVal += int(numofRawMat)
+                listofIndexs.append(lastVal)
+            except:
+                print(" @ exception @")
+                break
+
+    data = {}
+    arr = []
+    for n in matrix:
+        obj = {}
+        arr2 = []
+        for k,v in enumerate(n):
+            for idx in listofIndexs:
+                if k == idx and idx < 3:
+                    if k == 0:
+                        obj['raw_material'] = v
+                    elif k == 1:
+                        obj['specific_weight'] = v
+                    elif k == 2:
+                        obj['RM_cost'] = v
+                elif k == idx and idx >= 3:
+                    objBase = {}
+                    objBase['g_100g'] = v
+                    arr2.append(objBase)
+
+        print("obj : {}".format(obj))
+        print("objBase : {}".format(objBase))
+        obj['bases'] = arr2
+        arr.append(obj)
+
+    print("arr :\n{}".format(arr))
+
+    return matrix
+
 def populateMatrixFormulaBody(matrixFormula, nbases):
     # this formula has no header no footer
     sum_ml100g = 0

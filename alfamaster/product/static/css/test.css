@@ -24,6 +24,7 @@
         3.4.2 Component - Button - detail.html 
     3.5 Component - Modal Setting
     3.6 Component - Color Strength Setting
+    3.7 Component - Select Elements
 */
 
 /* -------------------------------
@@ -213,6 +214,11 @@ td {
     margin-top: 10px;
 }
 
+#main-dashboard-inner-grid-container-input-formula-name {
+    display:none;
+    margin-top: 30px;
+}
+
 /* select first 2 div inside class */
 .main-dashboard-inner-grid-container div:nth-child(-n+3), .main-dashboard-inner-grid-container-colorstrength div {
     font-weight: bold;
@@ -390,13 +396,15 @@ div.modal-footer form {
     padding-left:220;
 }
 
+/* 3.7 Component - Select Elements */
+
+#main-dashboard-inner-grid-container-select-formula-currency {
+    margin-left: 65px;
+    height: 25px;
+}
+
 /**********************/
 
-
-#nameProduct{
-    display:none;
-    margin-top: 30px;
-}
 
 #generateBtn {
     margin-top: 10px;
@@ -445,10 +453,6 @@ div.modal-footer form {
     display:none;
 }
 
-#currencies{
-    margin-left: 65px;
-    height: 25px;
-}
 
 #products{
     font-size: 17px;

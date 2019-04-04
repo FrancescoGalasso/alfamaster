@@ -46,7 +46,7 @@ function generateTable(id){
     var thead_col = ["Raw material", "Specific weight [g/mL]", "RM cost"]
     var thead_col_base = ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost"]
     var thead_col_master = ["TiO<sub>2</sub> removing", "%<sub>v/v</sub>", "g/100mL", "%<sub>w/w</sub>", "Formula Cost"]
-    var myTableDiv = document.getElementById("myGeneratedTable")
+    var myTableDiv = document.getElementById("main-dashboard-inner-table-bases")
 
     var table = document.createElement('TABLE')
     table.id = "generatedTable"
@@ -418,7 +418,7 @@ function hideGridGenerator(){
  * Set display = "none" to input #nameProduct and to button #btn_calculate
  */
 function clean_after_wrong_input(){
-    var name_product = document.getElementById('nameProduct')
+    var name_product = document.getElementById('main-dashboard-inner-grid-container-input-formula-name')
     name_product.style.display = "none"
     var calculate_btn = document.getElementById('btn_calculate')
     calculate_btn.style.display = "none"
@@ -577,7 +577,7 @@ function showGenerateBtn(){
         btn.style.display = "block";
     }
 
-    var btn_prodName = document.getElementById("nameProduct")
+    var btn_prodName = document.getElementById("main-dashboard-inner-grid-container-input-formula-name")
     if(btn_prodName){
         btn_prodName.style.display = "block"
     }
@@ -598,56 +598,68 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-function saveProduct(rev,currency) {
-    console.log("currency  ->   "   +   currency)
-    var jsonData = createJson()
-    var input_test = document.getElementsByName("name")[0]
-    var input_prod_name = document.getElementById("nameProduct")
-    if (input_prod_name){
-        var value = input_prod_name.value
-        input_test.value = value
-    }
-    // } else {
-    //     var value = $("h2").html()
-    //     console.log(value)
-    //     input_test.value = value
-    // }
+$.fn.elemExists = function() { 
+    return this.length; 
+}
 
-    var _input_test = document.getElementsByName("pk")[0]
-    if(typeof pk !== "undefined"){
-        if(pk){
-            _input_test.value = pk
+function saveProduct() {
+
+    if ($('[name="main-dashboard-form-save-input-name"]').elemExists()) {
+        var formulaName = $('#main-dashboard-inner-grid-container-input-formula-name').val()
+        $('[name="main-dashboard-form-save-input-name"]').val(formulaName)
+    }
+
+    if ($('[name="main-dashboard-form-save-input-data"]').elemExists()) {
+
+        var arrData = []
+        $('#main-dashboard-inner-table-bases > table > tbody  > tr').each(function(index, trow){
+			var currentRow=$(this);
+            var tmp = currentRow.find('td')
+            var cellData = [] 
+            tmp.each(function(subindex, cell){
+                var currentCell=$(this)
+                // console.log(currentCell.text())
+                cellData.push(currentCell.text())
+            });
+            arrData.push(cellData)
+        });
+        
+        console.log(arrData)
+        $('[name="main-dashboard-form-save-input-data"]').val(JSON.stringify(arrData, undefined, 2))
+    }
+
+    if ($('[name="main-dashboard-form-save-input-currency"]').elemExists()) {
+        var currency = ''
+        if($( "#main-dashboard-inner-grid-container-select-formula-currency").elemExists()) {
+            currency = $( "#main-dashboard-inner-grid-container-select-formula-currency option:selected" ).text();
+        } else {
+            currency = "default"
         }
+        $('[name="main-dashboard-form-save-input-currency"]').val(currency)
     }
 
-    var input_test2 = document.getElementsByName("data")[0]
-    input_test2.value = jsonData
-
-    console.log("revision -> "+rev)
-    var input_test3 =  document.getElementsByName("revision")[0]
-    if(input_test3){
-        input_test3.value = rev
+    if ($('[name="main-dashboard-form-save-input-fillvl"]').elemExists()) {
+        var slurryVol = $('#main-dashboard-inner-newpage-table-fillcalculation table tbody tr:last td:nth-child(1)').text()
+        var fillvl = 100 - parseInt(slurryVol)
+        var listofFillvl = slurryVol+" "+fillvl+" "+ fillvl
+        $('[name="main-dashboard-form-save-input-fillvl"]').val(listofFillvl)
     }
 
-    if(currency == null || currency == ''){
-        currency = $( "#currencies option:selected" ).text();
-    }
-    var input_test4 =  document.getElementsByName("currency")[0]
-    if(input_test4){
-        input_test4.value = currency
-    } else if(prod_currency){
-        input_test4.value = prod_currency
+    if ($('[name="main-dashboard-form-save-input-revision"]').elemExists()) {
+        var revision = ''
+        if ($('h4 > strong').elemExists()){
+            revision = $('h4 > strong').text()
+        } else {
+            revision = 0
+        }
+        $('[name="main-dashboard-form-save-input-revision"]').val(revision)
     }
 
-    var rowtableFillCalculation = $('#tableFillCalculation tr:last')
-    if(rowtableFillCalculation){
-        var text1 = $('#tableFillCalculation tr:last td:nth-child(1)').text()
-        var text2 = $('#tableFillCalculation tr:last td:nth-child(2)').text()
-        // var text3 = $('#tableFillCalculation tr:last td:nth-child(3)').text()
-        var lvl_fill = text1+" "+text2+" "+ text2
-        var input_test5 =  document.getElementsByName("lvl_fill")[0]
-        if(input_test5){
-            input_test5.value = lvl_fill
+    if ($('[name="main-dashboard-form-save-input-pk"]').elemExists()) {
+        if(typeof pk !== "undefined"){
+            if(pk){
+                $('[name="main-dashboard-form-save-input-pk"]').val(pk)
+            }
         }
     }
 
@@ -655,21 +667,25 @@ function saveProduct(rev,currency) {
 
 function createJson(){
 
-    var update_table = document.getElementById('tdetail')
-    var new_table = document.getElementById('generatedTable')
-    var table_name = ""
-    var numberofBases = 0
-    if(update_table){
-        table_name = "tdetail"
-        numberofBases = document.getElementById('tdetail').rows[0].cells.length -3
-    } else if(new_table){
-        table_name = "generatedTable"
-        numberofBases = global_num_bases
-    }
-    var listofRawMaterialNames = $('#'+table_name+' tbody tr td:nth-child(1)').get()
-    var listofIndexInput = [2,3,4,9]
+    // var update_table = document.getElementById('tdetail')
+    // var new_table = document.getElementById('generatedTable')
+    // var table_name = ""
+    // var numberofBases = 0
+    // if(update_table){
+    //     table_name = "tdetail"
+    //     numberofBases = document.getElementById('tdetail').rows[0].cells.length -3
+    // } else if(new_table){
+    //     table_name = "generatedTable"
+    //     numberofBases = global_num_bases
+    // }
+
+    var numofCells = $('#main-dashboard-inner-table-bases tbody tr:first td').length;
+    var numberofBases = ( parseInt(numofCells) - 3 ) / 5
     console.log(numberofBases)
-    if(numberofBases >1){
+
+    var listofRawMaterialNames = $('#main-dashboard-inner-table-bases tbody tr td:nth-child(1)').get()
+    var listofIndexInput = [2,3,4,9]
+    if(numberofBases >2){
         for(var i=2; i<=numberofBases; i++){
             var lastIndex = listofIndexInput[listofIndexInput.length-1]
             var newIndex = lastIndex+5
@@ -678,12 +694,13 @@ function createJson(){
     }
     var listofImputs = []
     for(var i=0; i<listofIndexInput.length; i++){
-        if($('#'+table_name+' tbody tr td:nth-child('+listofIndexInput[i]+')').length){ 
-            var listofSingleBaseInput = $('#'+table_name+' tbody tr td:nth-child('+listofIndexInput[i]+')').get()
+        if($('#main-dashboard-inner-table-bases tbody tr td:nth-child('+listofIndexInput[i]+')').length){ 
+            var listofSingleBaseInput = $('#main-dashboard-inner-table-bases tbody tr td:nth-child('+listofIndexInput[i]+')').get()
             listofImputs.push(listofSingleBaseInput)
         }
     }
 
+    console.log(listofImputs)
     
             // loop for the creation of the JSON
     var _q = ""
@@ -1033,7 +1050,7 @@ $( document ).ready(function() {
     for (var i=0;i<coinages.length;i++){
        option += '<option value="'+ coinages[i] + '">' + coinages[i] + '</option>';
     }
-    $('#currencies').append(option);
+    $('#main-dashboard-inner-grid-container-select-formula-currency').append(option);
 
     console.log("doc ready!")
 
@@ -1167,21 +1184,6 @@ function generateDataFromServer() {
 
     hideOrShowElements("calculateBases")
 
-    // var nofRawMat = $("#generatedTable > tbody > tr").length
-
-    // inputMatrix = []
-    // for (var i=0; i < nofRawMat; i++) {
-    //     rowsData = []
-    //     var colValue = $("#generatedTable tbody tr:eq("+i+")");
-    //     var numofCellsRow = colValue.find('td').length
-    //     for (var j=0; j < numofCellsRow; j++) {
-    //         value = colValue.find('td:eq('+j+')')
-    //         rowsData.push(value.text())
-    //     }
-    // inputMatrix.push(rowsData)
-    // }
-
-    // var matrix = JSON.stringify(inputMatrix, undefined, 2)
     var matrix = retrivePayloadFromTableBases()
     var payload = {'payload':matrix}
 
