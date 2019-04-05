@@ -3,18 +3,15 @@ from django.utils import timezone
 from .models import Product
 from .models import History
 from django.shortcuts import render, get_object_or_404, get_list_or_404
-import json
 from django.http import HttpResponse, HttpResponseNotFound, Http404,  HttpResponseRedirect
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-# framework messages
 from django.contrib import messages
-# from .utils import basesListToHtml, calculateFillToHtml, calculateMasterToHtml, populateMatrixFormulaBody
 from .utils import *
+import json
 import traceback
-
-# Python logging package
 import logging
+
 # Standard instance of a logger with __name__
 stdlogger = logging.getLogger(__name__)
 
@@ -64,8 +61,8 @@ def product_detail(request, pk):
 
             matrixList = basesListToHtml(lista, prod_currency)
             nbases = int( (len(matrixList[3]) - 3 ) / 5)
-            print("nbases -> {}".format(nbases))
-            print("matrixList -> {}".format(matrixList))
+            # print("nbases -> {}".format(nbases))
+            # print("matrixList -> {}".format(matrixList))
 
             _lista = matrixList[2:-1]    # no op on header and footer arrays
             _fillvl = prod_lvl_fill[2]
