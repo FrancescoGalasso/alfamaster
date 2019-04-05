@@ -565,72 +565,6 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-$.fn.elemExists = function() { 
-    return this.length; 
-}
-
-function saveProduct() {
-
-    if ($('[name="main-dashboard-form-save-input-name"]').elemExists()) {
-        var formulaName = $('#main-dashboard-inner-grid-container-input-formula-name').val()
-        $('[name="main-dashboard-form-save-input-name"]').val(formulaName)
-    }
-
-    if ($('[name="main-dashboard-form-save-input-data"]').elemExists()) {
-
-        var arrData = []
-        $('#main-dashboard-inner-table-bases > table > tbody  > tr').each(function(index, trow){
-			var currentRow=$(this);
-            var tmp = currentRow.find('td')
-            var cellData = [] 
-            tmp.each(function(subindex, cell){
-                var currentCell=$(this)
-                // console.log(currentCell.text())
-                cellData.push(currentCell.text())
-            });
-            arrData.push(cellData)
-        });
-        
-        $('[name="main-dashboard-form-save-input-data"]').val(JSON.stringify(arrData, undefined, 2))
-    }
-
-    if ($('[name="main-dashboard-form-save-input-currency"]').elemExists()) {
-        var currency = ''
-        if($( "#main-dashboard-inner-grid-container-select-formula-currency").elemExists()) {
-            currency = $( "#main-dashboard-inner-grid-container-select-formula-currency option:selected" ).text();
-        } else {
-            currency = "default"
-        }
-        $('[name="main-dashboard-form-save-input-currency"]').val(currency)
-    }
-
-    if ($('[name="main-dashboard-form-save-input-fillvl"]').elemExists()) {
-        var slurryVol = $('#main-dashboard-inner-newpage-table-fillcalculation table tbody tr:last td:nth-child(1)').text()
-        var fillvl = 100 - parseInt(slurryVol)
-        var listofFillvl = slurryVol+" "+fillvl+" "+ fillvl
-        $('[name="main-dashboard-form-save-input-fillvl"]').val(listofFillvl)
-    }
-
-    if ($('[name="main-dashboard-form-save-input-revision"]').elemExists()) {
-        var revision = ''
-        if ($('h4 > strong').elemExists()){
-            revision = $('h4 > strong').text()
-        } else {
-            revision = 0
-        }
-        $('[name="main-dashboard-form-save-input-revision"]').val(revision)
-    }
-
-    if ($('[name="main-dashboard-form-save-input-pk"]').elemExists()) {
-        if(typeof pk !== "undefined"){
-            if(pk){
-                $('[name="main-dashboard-form-save-input-pk"]').val(pk)
-            }
-        }
-    }
-
-}
-
 function download_csv(rev){
     var title = document.getElementsByTagName("h2")
     var name = title[0].innerText
@@ -789,135 +723,9 @@ function showLessDetailsMaster(){
     }
 }
 
-
-function addMoreLines(){
-
-    var tableBody = $('#generatedTable').find("tbody")
-    var trLast = tableBody.find("tr:last")
-    var trNew = trLast.clone()
-    trNew.children().text("")
-    if(global_num_raw_material >= 3){
-        var tdNew = trNew.find("td:first")
-        tdNew.attr("contentEditable","true");
-        tdNew.css( "background-color", "rgb(255, 255, 0)")
-    }
-    trLast.after(trNew)
-
-    global_more_rawMaterial += 1
-    if(global_more_rawMaterial > 0){
-        var remBtn = $('#main-dashboard-inner-grid-container-addremove-btn-remove')
-        remBtn.css("cursor", "auto")
-        remBtn.css("pointer-events", "auto")
-        remBtn.css("opacity", 1)
-    }
-    global_num_raw_material ++
-}
-
-function removeLastRawMatAdded(){
-    var tableBody = $('#generatedTable').find("tbody")
-    var trLast = tableBody.find("tr:last")
-    trLast.remove()
-    global_more_rawMaterial -= 1
-
-    if(global_more_rawMaterial < 1){
-        var remBtn = $('#main-dashboard-inner-grid-container-addremove-btn-remove')
-        remBtn.css("cursor", "not-allowed")
-        remBtn.css("pointer-events", "none")
-        remBtn.css("opacity", 0.65)
-    }
-    global_num_raw_material --
-}
-
-var supInput = ""
-var infInput = ""
-var counterTest = 2
-var testOK = false
-var up = false
-
-function startLabTest(){
-    infInput = $('#main-dashboard-inner-grid-input-3').val()
-    supInput = $('#main-dashboard-inner-grid-input-4').val()
- 
-
-    if(supInput == "" || infInput == ""){
-        alert("fill all the input fields")
-    }else{
-        $('#main-dashboard-inner-colorstrength-checktest').css("visibility", "visible");
-    }
-    counterTest = 2
-
-    var verifyBtn = $('#main-dashboard-inner-colorstrength-btn-verify')
-    verifyBtn.css("cursor", "not-allowed")
-    verifyBtn.css("pointer-events", "none")
-    verifyBtn.css("opacity", 0.65)
-
-    $( ".test" ).remove();
-    var divCheckTest = $('#main-dashboard-inner-colorstrength-checktest')
-    divCheckTest.append('<div class="test">Test result n°1 <input id="r1" type="number" style="margin-left:20px; width: 51 !important;text-align: center;"> <button style="margin-left:1;" onclick="verify(event)">Verify</button></div>')
-}
-
-function verify(event){
-    var resultTest = $("#main-dashboard-inner-colorstrength-checktest input:last")
-    if(resultTest.val() != ""){
-        if(resultTest.val() <= parseInt(supInput) && resultTest.val() >= parseInt(infInput)){
-            testOK=true
-        }else if (resultTest.val() < parseInt(infInput)){
-            testOK=false
-            up = true
-        }else if(resultTest.val() > parseInt(supInput)){
-            testOK=false
-        }
-
-        var check = $('#main-dashboard-inner-colorstrength-checktest')
-        var row = $('#main-dashboard-inner-colorstrength-checktest').find("div:last")
-        if(!testOK){
-            var newRow = row.clone()
-    
-            $(event.target).css("opacity", 0.65)    
-            $(event.target).css("pointer-events", "none")
-
-            inputt =  newRow.find("input").val("")
-            inputt.css("margin-left", "24px")
-            btnn = newRow.find("button")
-            btnn.css("margin-left", "5px")
-            newRow.html("Test result n°"+counterTest)
-            newRow.append(inputt)
-            newRow.append(btnn)
-            check.append(newRow)
-            row.append("    TEST FAILED")
-
-            var text1 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(1)').text()
-            var text2 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(2)').text()
-            var text3 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(3)').text()
-
-            $('#main-dashboard-inner-newpage-table-fillcalculation tr:last').remove();
-            $("#main-dashboard-inner-newpage-table-fillcalculation table tbody").append('<tr><td><del>'+text1+'</del></td><td><del>'+text2+'</del></td><td><del>'+text3+'</del></td></tr>');
-
-            if(up){
-                text1 = parseInt(text1) + 1
-                text2 = parseInt(text2) - 1
-                text3 = text2
-            }else{
-                text1 = parseInt(text1) - 1
-                text2 = parseInt(text2) + 1
-                text3 = text2
-            }
-            $("#main-dashboard-inner-newpage-table-fillcalculation table tbody").append('<tr><td>'+text1+'</td><td>'+text2+'</td><td>'+text3+'</td></tr>');
-
-            counterTest++
-            flag = false
-        }else{
-            $(event.target).css("opacity", 0.65)    
-            $(event.target).css("pointer-events", "none")
-            row.append("    TEST PASSED")
-            generateDataMasterFromServer()
-        }
-    }
-}
-
 /*
 *
-*               Document ready 
+*               OK functions
 *
 */
 
@@ -1179,4 +987,195 @@ function populateTableMasterWithDataFromServer(reply) {
           $row.append('<td>'+value+'</td>')
         });
     });
+}
+
+function verify(event){
+    var resultTest = $("#main-dashboard-inner-colorstrength-checktest input:last")
+    if(resultTest.val() != ""){
+        if(resultTest.val() <= parseInt(supInput) && resultTest.val() >= parseInt(infInput)){
+            testOK=true
+        }else if (resultTest.val() < parseInt(infInput)){
+            testOK=false
+            up = true
+        }else if(resultTest.val() > parseInt(supInput)){
+            testOK=false
+        }
+
+        var check = $('#main-dashboard-inner-colorstrength-checktest')
+        var row = $('#main-dashboard-inner-colorstrength-checktest').find("div:last")
+        if(!testOK){
+            var newRow = row.clone()
+    
+            $(event.target).css("opacity", 0.65)    
+            $(event.target).css("pointer-events", "none")
+
+            inputt =  newRow.find("input").val("")
+            inputt.css("margin-left", "24px")
+            btnn = newRow.find("button")
+            btnn.css("margin-left", "5px")
+            newRow.html("Test result n°"+counterTest)
+            newRow.append(inputt)
+            newRow.append(btnn)
+            check.append(newRow)
+            row.append("    TEST FAILED")
+
+            var text1 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(1)').text()
+            var text2 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(2)').text()
+            var text3 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(3)').text()
+
+            $('#main-dashboard-inner-newpage-table-fillcalculation tr:last').remove();
+            $("#main-dashboard-inner-newpage-table-fillcalculation table tbody").append('<tr><td><del>'+text1+'</del></td><td><del>'+text2+'</del></td><td><del>'+text3+'</del></td></tr>');
+
+            if(up){
+                text1 = parseInt(text1) + 1
+                text2 = parseInt(text2) - 1
+                text3 = text2
+            }else{
+                text1 = parseInt(text1) - 1
+                text2 = parseInt(text2) + 1
+                text3 = text2
+            }
+            $("#main-dashboard-inner-newpage-table-fillcalculation table tbody").append('<tr><td>'+text1+'</td><td>'+text2+'</td><td>'+text3+'</td></tr>');
+
+            counterTest++
+            flag = false
+        }else{
+            $(event.target).css("opacity", 0.65)    
+            $(event.target).css("pointer-events", "none")
+            row.append("    TEST PASSED")
+            generateDataMasterFromServer()
+        }
+    }
+}
+
+var supInput = ""
+var infInput = ""
+var counterTest = 2
+var testOK = false
+var up = false
+
+function startLabTest(){
+    infInput = $('#main-dashboard-inner-grid-input-3').val()
+    supInput = $('#main-dashboard-inner-grid-input-4').val()
+ 
+
+    if(supInput == "" || infInput == ""){
+        alert("fill all the input fields")
+    }else{
+        $('#main-dashboard-inner-colorstrength-checktest').css("visibility", "visible");
+    }
+    counterTest = 2
+
+    var verifyBtn = $('#main-dashboard-inner-colorstrength-btn-verify')
+    verifyBtn.css("cursor", "not-allowed")
+    verifyBtn.css("pointer-events", "none")
+    verifyBtn.css("opacity", 0.65)
+
+    $( ".test" ).remove();
+    var divCheckTest = $('#main-dashboard-inner-colorstrength-checktest')
+    divCheckTest.append('<div class="test">Test result n°1 <input id="r1" type="number" style="margin-left:20px; width: 51 !important;text-align: center;"> <button style="margin-left:1;" onclick="verify(event)">Verify</button></div>')
+}
+
+function addMoreLines(){
+
+    var tableBody = $('#generatedTable').find("tbody")
+    var trLast = tableBody.find("tr:last")
+    var trNew = trLast.clone()
+    trNew.children().text("")
+    if(global_num_raw_material >= 3){
+        var tdNew = trNew.find("td:first")
+        tdNew.attr("contentEditable","true");
+        tdNew.css( "background-color", "rgb(255, 255, 0)")
+    }
+    trLast.after(trNew)
+
+    global_more_rawMaterial += 1
+    if(global_more_rawMaterial > 0){
+        var remBtn = $('#main-dashboard-inner-grid-container-addremove-btn-remove')
+        remBtn.css("cursor", "auto")
+        remBtn.css("pointer-events", "auto")
+        remBtn.css("opacity", 1)
+    }
+    global_num_raw_material ++
+}
+
+function removeLastRawMatAdded(){
+    var tableBody = $('#generatedTable').find("tbody")
+    var trLast = tableBody.find("tr:last")
+    trLast.remove()
+    global_more_rawMaterial -= 1
+
+    if(global_more_rawMaterial < 1){
+        var remBtn = $('#main-dashboard-inner-grid-container-addremove-btn-remove')
+        remBtn.css("cursor", "not-allowed")
+        remBtn.css("pointer-events", "none")
+        remBtn.css("opacity", 0.65)
+    }
+    global_num_raw_material --
+}
+
+$.fn.elemExists = function() { 
+    return this.length; 
+}
+
+function saveProduct() {
+
+    if ($('[name="main-dashboard-form-save-input-name"]').elemExists()) {
+        var formulaName = $('#main-dashboard-inner-grid-container-input-formula-name').val()
+        $('[name="main-dashboard-form-save-input-name"]').val(formulaName)
+    }
+
+    if ($('[name="main-dashboard-form-save-input-data"]').elemExists()) {
+
+        var arrData = []
+        $('#main-dashboard-inner-table-bases > table > tbody  > tr').each(function(index, trow){
+			var currentRow=$(this);
+            var tmp = currentRow.find('td')
+            var cellData = [] 
+            tmp.each(function(subindex, cell){
+                var currentCell=$(this)
+                // console.log(currentCell.text())
+                cellData.push(currentCell.text())
+            });
+            arrData.push(cellData)
+        });
+        
+        $('[name="main-dashboard-form-save-input-data"]').val(JSON.stringify(arrData, undefined, 2))
+    }
+
+    if ($('[name="main-dashboard-form-save-input-currency"]').elemExists()) {
+        var currency = ''
+        if($( "#main-dashboard-inner-grid-container-select-formula-currency").elemExists()) {
+            currency = $( "#main-dashboard-inner-grid-container-select-formula-currency option:selected" ).text();
+        } else {
+            currency = "default"
+        }
+        $('[name="main-dashboard-form-save-input-currency"]').val(currency)
+    }
+
+    if ($('[name="main-dashboard-form-save-input-fillvl"]').elemExists()) {
+        var slurryVol = $('#main-dashboard-inner-newpage-table-fillcalculation table tbody tr:last td:nth-child(1)').text()
+        var fillvl = 100 - parseInt(slurryVol)
+        var listofFillvl = slurryVol+" "+fillvl+" "+ fillvl
+        $('[name="main-dashboard-form-save-input-fillvl"]').val(listofFillvl)
+    }
+
+    if ($('[name="main-dashboard-form-save-input-revision"]').elemExists()) {
+        var revision = ''
+        if ($('h4 > strong').elemExists()){
+            revision = $('h4 > strong').text()
+        } else {
+            revision = 0
+        }
+        $('[name="main-dashboard-form-save-input-revision"]').val(revision)
+    }
+
+    if ($('[name="main-dashboard-form-save-input-pk"]').elemExists()) {
+        if(typeof pk !== "undefined"){
+            if(pk){
+                $('[name="main-dashboard-form-save-input-pk"]').val(pk)
+            }
+        }
+    }
+
 }
