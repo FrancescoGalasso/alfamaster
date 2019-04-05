@@ -17,7 +17,7 @@
 <script src="{% static 'js/grid.js' %}"></script>
 <!-- ================== END BASE JS ================== -->
 
-<div id=tips>
+<div id="main-dashboard-inner-container-tips">
     <div>
         <h5 style="font-weight: bold">TIPS</h5>
         <p>If your product does not contain the raw material Ext TiO2, it is recommended to set its specific gravity to 1 and all other values to 0, otherwise it will not be possible to continue.
@@ -41,12 +41,12 @@
 
 <div id="main-dashboard-inner-table-bases"></div>
 <br>
-<div id="main-dashboard-inner-grid-container-btn-addremove">
-    <button type="button" class="btn btn-info btn-xs" onclick="addMoreLines()">
+<div id="main-dashboard-inner-grid-container-addremove">
+    <button id="main-dashboard-inner-grid-container-addremove-btn-add" type="button" class="btn btn-info btn-xs" onclick="addMoreLines()">
         <span class="glyphicon glyphicon-plus"></span>
          raw material
     </button>
-    <button type="button" class="btn btn-info btn-xs" onclick="removeLastRawMatAdded()">
+    <button id="main-dashboard-inner-grid-container-addremove-btn-remove" type="button" class="btn btn-info btn-xs" onclick="removeLastRawMatAdded()">
         <span class="glyphicon glyphicon-minus"></span>
          last raw material
     </button>

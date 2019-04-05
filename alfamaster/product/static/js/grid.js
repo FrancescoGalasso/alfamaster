@@ -805,7 +805,7 @@ function addMoreLines(){
 
     global_more_rawMaterial += 1
     if(global_more_rawMaterial > 0){
-        var remBtn = $('#removeRawMat')
+        var remBtn = $('#main-dashboard-inner-grid-container-addremove-btn-remove')
         remBtn.css("cursor", "auto")
         remBtn.css("pointer-events", "auto")
         remBtn.css("opacity", 1)
@@ -820,7 +820,7 @@ function removeLastRawMatAdded(){
     global_more_rawMaterial -= 1
 
     if(global_more_rawMaterial < 1){
-        var remBtn = $('#removeRawMat')
+        var remBtn = $('#main-dashboard-inner-grid-container-addremove-btn-remove')
         remBtn.css("cursor", "not-allowed")
         remBtn.css("pointer-events", "none")
         remBtn.css("opacity", 0.65)
@@ -1057,8 +1057,8 @@ function hideOrShowElements(action){
         case "showBtnsForUser":
             $('#main-dashboard-inner-grid-container-input-formula-name').css('display', 'block')
             $('#btn_update_save').css('display', 'block')
-            $('#main-dashboard-inner-grid-container-btn-addremove').css('display', 'block')
-            $('#btn_calculate').css('display', 'block')
+            $('#main-dashboard-inner-grid-container-addremove').css('display', 'block')
+            $('#main-dashboard-inner-grid-container-btn-calculate').css('display', 'block')
             $('#main-dashboard-inner-grid-container-select').css('display', 'block')
             break;
         default:

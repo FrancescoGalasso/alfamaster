@@ -25,6 +25,8 @@
     3.5 Component - Modal Setting
     3.6 Component - Color Strength Setting
     3.7 Component - Select Elements
+    3.8 Component - Container Elements
+
 */
 
 /* -------------------------------
@@ -348,11 +350,11 @@ input[type=number]::-webkit-outer-spin-button {
     margin-top: 55px;
 }
 
-#main-dashboard-inner-grid-container-btn-addremove button:first-child{
+#main-dashboard-inner-grid-container-addremove button:first-child{
     display: inline-block;
 }
 
-#main-dashboard-inner-grid-container-btn-addremove button:last-child{
+#main-dashboard-inner-grid-container-addremove button:last-child{
     display: inline-block;
     opacity: 0.65;
     cursor: not-allowed;
@@ -424,6 +426,28 @@ div.modal-footer form {
     height: 25px;
 }
 
+/* 3.8 Component - Container Elements */
+
+#main-dashboard-inner-container-tips {
+    border: 1px solid black;
+    width: 1150px;
+    background-color: lightyellow;
+}
+
+#main-dashboard-inner-container-tips div {
+    padding-top: 15px;
+    padding-left: 15;
+}
+
+#main-dashboard-inner-grid-container-addremove {
+    float: left;
+    display:none;
+}
+
+#main-dashboard-inner-grid-container-select {
+    display:none;
+}
+
 /**********************/
 
 /* update.html */
@@ -469,29 +493,3 @@ div.modal-footer form {
     width: 180px;
 }
 
-/* #search button{
-    margin-left: 10;
-} */
-
-
-#tips{
-    border: 1px solid black;
-    width: 1150px;
-    background-color: lightyellow;
-}
-
-#tips div {
-    padding-top: 15px;
-    padding-left: 15;
-}
-/*
-   container
-*/
-#main-dashboard-inner-grid-container-btn-addremove {
-    float: left;
-    display:none;
-}
-
-#main-dashboard-inner-grid-container-select {
-    display:none;
-}
