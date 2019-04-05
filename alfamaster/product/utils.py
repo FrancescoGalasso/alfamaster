@@ -131,9 +131,11 @@ def convertMatrixToBasesList(matrix):
         obj['bases'] = arr2
         arr.append(obj)
 
-    print("arr :\n{}".format(arr))
+    # print("arr :\n{}".format(arr))
+    data['data'] = arr
+    print("data :\n{}".format(data))
 
-    return matrix
+    return data
 
 def populateMatrixFormulaBody(matrixFormula, nbases):
     # this formula has no header no footer
