@@ -33,18 +33,18 @@ def product_detail(request, pk):
         prod_name = product.name
         prod_pk = pk
         history_id = history.id 
-        stdlogger.debug("       *** [debug] product history_id: "+ str(history_id))
-
-        stdlogger.debug("       *** [debug] product_name: "+ prod_name)
         prod_owner = product.owner
-        stdlogger.debug("       *** [debug] product_owner: "+ prod_owner)
         prod_rev = str(history.revision)
-        stdlogger.debug("       *** [debug] product history_revision: "+ prod_rev)
         prod_currency = str(product.currencies)
-        stdlogger.debug("       *** [debug] product_currency: "+ prod_currency)
         prod_admin = ""
-
         prod_lvl_fill = history.lvl_fill
+
+        stdlogger.debug("       *** [debug] product history_id: "+ str(history_id))
+        stdlogger.debug("       *** [debug] product_name: "+ prod_name)
+        stdlogger.debug("       *** [debug] product_owner: "+ prod_owner)
+        stdlogger.debug("       *** [debug] product history_revision: "+ prod_rev)
+        stdlogger.debug("       *** [debug] product_currency: "+ prod_currency)
+
 
         if prod_owner == request.user.username or request.user.username == "admin":
             try:
@@ -105,7 +105,7 @@ def product_list(request):
         return render(request, 'product/product_list.html')
 
 @login_required
-def product_new(request):
+def product_savenew(request):
     print(request.GET)
     print(request.POST)
     if request.method == "POST":
@@ -149,7 +149,7 @@ def product_new(request):
 
 
 @login_required
-def product_save(request):
+def product_saveupdate(request):
     print(request.GET)
     print(request.POST)
     if request.method == "POST":
@@ -223,46 +223,46 @@ def product_erase(request, pk):
     return HttpResponseRedirect("/")
 
 
-@login_required
-def product_update(request, pk):
-    stdlogger.info("        +++ [info] Call to PRODUCT_UPDATE method")
-    product = get_object_or_404(Product, pk=pk)
-    history= History.objects.filter(product=pk).latest('revision')
-    data =history.data
-    if isinstance(data, str):
-        _data = json.loads(data)
-    else:
-        _data = data
-    prod_name = product.name
-    prod_pk = pk
-    rev = history.revision
-    # stdlogger.debug("       *** [debug] product name: "+ prod_name)
-    prod_owner = product.owner
-    stdlogger.debug("       *** [debug] product owner: "+ prod_owner)
-    prod_currency = str(product.currencies)
-    stdlogger.debug("       *** [debug] product currency: "+ prod_currency)
-    prod_admin = ""
-    prod_lvl_fill = history.lvl_fill
+# @login_required
+# def product_update(request, pk):
+#     stdlogger.info("        +++ [info] Call to PRODUCT_UPDATE method")
+#     product = get_object_or_404(Product, pk=pk)
+#     history= History.objects.filter(product=pk).latest('revision')
+#     data =history.data
+#     if isinstance(data, str):
+#         _data = json.loads(data)
+#     else:
+#         _data = data
+#     prod_name = product.name
+#     prod_pk = pk
+#     rev = history.revision
+#     # stdlogger.debug("       *** [debug] product name: "+ prod_name)
+#     prod_owner = product.owner
+#     stdlogger.debug("       *** [debug] product owner: "+ prod_owner)
+#     prod_currency = str(product.currencies)
+#     stdlogger.debug("       *** [debug] product currency: "+ prod_currency)
+#     prod_admin = ""
+#     prod_lvl_fill = history.lvl_fill
 
-    if prod_owner == request.user.username:
-        try:
-            lista = _data['data']
-            # stdlogger.debug("       *** [debug] product data: {}".format(lista))
+#     if prod_owner == request.user.username:
+#         try:
+#             lista = _data['data']
+#             # stdlogger.debug("       *** [debug] product data: {}".format(lista))
             
-        except:
-            import traceback
-            print(traceback.format_exc())
-            lista = { }
+#         except:
+#             import traceback
+#             print(traceback.format_exc())
+#             lista = { }
 
-        if request.user.username == "admin":
-            prod_admin = True
-        else:
-            prod_admin = False
+#         if request.user.username == "admin":
+#             prod_admin = True
+#         else:
+#             prod_admin = False
 
-        return render(request, 'product/product_update.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin, 'prod_lvl_fill':prod_lvl_fill})   
-    else:
-        stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
-        return render(request, 'product/error.html')
+#         return render(request, 'product/product_update.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin, 'prod_lvl_fill':prod_lvl_fill})   
+#     else:
+#         stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
+#         return render(request, 'product/error.html')
 
 
 from django.http import JsonResponse
