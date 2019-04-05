@@ -28,30 +28,30 @@
 <div class="main-dashboard-inner-grid-container">
     <div>Insert number of raw materials<input type="number" id="main-dashboard-inner-grid-input-1" placeholder="Insert number - min num 5"></div>
     <div>Insert number of bases<input type="number" id="main-dashboard-inner-grid-input-2" placeholder="Insert number - min num 2"></div>
-    <button id="generateBtn" type="button" class="btn btn-primary" onclick=generateTable()>Generate table</button>
+    <button id="main-dashboard-inner-grid-container-btn-generateTable" type="button" class="btn btn-primary" onclick=generateTable()>Generate table</button>
     <hr>
 
 </div>
 
 <input id="main-dashboard-inner-grid-container-input-formula-name" type="text" name="firstname" placeholder="Type product's name"><br>
-<div id = "money">Select your currencies  <select id="main-dashboard-inner-grid-container-select-formula-currency">
+<div id = "main-dashboard-inner-grid-container-select">Select your currencies  <select id="main-dashboard-inner-grid-container-select-formula-currency">
     </select></div>
 <br>
 
 
 <div id="main-dashboard-inner-table-bases"></div>
 <br>
-<div id="addorRemoveRawMat">
-    <button type="button" class="btn btn-info btn-xs" id="addRawMat" onclick="addMoreLines()">
+<div id="main-dashboard-inner-grid-container-btn-addremove">
+    <button type="button" class="btn btn-info btn-xs" onclick="addMoreLines()">
         <span class="glyphicon glyphicon-plus"></span>
          raw material
     </button>
-    <button type="button" class="btn btn-info btn-xs" id="removeRawMat" onclick="removeLastRawMatAdded()">
+    <button type="button" class="btn btn-info btn-xs" onclick="removeLastRawMatAdded()">
         <span class="glyphicon glyphicon-minus"></span>
          last raw material
     </button>
 </div>
-<button id = "btn_calculate" type="button" class="btn btn-sm" onclick=generateDataFromServer()>Calculate</button>
+<button id = "main-dashboard-inner-grid-container-btn-calculate" type="button" class="btn btn-sm" onclick=generateDataFromServer()>Calculate</button>
 <br>
 <div id="container">
     <div id="main-dashboard-inner-newpage-table-fillcalculation">
@@ -102,7 +102,6 @@
 </div>
 <br>
 
-<!-- <div id="save"> -->
 <div id="main-dashboard-form-save">
     <form action='.' method='POST'> {% csrf_token %}
         <input type='hidden' name='main-dashboard-form-save-input-name' />

@@ -339,6 +339,27 @@ input[type=number]::-webkit-outer-spin-button {
 
 /* 3.4.2 Component - Button - new.html update.html */
 
+#main-dashboard-inner-grid-container-btn-generateTable {
+    margin-top: 10px;
+}
+
+#main-dashboard-inner-grid-container-btn-calculate {
+    display:none;
+    margin-top: 55px;
+}
+
+#main-dashboard-inner-grid-container-btn-addremove button:first-child{
+    display: inline-block;
+}
+
+#main-dashboard-inner-grid-container-btn-addremove button:last-child{
+    display: inline-block;
+    opacity: 0.65;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+
 /* #main-dashboard-inner-colorstrength-btn-verify:active {
     cursor: not-allowed;
     pointer-events: none;
@@ -405,11 +426,7 @@ div.modal-footer form {
 
 /**********************/
 
-
-#generateBtn {
-    margin-top: 10px;
-}
-
+/* update.html */
 .main {
     /* display: none; */
     visibility: hidden;
@@ -440,16 +457,9 @@ div.modal-footer form {
 /*
 *   stuffs
 */
-#btn_calculate {
-    display:none;
-    margin-top: 55px;
-}
+
 
 #slurry-div {
-    display:none;
-}
-
-#money{
     display:none;
 }
 
@@ -459,9 +469,9 @@ div.modal-footer form {
     width: 180px;
 }
 
-#search button{
+/* #search button{
     margin-left: 10;
-}
+} */
 
 
 #tips{
@@ -475,42 +485,13 @@ div.modal-footer form {
     padding-left: 15;
 }
 /*
-*   css for div & btn add/remove raw mat during creation
+   container
 */
-#addorRemoveRawMat{
+#main-dashboard-inner-grid-container-btn-addremove {
     float: left;
     display:none;
 }
 
-#addorRemoveRawMat button:first-child{
-    display: inline-block;
+#main-dashboard-inner-grid-container-select {
+    display:none;
 }
-
-#addorRemoveRawMat button:last-child{
-    display: inline-block;
-    opacity: 0.65;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-
-/*
-*   test on develop
-*/
-
-/* #tableFillCalculation{
-    background-color: aqua
-}
-
-#startTest{
-    background-color: beige
-
-}
-
-#checkTest{
-    background-color: thistle
-}
-
-#container{
-    background-color: yellow
-} */

@@ -13,7 +13,6 @@ var global_popupNewProd = false
 var show_save_form = false
 
 function generateTable(id){
-    showGenerateBtn()
 
     var num_raw_material = document.getElementById('main-dashboard-inner-grid-input-1').value
     var num_bases = document.getElementById('main-dashboard-inner-grid-input-2').value
@@ -38,7 +37,8 @@ function generateTable(id){
         return;
     }
 
-    hideGridGenerator()
+    hideOrShowElements("hideGridContainer")
+    hideOrShowElements("showBtnsForUser")
 
     /*
     *       generate the table
@@ -408,11 +408,6 @@ function returnTheadList(thead_col, thead_col_base){
     return listofTheadArrays
 }
 
-function hideGridGenerator(){
-    var grid = document.getElementsByClassName("main-dashboard-inner-grid-container")[0]
-    grid.style.display = "none"
-}
-
 /**
  * 
  * Set display = "none" to input #nameProduct and to button #btn_calculate
@@ -565,34 +560,6 @@ function returnListClassName(baseClassName, list_totName){
     return list
 }
 
-function showGenerateBtn(){
-    var elem = document.getElementById("money")
-    if(elem){
-        elem.style.display = "block";
-    }
-
-
-    var btn = document.getElementById("btn_calculate")
-    if(btn){
-        btn.style.display = "block";
-    }
-
-    var btn_prodName = document.getElementById("main-dashboard-inner-grid-container-input-formula-name")
-    if(btn_prodName){
-        btn_prodName.style.display = "block"
-    }
-
-    var btn_update_save = document.getElementById("btn_update_save")
-    if(btn_update_save){
-        btn_update_save.style.display = "block"
-    }
-
-    var addorRemoveRawMatDiv = document.getElementById("addorRemoveRawMat")
-    if(addorRemoveRawMatDiv){
-        addorRemoveRawMatDiv.style.display = "block"
-    }
-}
-
 // https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -624,7 +591,6 @@ function saveProduct() {
             arrData.push(cellData)
         });
         
-        console.log(arrData)
         $('[name="main-dashboard-form-save-input-data"]').val(JSON.stringify(arrData, undefined, 2))
     }
 
@@ -663,74 +629,6 @@ function saveProduct() {
         }
     }
 
-}
-
-function createJson(){
-
-    // var update_table = document.getElementById('tdetail')
-    // var new_table = document.getElementById('generatedTable')
-    // var table_name = ""
-    // var numberofBases = 0
-    // if(update_table){
-    //     table_name = "tdetail"
-    //     numberofBases = document.getElementById('tdetail').rows[0].cells.length -3
-    // } else if(new_table){
-    //     table_name = "generatedTable"
-    //     numberofBases = global_num_bases
-    // }
-
-    var numofCells = $('#main-dashboard-inner-table-bases tbody tr:first td').length;
-    var numberofBases = ( parseInt(numofCells) - 3 ) / 5
-    console.log(numberofBases)
-
-    var listofRawMaterialNames = $('#main-dashboard-inner-table-bases tbody tr td:nth-child(1)').get()
-    var listofIndexInput = [2,3,4,9]
-    if(numberofBases >2){
-        for(var i=2; i<=numberofBases; i++){
-            var lastIndex = listofIndexInput[listofIndexInput.length-1]
-            var newIndex = lastIndex+5
-            listofIndexInput.push(newIndex)
-        }
-    }
-    var listofImputs = []
-    for(var i=0; i<listofIndexInput.length; i++){
-        if($('#main-dashboard-inner-table-bases tbody tr td:nth-child('+listofIndexInput[i]+')').length){ 
-            var listofSingleBaseInput = $('#main-dashboard-inner-table-bases tbody tr td:nth-child('+listofIndexInput[i]+')').get()
-            listofImputs.push(listofSingleBaseInput)
-        }
-    }
-
-    console.log(listofImputs)
-    
-            // loop for the creation of the JSON
-    var _q = ""
-    for(var i=0; i < global_num_raw_material; i++){
-        var q = `
-        {
-            "raw_material": "`+ listofRawMaterialNames[i].textContent+`",
-            "specific_weight": "`+ listofImputs[0][i].textContent+`",
-            "RM_cost": "`+ listofImputs[1][i].textContent+`",
-            "bases":[`
-            for(var j=2; j<listofImputs.length; j++){
-                var base = '{"g_100g": "'+listofImputs[j][i].textContent+'"}'
-                if(j != listofImputs.length-1){
-                    base += ","
-                }
-                q+=base
-            }
-        q += `]
-            }`  
-        if(global_num_raw_material > 1 && i != global_num_raw_material-1){
-            q += ',' 
-            _q += q
-        }
-        else{
-            _q += q
-        }
-    }
-    var jsonData = '{"data":['+_q+']}'
-    console.log(jsonData)
-    return jsonData
 }
 
 function download_csv(rev){
@@ -1153,6 +1051,16 @@ function hideOrShowElements(action){
             $("#main-dashboard-inner-colorstrength-btn-verify").css({ 'cursor' : '', 'pointer-events' : '' , 'opacity' : ''});
             $('#main-dashboard-form-save').css('display', 'none')
           break;
+        case "hideGridContainer":
+            $('.main-dashboard-inner-grid-container').css('display', 'none')
+            break;
+        case "showBtnsForUser":
+            $('#main-dashboard-inner-grid-container-input-formula-name').css('display', 'block')
+            $('#btn_update_save').css('display', 'block')
+            $('#main-dashboard-inner-grid-container-btn-addremove').css('display', 'block')
+            $('#btn_calculate').css('display', 'block')
+            $('#main-dashboard-inner-grid-container-select').css('display', 'block')
+            break;
         default:
           // code block
           alert("default")
