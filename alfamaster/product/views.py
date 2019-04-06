@@ -223,46 +223,75 @@ def product_erase(request, pk):
     return HttpResponseRedirect("/")
 
 
-# @login_required
-# def product_update(request, pk):
-#     stdlogger.info("        +++ [info] Call to PRODUCT_UPDATE method")
-#     product = get_object_or_404(Product, pk=pk)
-#     history= History.objects.filter(product=pk).latest('revision')
-#     data =history.data
-#     if isinstance(data, str):
-#         _data = json.loads(data)
-#     else:
-#         _data = data
-#     prod_name = product.name
-#     prod_pk = pk
-#     rev = history.revision
-#     # stdlogger.debug("       *** [debug] product name: "+ prod_name)
-#     prod_owner = product.owner
-#     stdlogger.debug("       *** [debug] product owner: "+ prod_owner)
-#     prod_currency = str(product.currencies)
-#     stdlogger.debug("       *** [debug] product currency: "+ prod_currency)
-#     prod_admin = ""
-#     prod_lvl_fill = history.lvl_fill
+@login_required
+def product_update(request, pk):
 
-#     if prod_owner == request.user.username:
-#         try:
-#             lista = _data['data']
-#             # stdlogger.debug("       *** [debug] product data: {}".format(lista))
-            
-#         except:
-#             import traceback
-#             print(traceback.format_exc())
-#             lista = { }
+    if request.user.is_authenticated():
+        # import pdb; pdb.set_trace()
+        stdlogger.info("        +++ [info] Call to UPDATE logic")
+        product = get_object_or_404(Product, pk=pk)
+        history= History.objects.filter(product=pk).latest('revision')
 
-#         if request.user.username == "admin":
-#             prod_admin = True
-#         else:
-#             prod_admin = False
+        data = history.data
+        if isinstance(data, str):
+            _data = json.loads(data)
+        else:
+            _data = data
 
-#         return render(request, 'product/product_update.html', {'list': lista, 'prod_name': prod_name, 'prod_pk':prod_pk, 'prod_rev':rev, 'prod_currency':prod_currency, 'prod_admin':prod_admin, 'prod_lvl_fill':prod_lvl_fill})   
-#     else:
-#         stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
-#         return render(request, 'product/error.html')
+        prod_name = product.name
+        prod_pk = pk
+        history_id = history.id 
+        prod_owner = product.owner
+        prod_rev = str(history.revision)
+        prod_currency = str(product.currencies)
+        prod_admin = ""
+        prod_lvl_fill = history.lvl_fill
+
+        stdlogger.debug("       *** [debug] product history_id: "+ str(history_id))
+        stdlogger.debug("       *** [debug] product_name: "+ prod_name)
+        stdlogger.debug("       *** [debug] product_owner: "+ prod_owner)
+        stdlogger.debug("       *** [debug] product history_revision: "+ prod_rev)
+        stdlogger.debug("       *** [debug] product_currency: "+ prod_currency)
+
+
+        if prod_owner == request.user.username or request.user.username == "admin":
+            try:
+                lista = _data['data']
+                stdlogger.debug("       *** [debug] product history_data: {}".format(lista))
+            except:
+                print(traceback.format_exc())
+                lista = { }
+
+            if request.user.username == "admin":
+                prod_admin = True
+            else:
+                prod_admin = False
+
+            matrixList = basesListToHtml(lista, prod_currency)
+            nbases = int( (len(matrixList[3]) - 3 ) / 5)
+            # print("nbases -> {}".format(nbases))
+            # print("matrixList -> {}".format(matrixList))
+
+            _lista = matrixList[2:-1]    # no op on header and footer arrays
+            _fillvl = prod_lvl_fill[2]
+            master = calculateMasterToHtml(_lista, _fillvl, nbases)
+
+            return render(request, 'product/product_update.html', {
+                'list': matrixList,
+                'master': master,
+                'prod_name': prod_name,
+                'prod_pk': prod_pk,
+                'prod_rev': prod_rev,
+                'prod_currency': prod_currency,
+                'prod_admin': prod_admin,
+                'history_id': history_id,
+                'prod_lvl_fill': prod_lvl_fill,
+                'bases_num': nbases,
+                })
+            # return render(request, 'product/product_detail.html')
+        else:
+            stdlogger.debug("       *** [debug] ERROR on detail show: NOT ALLOWED ACTION!!!")
+            return render(request, 'product/error.html')
 
 
 from django.http import JsonResponse

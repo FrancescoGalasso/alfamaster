@@ -19,7 +19,7 @@ $( document ).ready(function() {
     tableFoot.style.borderColor = "black" // css
     creationTFoot(tableFoot, tr_foot)
 
-    setClassesForCalculation()
+    // setClassesForCalculation()
 
-    generateData()
+    // generateData()
 });

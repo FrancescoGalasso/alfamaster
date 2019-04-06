@@ -361,6 +361,9 @@ input[type=number]::-webkit-outer-spin-button {
     pointer-events: none;
 }
 
+#main-dashboard-inner-updatepage-grid-container-btn-calculate {
+    visibility: hidden;
+}
 
 /* #main-dashboard-inner-colorstrength-btn-verify:active {
     cursor: not-allowed;
