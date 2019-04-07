@@ -38,7 +38,7 @@
 	<h1>{{prod_name}}</h1>
 	<h4>revision: <strong>{{prod_rev}}</strong></h4>
 
-	<table id="main-dashboard-inner-detailpage-table-bases">   
+	<table id="main-dashboard-inner-table-bases">   
 		<thead>
 			{% for itemlists in list %}
 				{% if forloop.counter0 <= 1 %}
@@ -100,27 +100,41 @@
     <button id = "main-dashboard-inner-updatepage-grid-container-btn-calculate" type="button" class="btn btn-sm" onclick=generateDataFromServer()>Calculate</button>
     <br>
 
-	<div id="main-dashboard-inner-detailpage-table-fillvl">
-		<table>
-			<caption class="table-caption">Fill level calculation</caption>
-			<thead>
-				<th>Volume TiO<sub>2</sub> Slurry (%<sub>v/v</sub>)</th>
-				<th>Fill level (%<sub>v/v</sub>)</th>
-				<th>Definitive fill level</th>
-			</thead>
-			<tbody class="table-body">
-				<tr>
-					{% for item in prod_lvl_fill %}
-					<td>
-						{{item}}
-					</td>
-					{% endfor %}
-				</tr>
-			</tbody>
-		</table>
-	</div>
+    <div id="container">
+        <div id="main-dashboard-inner-table-fillcalculation">
+            <table>
+                <caption class="table-caption">Fill level calculation</caption>
+                <thead>
+                    <th>Volume TiO<sub>2</sub> Slurry (%<sub>v/v</sub>)</th>
+                    <th>Fill level (%<sub>v/v</sub>)</th>
+                    <th>Definitive fill level</th>
+                </thead>
+                <tbody class="table-body">
+                    <tr>
+                        {% for item in prod_lvl_fill %}
+                        <td>
+                            {{item}}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="main-dashboard-inner-colorstrength">
+                <p>Acceptability range for <b>COLOR STRENGTH</b></p>
+                <div class="main-dashboard-inner-grid-container-colorstrength">
+                    <div>Inferior Range<input id="main-dashboard-inner-grid-input-3" type="number" value=98 placeholder="98" readonly></div>
+                    <div>Superior Range<input id="main-dashboard-inner-grid-input-4" type="number" value=102 placeholder="102" readonly></div>
+                </div>
+                <br>
+                <button id="main-dashboard-inner-colorstrength-btn-verify" onclick="startLabTest()">Start Laboratory Test</button>
+        </div>
+        <div id="main-dashboard-inner-colorstrength-checktest">
+            <p>Insert result of Laboratory Test</p>
+        </div>
+    </div>
 	<br>
-	<div id="main-dashboard-inner-detailpage-table-master">
+	<div id="main-dashboard-inner-table-master">
 			<table>
 				<caption class="table-caption">MASTER</caption>
 				<thead>
@@ -143,6 +157,17 @@
 			</table>
 		</div>
 	<br>
+    <div id="main-dashboard-form-save">
+        <form action='/product/save/' method='POST'> {% csrf_token %}
+            <input type='hidden' name='main-dashboard-form-save-input-name' />
+            <input type='hidden' name='main-dashboard-form-save-input-data' />
+            <input type='hidden' name='main-dashboard-form-save-input-currency' />
+            <input type='hidden' name='main-dashboard-form-save-input-fillvl' />
+            <input type='hidden' name='main-dashboard-form-save-input-revision'/>
+            <input type='hidden' name='main-dashboard-form-save-input-pk' />
+            <input type='submit' onclick=saveProduct() value='Save' />
+        </form>
+    </div>
 
 	<script>
 		console.log("bases_num -> "+bases_num)

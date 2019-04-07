@@ -160,18 +160,20 @@ def product_saveupdate(request):
         formula_data = request.POST.get('main-dashboard-form-save-input-data')
         formula_currency = request.POST.get('main-dashboard-form-save-input-currency')
         formula_fillvl = request.POST.get('main-dashboard-form-save-input-fillvl')
-        formula_revision = request.POST.get('main-dashboard-form-save-input-revision')
+        _formula_revision = request.POST.get('main-dashboard-form-save-input-revision')
         formula_pk = request.POST.get('main-dashboard-form-save-input-pk')
 
         # my_product_currency= request.POST.get('currency')
 
-        if(int(formula_revision) > 0):
+        formula_revision = int(_formula_revision)
+        if(formula_revision >= 0):
             formula_revision += 1
 
-        data = json.loads(formula_data)
+        _data = json.loads(formula_data)
+        data = convertMatrixToBasesList(_data)
         stdlogger.info("        +++ [info] new History object created")
-        lvl_fill = list(map(int, my_product_lvl_fill.split(" ")))
-        History.objects.create(data=formula_data, revision=formula_revision, product_id=formula_pk, lvl_fill=formula_fillvl)
+        lvl_fill = list(map(int, formula_fillvl.split(" ")))
+        History.objects.create(data=data, revision=formula_revision, product_id=formula_pk, lvl_fill=lvl_fill)
         obj = Product.objects.get(pk=formula_pk)
         messages.info(request, "The product %s has been successfully updated" % obj.name.upper())
             # redirect to HOME

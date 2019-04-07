@@ -277,17 +277,17 @@ input[type=number]::-webkit-outer-spin-button {
     margin-left: 350px;
 }
 
-#main-dashboard-inner-detailpage-table-bases{
+#main-dashboard-inner-table-bases{
     width: 100%;
     margin-top: 20;
 }
 
-#main-dashboard-inner-detailpage-table-bases tfoot{
+#main-dashboard-inner-table-bases tfoot{
     border: 3px solid black;
     font-weight: bold;
 }
 
-#main-dashboard-inner-newpage-table-fillcalculation{
+#main-dashboard-inner-table-fillcalculation {
     display: none;
     /* display: inline-grid; */
 }
@@ -301,7 +301,7 @@ input[type=number]::-webkit-outer-spin-button {
     text-align: center !important;
 }
 
-#main-dashboard-inner-newpage-table-master {
+#main-dashboard-inner-table-master {
     display: none;
 }
 

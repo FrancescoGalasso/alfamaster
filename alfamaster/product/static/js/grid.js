@@ -46,10 +46,10 @@ function generateTable(id){
     var thead_col = ["Raw material", "Specific weight [g/mL]", "RM cost"]
     var thead_col_base = ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost"]
     var thead_col_master = ["TiO<sub>2</sub> removing", "%<sub>v/v</sub>", "g/100mL", "%<sub>w/w</sub>", "Formula Cost"]
-    var myTableDiv = document.getElementById("main-dashboard-inner-table-bases")
+    var myTableDiv = document.getElementById("main-dashboard-inner-container-table-bases")
 
     var table = document.createElement('TABLE')
-    table.id = "generatedTable"
+    table.id = "main-dashboard-inner-table-bases"
     var tableHead = document.createElement('THEAD')
     var tableBody = document.createElement('TBODY')
     var tableFoot = document.createElement('TFOOT')
@@ -275,7 +275,7 @@ async function generateTableMaster(){
         _table = '#tdetail'
         cell_table = 'th'
     } else {
-        _table = '#generatedTable'
+        _table = '#main-dashboard-inner-table-bases'
         cell_table = 'td'
     }
 
@@ -533,7 +533,7 @@ function setClassesForCalculation(){
     }
 }
 
-    // class name for #generatedTableMaster
+    // class name for #main-dashboard-inner-table-basesMaster
 function setClassesForCalculationMaster(){
 
     var list_class = ["tirem_m", "vv_m", "g100ml_m", "ww_m", "fc_m"]
@@ -589,7 +589,7 @@ function download_csv(rev){
         body_tbl1.push(lista)
     }
 
-    // table #generatedTableFillLvl
+    // table #main-dashboard-inner-table-basesFillLvl
     var body_tbl2 = []
     var table2 = document.getElementById("generatedTableFillLvl");
     for (var i = 0, row; row = table2.rows[i]; i++) {
@@ -600,7 +600,7 @@ function download_csv(rev){
         body_tbl2.push(lista)
     }
 
-    // table #generatedTableMaster
+    // table #main-dashboard-inner-table-basesMaster
     var body_tbl3 = []
     var table3 = document.getElementById("generatedTableMaster");
     for (var i = 0, row; row = table3.rows[i]; i++) {
@@ -706,7 +706,7 @@ function showLessDetails(action){
 
 /**
  * 
- * If the user authenticated is not an admin user, show less details on table #generatedTableMaster
+ * If the user authenticated is not an admin user, show less details on table #main-dashboard-inner-table-basesMaster
  */
 function showLessDetailsMaster(){
     var table2 = document.getElementById("generatedTableMaster")
@@ -770,7 +770,7 @@ $( document ).ready(function() {
 
     if(window.location.href.indexOf("update") > -1){
         console.log("URL UPDATE")
-        var numberofBases = $("#main-dashboard-inner-detailpage-table-bases  thead tr:nth-child(1) th").length - 3
+        var numberofBases = $("#main-dashboard-inner-table-bases  thead tr:nth-child(1) th").length - 3
         var listofIndexInput = [1,2,3,8,13]
 
         if(numberofBases >1){
@@ -782,7 +782,7 @@ $( document ).ready(function() {
         }
         
         // set class for table-bases body
-        $("#main-dashboard-inner-detailpage-table-bases  tbody tr").each(function(){
+        $("#main-dashboard-inner-table-bases  tbody tr").each(function(){
             var currentRow=$(this);
             var tmp = currentRow.find('td')
             tmp.each(function(subindex, cell){
@@ -803,9 +803,8 @@ $( document ).ready(function() {
         });
 
         // set class for table-bases tfoot
-        $("#main-dashboard-inner-detailpage-table-bases  tfoot tr").find('td').each(function(index, cell){
+        $("#main-dashboard-inner-table-bases  tfoot tr").find('td').each(function(index, cell){
             if(index > 0){
-                var currentCell=$(this);
                 $(this).attr('class','to_update');
             }
         });
@@ -814,52 +813,32 @@ $( document ).ready(function() {
         $('.update').keyup(function(){
             $(this).css('font-weight', 'bold');
             $(this).css('font-style', 'italic');
-            $("#main-dashboard-inner-detailpage-table-bases").find('.to_update').each(function(){
+            $("#main-dashboard-inner-table-bases").find('.to_update').each(function(){
                 var currentCell=$(this);
                 currentCell.text('')
             });
 
-            setClassesForCalculation()
-
-            document.getElementById("updateCalculateBtn").disabled = false;
-
-            var table = document.getElementById("generatedTableFillLvl")
-            // if table exists, clear the cells of last rows
-            if (table){
-                var count = table.rows[0].cells.length
-                for (var i=0; i<count; i++){
-                    var cell = table.rows[table.rows.length - 1].cells[i]
-                    cell.innerHTML = " "
-                }
-            }
-            keyupAction = true
-
-            // var show_save_form = false
-            if($(this).hasClass("sw")){
-                show_save_form = true
-            }
-            if($(this).hasClass("rm_cost")){
-                show_save_form = true
-            }    
+            keyupAction = true 
+            hideOrShowElements("calculateBasesOnUpdate")
         }); 
 
-        $('#main-dashboard-inner-colorstrength').css("visibility", "hidden");
-        $('#btn_update_save').css("visibility", "hidden");
+        hideOrShowElements("loadOnUpdate")
         var keyupAction = false
     }
 });
 
 function hideOrShowElements(action){
 
+    // TODO: uniformare nomi tabelle tra pagine?
     switch(action) {
         case "calculateBases":
-            $("#main-dashboard-inner-newpage-table-fillcalculation").css("display", "none")
+            $("#main-dashboard-inner-table-fillcalculation").css("display", "none")
             $('#main-dashboard-inner-colorstrength').css("visibility", "hidden")
             $('#main-dashboard-inner-colorstrength-checktest').css("visibility", "hidden")
-            $('#main-dashboard-inner-newpage-table-fillcalculation tbody').empty()
-            $('#main-dashboard-inner-newpage-table-fillcalculation tbody').append('<tr><td></td><td></td><td></td></tr>')
-            $('#main-dashboard-inner-newpage-table-master').css('display', 'none')
-            $('#main-dashboard-inner-newpage-table-master tbody').empty()
+            $('#main-dashboard-inner-table-fillcalculation tbody').empty()
+            $('#main-dashboard-inner-table-fillcalculation tbody').append('<tr><td></td><td></td><td></td></tr>')
+            $('#main-dashboard-inner-table-master').css('display', 'none')
+            $('#main-dashboard-inner-table-master tbody').empty()
             $("#main-dashboard-inner-colorstrength-btn-verify").css({ 'cursor' : '', 'pointer-events' : '' , 'opacity' : ''});
             $('#main-dashboard-form-save').css('display', 'none')
           break;
@@ -873,6 +852,20 @@ function hideOrShowElements(action){
             $('#main-dashboard-inner-grid-container-btn-calculate').css('display', 'block')
             $('#main-dashboard-inner-grid-container-select').css('display', 'block')
             break;
+        case "calculateBasesOnUpdate":
+            $("#main-dashboard-inner-table-fillcalculation").css("display", "none")
+            $('#main-dashboard-inner-table-fillcalculation tbody').empty()
+            $('#main-dashboard-inner-table-fillcalculation tbody').append('<tr><td></td><td></td><td></td></tr>')
+            $('#main-dashboard-inner-table-master').css('display', 'none')
+            $('main-dashboard-inner-table-master tbody').empty()
+            $('#main-dashboard-inner-updatepage-grid-container-btn-calculate').css('visibility', 'visible')
+            break;
+        case "loadOnUpdate":
+            $('#main-dashboard-inner-table-fillcalculation').css("display", "block");
+            $('#main-dashboard-inner-table-master').css('display', 'block');
+            $('#main-dashboard-inner-colorstrength').css("visibility", "hidden");
+            $('#btn_update_save').css("visibility", "hidden");
+            break;
         default:
           // code block
           alert("default")
@@ -880,22 +873,31 @@ function hideOrShowElements(action){
       }
 }
 
+// https://stackoverflow.com/questions/7390426/better-way-to-get-type-of-a-javascript-variable
+function typeOf(obj) {
+    return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
+  }
+
 function retrivePayloadFromTableBases() {
 
-    var nofRawMat = $("#generatedTable > tbody > tr").length
+    var nofRawMat = $("#main-dashboard-inner-table-bases > tbody > tr").length
 
     inputMatrix = []
     for (var i=0; i < nofRawMat; i++) {
         rowsData = []
-        var colValue = $("#generatedTable tbody tr:eq("+i+")");
+        var colValue = $("#main-dashboard-inner-table-bases tbody tr:eq("+i+")");
         var numofCellsRow = colValue.find('td').length
         for (var j=0; j < numofCellsRow; j++) {
             value = colValue.find('td:eq('+j+')')
-            rowsData.push(value.text())
+            var data = value.text()
+            data = data.replace(/\t/g, '');
+            data = data.replace(/\n/g, '');
+            rowsData.push(data)
         }
     inputMatrix.push(rowsData)
     }
 
+    console.log("inputMatrix -> ",inputMatrix)
     return JSON.stringify(inputMatrix, undefined, 2)
 
 }
@@ -906,7 +908,7 @@ function generateDataFromServer() {
 
     var matrix = retrivePayloadFromTableBases()
     var payload = {'payload':matrix}
-
+    console.log("payload to server -> ", payload);
     $.ajax({
         url: '/bases/',
         type: 'POST',
@@ -915,8 +917,10 @@ function generateDataFromServer() {
     .done(function (data) {
         console.log("SUCCESS callback")
         var payloadBases = data['payloadBases']
+        console.log("payload bases from server -> ",payloadBases)
         populateTableBasesWithDataFromServer(payloadBases)
         var payloadFillvl = data['payloadFillvl']
+        console.log("payload Fillvl from server -> ",payloadFillvl)
         populateTableFillvlWithDataFromServer(payloadFillvl)
 
         // TODO: check if this must be moved outsite in some specific function
@@ -932,8 +936,7 @@ function generateDataFromServer() {
 function generateDataMasterFromServer() {
 
     var matrix = retrivePayloadFromTableBases()
-    var defLvl = $('#main-dashboard-inner-newpage-table-fillcalculation tbody tr:last td:nth-child(3)').text()
-    console.log(defLvl)
+    var defLvl = $('#main-dashboard-inner-table-fillcalculation tbody tr:last td:nth-child(3)').text()
     var payload = {'payloadBases': matrix, 'payloadLvl': defLvl}
 
     $.ajax({
@@ -945,7 +948,7 @@ function generateDataMasterFromServer() {
         var reply = data['replyFromServer']
         if ( reply.length > 0 ) {
             console.log("SUCCESS Master callback")
-            $('#main-dashboard-inner-newpage-table-master').css("display", "inline")
+            $('#main-dashboard-inner-table-master').css("display", "inline")
             // $('#btn_update_save').css("visibility", "visible");
             $('#main-dashboard-form-save').css('display', 'inline')
             populateTableMasterWithDataFromServer(reply)
@@ -961,9 +964,9 @@ function generateDataMasterFromServer() {
 }
 
 function populateTableBasesWithDataFromServer(payload) {
-    var nofRawMat = $("#generatedTable > tbody > tr").length
+    var nofRawMat = $("#main-dashboard-inner-table-bases > tbody > tr").length
     for (var i=0; i < nofRawMat; i++) {
-        var colValue = $("#generatedTable tbody tr:eq("+i+")");
+        var colValue = $("#main-dashboard-inner-table-bases tbody tr:eq("+i+")");
         var numofCellsRow = colValue.find('td').length
         for (var j=0; j < numofCellsRow; j++) {
             // oldValue = colValue.find('td:eq('+j+')')
@@ -974,8 +977,8 @@ function populateTableBasesWithDataFromServer(payload) {
 }
 
 function populateTableFillvlWithDataFromServer(payload) {
-    $("#main-dashboard-inner-newpage-table-fillcalculation").css("display", "inline-grid")
-    var colValue = $("#main-dashboard-inner-newpage-table-fillcalculation > table > tbody > tr:eq(0)");
+    $("#main-dashboard-inner-table-fillcalculation").css("display", "inline-grid")
+    var colValue = $("#main-dashboard-inner-table-fillcalculation > table > tbody > tr:eq(0)");
     var numofCellsRow = colValue.find('td').length
     for (var j=0; j < numofCellsRow; j++) {
         newValue = payload[j]
@@ -985,9 +988,9 @@ function populateTableFillvlWithDataFromServer(payload) {
 
 function populateTableMasterWithDataFromServer(reply) {
     $.each(reply, function(index, array) {
-        $('#main-dashboard-inner-newpage-table-master tbody').append('<tr></tr>')
+        $('#main-dashboard-inner-table-master tbody').append('<tr></tr>')
         $.each(array, function(subindex, value) {
-          $row = $('#main-dashboard-inner-newpage-table-master tbody tr:last')
+          $row = $('#main-dashboard-inner-table-master tbody tr:last')
           $row.append('<td>'+value+'</td>')
         });
     });
@@ -1023,12 +1026,12 @@ function verify(event){
             check.append(newRow)
             row.append("    TEST FAILED")
 
-            var text1 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(1)').text()
-            var text2 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(2)').text()
-            var text3 = $('#main-dashboard-inner-newpage-table-fillcalculation tr:last td:nth-child(3)').text()
+            var text1 = $('#main-dashboard-inner-table-fillcalculation tr:last td:nth-child(1)').text()
+            var text2 = $('#main-dashboard-inner-table-fillcalculation tr:last td:nth-child(2)').text()
+            var text3 = $('#main-dashboard-inner-table-fillcalculation tr:last td:nth-child(3)').text()
 
-            $('#main-dashboard-inner-newpage-table-fillcalculation tr:last').remove();
-            $("#main-dashboard-inner-newpage-table-fillcalculation table tbody").append('<tr><td><del>'+text1+'</del></td><td><del>'+text2+'</del></td><td><del>'+text3+'</del></td></tr>');
+            $('#main-dashboard-inner-table-fillcalculation tr:last').remove();
+            $("#main-dashboard-inner-table-fillcalculation table tbody").append('<tr><td><del>'+text1+'</del></td><td><del>'+text2+'</del></td><td><del>'+text3+'</del></td></tr>');
 
             if(up){
                 text1 = parseInt(text1) + 1
@@ -1039,7 +1042,7 @@ function verify(event){
                 text2 = parseInt(text2) + 1
                 text3 = text2
             }
-            $("#main-dashboard-inner-newpage-table-fillcalculation table tbody").append('<tr><td>'+text1+'</td><td>'+text2+'</td><td>'+text3+'</td></tr>');
+            $("#main-dashboard-inner-table-fillcalculation table tbody").append('<tr><td>'+text1+'</td><td>'+text2+'</td><td>'+text3+'</td></tr>');
 
             counterTest++
             flag = false
@@ -1082,7 +1085,7 @@ function startLabTest(){
 
 function addMoreLines(){
 
-    var tableBody = $('#generatedTable').find("tbody")
+    var tableBody = $('#main-dashboard-inner-table-bases').find("tbody")
     var trLast = tableBody.find("tr:last")
     var trNew = trLast.clone()
     trNew.children().text("")
@@ -1104,7 +1107,7 @@ function addMoreLines(){
 }
 
 function removeLastRawMatAdded(){
-    var tableBody = $('#generatedTable').find("tbody")
+    var tableBody = $('#main-dashboard-inner-table-bases').find("tbody")
     var trLast = tableBody.find("tr:last")
     trLast.remove()
     global_more_rawMaterial -= 1
@@ -1132,13 +1135,12 @@ function saveProduct() {
     if ($('[name="main-dashboard-form-save-input-data"]').elemExists()) {
 
         var arrData = []
-        $('#main-dashboard-inner-table-bases > table > tbody  > tr').each(function(index, trow){
+        $('#main-dashboard-inner-table-bases > tbody  > tr').each(function(index, trow){
 			var currentRow=$(this);
             var tmp = currentRow.find('td')
             var cellData = [] 
             tmp.each(function(subindex, cell){
                 var currentCell=$(this)
-                // console.log(currentCell.text())
                 cellData.push(currentCell.text())
             });
             arrData.push(cellData)
@@ -1158,7 +1160,7 @@ function saveProduct() {
     }
 
     if ($('[name="main-dashboard-form-save-input-fillvl"]').elemExists()) {
-        var slurryVol = $('#main-dashboard-inner-newpage-table-fillcalculation table tbody tr:last td:nth-child(1)').text()
+        var slurryVol = $('#main-dashboard-inner-table-fillcalculation table tbody tr:last td:nth-child(1)').text()
         var fillvl = 100 - parseInt(slurryVol)
         var listofFillvl = slurryVol+" "+fillvl+" "+ fillvl
         $('[name="main-dashboard-form-save-input-fillvl"]').val(listofFillvl)
