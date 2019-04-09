@@ -945,7 +945,6 @@ function generateDataFromServer() {
                             }
                             break;
                         case 3:
-                            console.log("n --> ", n)
                             if(global_startingFormulaMatrix[n][m] != _matrix[n][m]){
                                 skipTestColorStrenght = false
                                 console.log("different %w/w")
@@ -963,15 +962,12 @@ function generateDataFromServer() {
                                 console.log("upperBound : ",upperBound)
                                 console.log("lowerBound : ",lowerBound)
                                 if(new_value > upperBound) {
-                                    // TODO: check if this logic is correct : show popup and exit
                                     skipTestColorStrenght = true
                                     alert("You must create a new product!")
                                     return;
                                 } else {
                                     skipTestColorStrenght = false
                                 }
-                                // var idx = m-1
-                                // checkArray[idx] = false 
                             }
                             break;
                         default:
@@ -989,7 +985,6 @@ function generateDataFromServer() {
     })
     .done(function (data) {
         console.log("SUCCESS callback")
-        // console.log("checkArray : ", checkArray)
         console.log("skipTestColorStrenght :", skipTestColorStrenght)
         var payloadBases = data['payloadBases']
         console.log("payload bases from server -> ",payloadBases)
@@ -997,9 +992,6 @@ function generateDataFromServer() {
         var payloadFillvl = data['payloadFillvl']
         console.log("payload Fillvl from server -> ",payloadFillvl)
         populateTableFillvlWithDataFromServer(payloadFillvl)
-
-        // // TODO: check if this must be moved outsite in some specific function
-        // // $('#main-dashboard-inner-colorstrength').css("visibility", "visible")
 
         // TODO: check if skipTestColorStrenght is true, show master table and save bnt
         if (skipTestColorStrenght){
@@ -1009,13 +1001,8 @@ function generateDataFromServer() {
         } else {
             $('#main-dashboard-inner-colorstrength').css("visibility", "visible")
         }
-
-        // // TODO: if checkArray contains a false, show test colorStrenght
-        // // console.log("post ajax")
-        // // console.log("checkArray -> ", checkArray)
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
-        //  serrorFunction();
         console.log("ERROR callback")
         alert("ERROR!") }
     );
