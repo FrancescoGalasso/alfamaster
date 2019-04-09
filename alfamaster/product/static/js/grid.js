@@ -12,6 +12,10 @@ var global_colorStrength = false
 var global_popupNewProd = false
 var show_save_form = false
 
+var global_startingFormulaMatrix = []
+// var checkArray = [true, true, true, true]
+var skipTestColorStrenght = true
+
 function generateTable(id){
 
     var num_raw_material = document.getElementById('main-dashboard-inner-grid-input-1').value
@@ -770,6 +774,9 @@ $( document ).ready(function() {
 
     if(window.location.href.indexOf("update") > -1){
         console.log("URL UPDATE")
+        global_startingFormulaMatrix = retrivePayloadFromTableBases()
+        global_startingFormulaMatrix = JSON.parse(global_startingFormulaMatrix);
+        console.log("global_startingFormulaMatrix -> ",global_startingFormulaMatrix)
         var numberofBases = $("#main-dashboard-inner-table-bases  thead tr:nth-child(1) th").length - 3
         var listofIndexInput = [1,2,3,8,13]
 
@@ -829,7 +836,6 @@ $( document ).ready(function() {
 
 function hideOrShowElements(action){
 
-    // TODO: uniformare nomi tabelle tra pagine?
     switch(action) {
         case "calculateBases":
             $("#main-dashboard-inner-table-fillcalculation").css("display", "none")
@@ -859,6 +865,10 @@ function hideOrShowElements(action){
             $('#main-dashboard-inner-table-master').css('display', 'none')
             $('main-dashboard-inner-table-master tbody').empty()
             $('#main-dashboard-inner-updatepage-grid-container-btn-calculate').css('visibility', 'visible')
+            $('#btn_update_save').css("visibility", "hidden");
+            $('#main-dashboard-inner-colorstrength').css("visibility", "hidden");
+            $('#main-dashboard-inner-colorstrength-checktest').css("visibility", "hidden");
+            $("#main-dashboard-form-save").css("display", "none")
             break;
         case "loadOnUpdate":
             $('#main-dashboard-inner-table-fillcalculation').css("display", "block");
@@ -905,10 +915,73 @@ function retrivePayloadFromTableBases() {
 function generateDataFromServer() {
 
     hideOrShowElements("calculateBases")
-
+    skipTestColorStrenght = true
     var matrix = retrivePayloadFromTableBases()
     var payload = {'payload':matrix}
     console.log("payload to server -> ", payload);
+
+    if(window.location.href.indexOf("update") > -1){
+
+        var _matrix = JSON.parse(matrix);
+
+        for (var n = 0; n < global_startingFormulaMatrix.length; n ++){
+            for (var m = 0; m < global_startingFormulaMatrix[n].length; m ++){
+                if (m < 4 && n > 0 && n < 5){
+                // console.log(global_startingFormulaMatrix[n][m])
+                    switch (m){
+                        case 0:
+                            if(global_startingFormulaMatrix[n][m] != _matrix[n][m]){
+                                console.log("different names")
+                            }
+                            break;
+                        case 1:
+                            if(global_startingFormulaMatrix[n][m] != _matrix[n][m]){
+                                console.log("different specific weights")
+                            }
+                            break;
+                        case 2:
+                            if(global_startingFormulaMatrix[n][m] != _matrix[n][m]){
+                                console.log("different RM costs")
+                            }
+                            break;
+                        case 3:
+                            console.log("n --> ", n)
+                            if(global_startingFormulaMatrix[n][m] != _matrix[n][m]){
+                                skipTestColorStrenght = false
+                                console.log("different %w/w")
+                                console.log("starting val : ",global_startingFormulaMatrix[n][m])
+                                console.log("new val : ", _matrix[n][m])
+                                var old_value = global_startingFormulaMatrix[n][m]
+                                var new_value = _matrix[n][m]
+                    
+                                var op =  Math.abs(new_value - old_value);
+                                var gap = 3*parseFloat(old_value)/100
+                                console.log("diff new-old : ",op)
+                                console.log("scostamento 3% :",gap)
+                                var upperBound = parseFloat(old_value) + parseFloat(gap)
+                                var lowerBound = parseFloat(old_value) - parseFloat(gap)
+                                console.log("upperBound : ",upperBound)
+                                console.log("lowerBound : ",lowerBound)
+                                if(new_value > upperBound) {
+                                    // TODO: check if this logic is correct : show popup and exit
+                                    skipTestColorStrenght = true
+                                    alert("You must create a new product!")
+                                    return;
+                                } else {
+                                    skipTestColorStrenght = false
+                                }
+                                // var idx = m-1
+                                // checkArray[idx] = false 
+                            }
+                            break;
+                        default:
+                            alert("default")
+                    }
+                }
+            }
+        }
+    }
+
     $.ajax({
         url: '/bases/',
         type: 'POST',
@@ -916,6 +989,8 @@ function generateDataFromServer() {
     })
     .done(function (data) {
         console.log("SUCCESS callback")
+        // console.log("checkArray : ", checkArray)
+        console.log("skipTestColorStrenght :", skipTestColorStrenght)
         var payloadBases = data['payloadBases']
         console.log("payload bases from server -> ",payloadBases)
         populateTableBasesWithDataFromServer(payloadBases)
@@ -923,8 +998,21 @@ function generateDataFromServer() {
         console.log("payload Fillvl from server -> ",payloadFillvl)
         populateTableFillvlWithDataFromServer(payloadFillvl)
 
-        // TODO: check if this must be moved outsite in some specific function
-        $('#main-dashboard-inner-colorstrength').css("visibility", "visible")
+        // // TODO: check if this must be moved outsite in some specific function
+        // // $('#main-dashboard-inner-colorstrength').css("visibility", "visible")
+
+        // TODO: check if skipTestColorStrenght is true, show master table and save bnt
+        if (skipTestColorStrenght){
+            console.log("post ajax")
+            console.log("skipTestColorStrenght -> ", skipTestColorStrenght)
+            generateDataMasterFromServer()
+        } else {
+            $('#main-dashboard-inner-colorstrength').css("visibility", "visible")
+        }
+
+        // // TODO: if checkArray contains a false, show test colorStrenght
+        // // console.log("post ajax")
+        // // console.log("checkArray -> ", checkArray)
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
         //  serrorFunction();
