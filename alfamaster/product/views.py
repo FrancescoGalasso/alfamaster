@@ -313,14 +313,14 @@ def retrieveBasesAndFillvl(request):
 
         nbases = int( (len(payload[0]) - 3 ) / 5)
 
-        print("nbases: {}".format(nbases))
-        print("payload:\n{}".format(payload))
+        # print("nbases: {}".format(nbases))
+        # print("payload:\n{}".format(payload))
         calculatedPayloadBases = populateMatrixFormulaBody(payload, nbases)
-        print("calculatedPayload:\n{}".format(calculatedPayloadBases))
+        # print("calculatedPayload:\n{}".format(calculatedPayloadBases))
         calculatedPayloadFillvl = calculateFillToHtml(payload)
-        print("calculatedPayloadFillvl:\n{}".format(calculatedPayloadFillvl))
+        # print("calculatedPayloadFillvl:\n{}".format(calculatedPayloadFillvl))
         footer = populate_Matrix_Formula_footer()
-        print("footer:\n{}".format(footer))
+        # print("footer:\n{}".format(footer))
 
         data = {'payloadBases': calculatedPayloadBases, 
                 'payloadFillvl': calculatedPayloadFillvl, 
@@ -352,7 +352,7 @@ def retrieveMaster(request):
             print(traceback.format_exc())
             calculatedPayloadMaster = []
 
-        print("calculatedPayloadMaster:\n{}".format(calculatedPayloadMaster))
+        # print("calculatedPayloadMaster:\n{}".format(calculatedPayloadMaster))
         data = {'replyFromServer': calculatedPayloadMaster}
     else:
         data = {'payload': 'KO'}
