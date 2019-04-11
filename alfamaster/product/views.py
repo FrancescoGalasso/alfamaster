@@ -319,8 +319,12 @@ def retrieveBasesAndFillvl(request):
         print("calculatedPayload:\n{}".format(calculatedPayloadBases))
         calculatedPayloadFillvl = calculateFillToHtml(payload)
         print("calculatedPayloadFillvl:\n{}".format(calculatedPayloadFillvl))
+        footer = populate_Matrix_Formula_footer()
+        print("footer:\n{}".format(footer))
 
-        data = {'payloadBases': calculatedPayloadBases, 'payloadFillvl': calculatedPayloadFillvl}
+        data = {'payloadBases': calculatedPayloadBases, 
+                'payloadFillvl': calculatedPayloadFillvl, 
+                'footer': footer}
     else:
         data = {'payload': 'KO'}
 

@@ -992,6 +992,10 @@ function generateDataFromServer() {
         var payloadFillvl = data['payloadFillvl']
         console.log("payload Fillvl from server -> ",payloadFillvl)
         populateTableFillvlWithDataFromServer(payloadFillvl)
+        var payloadFooter = data['footer']
+        console.log("payload footer from server -> ",payloadFooter)
+        populateTableFooterWithDataFromServer(payloadFooter)
+
 
         // TODO: check if skipTestColorStrenght is true, show master table and save bnt
         if (skipTestColorStrenght){
@@ -1048,6 +1052,16 @@ function populateTableBasesWithDataFromServer(payload) {
             newValue = payload[i][j]
             colValue.find('td:eq('+j+')').text(newValue)
         }
+    }
+}
+
+function populateTableFooterWithDataFromServer(payload) {
+    var footer = $("#main-dashboard-inner-table-bases tfoot tr");
+    var numofCellsRow = footer.find('td').length
+    for (var j=1; j < numofCellsRow; j++) {
+        // oldValue = colValue.find('td:eq('+j+')')
+        newValue = payload[j-1]
+        footer.find('td:eq('+j+')').text(newValue)
     }
 }
 

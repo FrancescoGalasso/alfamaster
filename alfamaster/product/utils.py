@@ -327,6 +327,9 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
     return matrixFormula
 
+def populate_Matrix_Formula_footer():
+    return totalArray
+    
 def populateFormulaFooter(tfooter):
     innerTotalArray = totalArray
     for v in tfooter:
@@ -410,7 +413,6 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                                 forced_res_to_zero = True
                                 value_to_add_to_max_rawMat += float(res)
                         else:
-                            # print("TODO: perform other checks")
                             if wwB1_current_RawMat > wwBN_current_RawMat and diff > limit:
                                 print("{} is not a RAW MATERIAL SOLID\nmustbe calculated to ZERO on MASTER TABLE." \
                                 "\nAdd calculated value to h2o".format(matrixTransposed[0][k]))
