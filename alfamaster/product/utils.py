@@ -97,7 +97,7 @@ def convertMatrixToBasesList(matrix):
 
     if nbases > 3:
         nbasesDefault = len(listofIndexs)
-        missingIndex = nbases - nbasesDefault
+        missingIndex = int(nbases) - nbasesDefault
         for i in range(missingIndex):
             try:
                 lastVal = listofIndex[-1]
@@ -151,8 +151,24 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
     ml1000gArray = []
     fcostArray = []
 
+    # ! ~~ put None to all calculated values on matrixFormula each time this function is called
+    print("matrixFormula begin:\n{}".format(matrixFormula))
+    default_indexs = [0,1,2,3,8,13]
+    if nbases > 2:
+        diff = int(nbases) - 3
+        for i in range(diff):
+            last_index = default_indexs[-1]
+            new_calculated_index_value = int(last_index) + 5
+            default_indexs.append(new_calculated_index_value)
+    print("default_indexs: {}".format(default_indexs))
+    for arr in matrixFormula:
+        for k,v in enumerate(arr):
+            if k not in default_indexs:
+                arr[k] = None
+    print("matrixFormula Noned:\n{}".format(matrixFormula))
+
     numofRawMat = len(matrixFormula)
-    # print("numofRawMat -> {}".format(numofRawMat))
+    print("numofRawMat -> {} | nbases -> {}".format(numofRawMat, nbases))
 
     for array in matrixFormula:
         swArray.append(array[1])
@@ -164,7 +180,8 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
         sumofMl1000g = 0.0
         sumofFcost = 0.0
         sumofWW = 0.0
-
+        _test = int(nbases)-1
+        print("\t{} of {}".format(i, _test))
         for array in matrixFormula:
             index = i*5
             ww = array[3+index]
@@ -218,24 +235,14 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
         # print("sumofWW: {}".format(sumofWW))
         # print("sumofMl100g: {}".format(sumofMl100g))
-        # print("ml100gArray: {}".format(ml100gArray))
+        print("ml100gArray: {}".format(ml100gArray))
         # print("sumofVv: {}".format(sumofVv))
-        # print("vvArray: {}".format(vvArray))
+        print("vvArray: {}".format(vvArray))
         # print("sumofMl1000g: {}".format(sumofMl1000g))
-        # print("ml1000gArray: {}".format(ml1000gArray))
+        print("ml1000gArray: {}".format(ml1000gArray))
         # print("sumofFcost:{}".format(fcostArray))
+        print("fcostArray: {}".format(fcostArray))
         print("::::::::")
-
-    matrixCalculatedValues = [ml100gArray, vvArray, ml1000gArray, fcostArray]
-    matrixCalculatedValuesTransposed = [[matrixCalculatedValues[j][i]
-                                        for j in
-                                        range(len(matrixCalculatedValues))]
-                                        for i in
-                                        range(len(matrixCalculatedValues[0]))]
-
-    print("matrixCalculatedValues:\n{}".format(matrixCalculatedValues))
-    print("matrixCalculatedValuesTransposed:\n{}".format(matrixCalculatedValuesTransposed))
-
 
     # ! ~~ create base listofIndex depending on base's number
     listofIndex = [0,numofRawMat,numofRawMat*2]
@@ -252,84 +259,152 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
                 break
 
     # ! ~~ create calcuted listofIndex based on [ml100gArray, vvArray, ml1000gArray, fcostArray]
-    for n in range(numofRawMat):
-        if n > 0:
-            tmp = []
-            for k,v in enumerate(listofIndex):
-                if k < 3:
-                    value = listofIndex[k]
-                    value += n                    
-                    tmp.append(value)
+    _tmp = []
+    import copy
+    _tmp = copy.copy(listofIndex)
+    print(_tmp)
+    for i in range(4):
+        idx = i+1
+        for n in _tmp:
+            new_value = int(n)+idx
+            listofIndex.append(new_value)
 
-            listofIndex.extend(tmp)
+    print("listofIndex : {}".format(listofIndex))
 
+    matrixCalculatedValues = [ml100gArray, vvArray, ml1000gArray, fcostArray]
+    listof_calculated_values = []
+    for val in listofIndex:
+        print(val)
+        for arr in matrixCalculatedValues:
+            for k,v in enumerate(arr):
+                if k == val:
+                    print("k: {} - v: {}".format(k,v))
+                    listof_calculated_values.append(v)
 
-    # ! ~~ create empty matrix containter
-    '''
-        eg matrix
-        [
-            [],
-            [],
-            [],
-            [],
-            []
-        ]
-    '''
-    emptyMatrixContainer = []
-    for i in range(numofRawMat):
-        tmp = []
-        emptyMatrixContainer.append(tmp)
-
-    # ! ~~ populate empty matrix with values
-    '''
-        eg matrix
-        [
-            ['25.000', '44.117', '441.170', '0.000', '5.000', '12.500', '125.000', '0.000', '0.000', '0.000', '0.000', '0.000'],
-            ['20.000', '35.294', '352.940', '0.141', '10.000', '25.000', '250.000', '0.100', '0.500', '100.000', '1000.000', '0.400'],
-            ['11.667', '20.589', '205.890', '0.191', '25.000', '62.500', '625.000', '0.581', '0.000', '0.000', '0.000', '0.000'],
-            ['0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000'],
-            ['0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000']
-        ]
-    '''
-    counter = 0
-    for i in range(numofRawMat):
-        idx = i + (2*i)
-        for k,v in enumerate(listofIndex):
-            if idx == 0:
-                if k < nbases:
-                    emptyMatrixContainer[i].extend(matrixCalculatedValuesTransposed[v])
-            elif k>=idx and k < (idx + nbases ) :
-                emptyMatrixContainer[i].extend(matrixCalculatedValuesTransposed[v])
-
-
-    # ! ~~ substitute None with specific values from matrix
-    '''
-        eg starting matrix
-        [
-            ['25.000', None, None, None, '5.000', None, None, None, '0.000', None, None, None],
-            ...
-        ]
-
-        eg matrix after substitution
-        [
-            ['25.000', '44.117', '441.170', '0.000', '5.000', '12.500', '125.000', '0.000', '0.000', '0.000', '0.000', '0.000'],
-            ...
-        ]
-    '''
     for idx, array in enumerate(matrixFormula):
-        counter = 0
-        for v in array:
-            if v is None:
-                idxNone = array.index(v)
-                # print("spotted a None at index : {}".format(idxNone))
-                # print("specific value -> {}".format(matrix[idx].pop(0)))
-                array[idxNone] = emptyMatrixContainer[idx].pop(0)
+            for v in array:
+                if v is None:
+                    idxNone = array.index(v)
+                    array[idxNone] = listof_calculated_values.pop(0)
+
+    print("matrixFormula final:\n{}".format(matrixFormula))
+
+    # matrixCalculatedValuesTransposed = [[matrixCalculatedValues[j][i]
+    #                                     for j in
+    #                                     range(len(matrixCalculatedValues))]
+    #                                     for i in
+    #                                     range(len(matrixCalculatedValues[0]))]
+
+    # print("matrixCalculatedValues:\n{}".format(matrixCalculatedValues))
+    # print("matrixCalculatedValuesTransposed:\n{}".format(matrixCalculatedValuesTransposed))
+
+
+    # # ! ~~ create base listofIndex depending on base's number
+    # listofIndex = [0,numofRawMat,numofRawMat*2]
+    # if nbases > 3:
+    #     nbasesDefault = len(listofIndex)
+    #     missingIndex = nbases - nbasesDefault
+    #     for i in range(missingIndex):
+    #         try:
+    #             lastVal = listofIndex[-1]
+    #             lastVal += int(numofRawMat)
+    #             listofIndex.append(lastVal)
+    #         except:
+    #             print(" @ exception @")
+    #             break
+
+    # # ! ~~ create calcuted listofIndex based on [ml100gArray, vvArray, ml1000gArray, fcostArray]
+    # # for n in range(numofRawMat):
+    # #     if n > 0:
+    # #         tmp = []
+    # #         for k,v in enumerate(listofIndex):
+    # #             if k < 3:
+    # #                 value = listofIndex[k]
+    # #                 value += n                    
+    # #                 tmp.append(value)
+
+    # #         listofIndex.extend(tmp)
+    # _tmp = []
+    # import copy
+    # _tmp = copy.copy(listofIndex)
+    # print(_tmp)
+    # for i in range(4):
+    #     idx = i+1
+    #     for n in _tmp:
+    #         new_value = int(n)+idx
+    #         listofIndex.append(new_value)
+
+    # print("listofIndex : {}".format(listofIndex))
+
+    # # ! ~~ create empty matrix containter
+    # '''
+    #     eg matrix
+    #     [
+    #         [],
+    #         [],
+    #         [],
+    #         [],
+    #         []
+    #     ]
+    # '''
+    # emptyMatrixContainer = []
+    # for i in range(numofRawMat):
+    #     tmp = []
+    #     emptyMatrixContainer.append(tmp)
+    # print("emptyMatrixContainer:\n{}".format(emptyMatrixContainer))
+    # # ! ~~ populate empty matrix with values
+    # '''
+    #     eg matrix
+    #     [
+    #         ['25.000', '44.117', '441.170', '0.000', '5.000', '12.500', '125.000', '0.000', '0.000', '0.000', '0.000', '0.000'],
+    #         ['20.000', '35.294', '352.940', '0.141', '10.000', '25.000', '250.000', '0.100', '0.500', '100.000', '1000.000', '0.400'],
+    #         ['11.667', '20.589', '205.890', '0.191', '25.000', '62.500', '625.000', '0.581', '0.000', '0.000', '0.000', '0.000'],
+    #         ['0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000'],
+    #         ['0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000']
+    #     ]
+    # '''
+    # counter = 0
+    # # print("nbases: {}".format(nbases))
+    # for i in range(numofRawMat):
+    #     idx = i + (2*i)
+    #     for k,v in enumerate(listofIndex):
+    #         # print("idx -> {}\nval -> {}".format(idx, matrixCalculatedValuesTransposed[v]))
+    #         if idx == 0:
+    #             if k < nbases:
+    #                 emptyMatrixContainer[i].extend(matrixCalculatedValuesTransposed[v])
+    #         elif k>=idx and k < (idx + nbases ) :
+    #             emptyMatrixContainer[i].extend(matrixCalculatedValuesTransposed[v])
+
+
+    # # print("emptyMatrixContainer:\n{}".format(emptyMatrixContainer))
+    # # ! ~~ substitute None with specific values from matrix
+    # '''
+    #     eg starting matrix
+    #     [
+    #         ['25.000', None, None, None, '5.000', None, None, None, '0.000', None, None, None],
+    #         ...
+    #     ]
+
+    #     eg matrix after substitution
+    #     [
+    #         ['25.000', '44.117', '441.170', '0.000', '5.000', '12.500', '125.000', '0.000', '0.000', '0.000', '0.000', '0.000'],
+    #         ...
+    #     ]
+    # '''
+    # for idx, array in enumerate(matrixFormula):
+    #     counter = 0
+    #     for v in array:
+    #         if v is None:
+    #             idxNone = array.index(v)
+    #             # print("spotted a None at index : {}".format(idxNone))
+    #             # print("specific value -> {}".format(matrix[idx].pop(0)))
+    #             array[idxNone] = emptyMatrixContainer[idx].pop(0)
 
     return matrixFormula
 
 def populate_Matrix_Formula_footer():
     return totalArray
-    
+
 def populateFormulaFooter(tfooter):
     innerTotalArray = totalArray
     for v in tfooter:
@@ -343,9 +418,11 @@ def calculateFillToHtml(lista):
     print("lista:\n{}".format(lista))
     operand1 = lista[2][5]
     operand2 = lista[2][10]
+    print("op1: {} | op2: {}".format(operand1, operand2))
     value1 = round((float(operand1) * 100) / float(operand2))
     value2 = 100 - value1
     value3 = value2
+    print("{} - {} - {}".format(value1, value2, value3))
     listofFillCalculated.extend([value1, value2, value3])
 
     return listofFillCalculated
@@ -447,9 +524,54 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                     res = 0.000
                 else:
                     # TODO: check for res <= 1
-                    if res <= 1:
-                        print("TODO: check which value of VV insert")
+                    print("starting check for res <= 1")
+                    # if res <= 1:
+                    #     print("TODO: check which value of VV insert")
+                    #     print("RawMatName: {} || idx of res <= 1 : {} || matrixofVV :\n{}".format(listofRawMatNames[k], k, matrixofVV))
 
+                    #     tmp_listof_vv_current_rawMat = []
+                    #     for arr in matrixofVV:
+                    #         print("vv: {} of {}".format(arr[k], listofRawMatNames[k]))
+                    #         tmp_listof_vv_current_rawMat.append(arr[k])
+
+                    #     print("\t_tmp_listof_vv_current_rawMat : {}".format(tmp_listof_vv_current_rawMat))
+
+                    #     listof_vv_checks = []
+                    #     for key,v in enumerate(tmp_listof_vv_current_rawMat):
+                    #         calc = 0
+                    #         margin = float(tmp_listof_vv_current_rawMat[0]) * 0.1
+                    #         print("key: {} | len {}".format(key, len(tmp_listof_vv_current_rawMat)))
+                    #         if k < (len(tmp_listof_vv_current_rawMat) - 1):
+                    #             calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[key+1]))
+                    #         else:
+                    #             calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[0]))
+
+                    #         print("calc : {} | margin: {}".format(calc, margin))
+                    #         if calc < margin:
+                    #             # print("1 - correct")
+                    #             listof_vv_checks.append(1)
+                    #         else:
+                    #             # print("0 - uncorrect")
+                    #             listof_vv_checks.append(0)
+                            
+                    #     print("\tlistof_vv_checks : {}".format(listof_vv_checks))
+                    #     if(len(set(listof_vv_checks))==1):
+                    #         # rispetto base1-10% < VALUE x < base1+10%
+                    #         print("All elements in list are same")
+                    #         base1 = float(tmp_listof_vv_current_rawMat[0])
+                    #         margin = 0.1
+                    #         leftBound = base1 - (base1 * margin)
+                    #         rightBound = base1 + (base1 * margin)
+                    #         if res > leftBound and res < rightBound:
+                    #             print("res > leftBound && res < rightBound")
+                    #         else:
+                    #             print("****   NO **** res > leftBound && res < rightBound")
+                    #             # mostro contenuto vvB1 al posto del valore calcolato
+                    #             # print("vvB1 val calculated : {}".format(tmp_listof_vv_current_rawMat[k]))
+                    #             # res = tmp_listof_vv_current_rawMat[k]
+                    #     else:
+                    #         # non rispetto base1-10% < VALUE x < base1+10%
+                    #         print("All elements in list are not same...save calculated res for {}".format(listofRawMatNames[k]))
                 listofVV.append(res)
                 sumofVV += res
 
