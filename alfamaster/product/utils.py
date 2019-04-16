@@ -170,6 +170,7 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
         swArray.append(array[1])
         rmcostArray.append(array[2])
 
+    totalArray.clear()
     for i in range(nbases):
         sumofMl100g = 0.0
         sumofVv = 0.0

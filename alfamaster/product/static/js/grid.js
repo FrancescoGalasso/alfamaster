@@ -137,11 +137,11 @@ function creationTBody(num_raw_material, tableBody){
 
 function creationTFoot(tableFoot, tr_foot){
     console.log("td_counter -> "+td_counter)
-    var th = document.createElement('th')
-    th.colSpan =  3
-    th.innerHTML = 'Total'
-    th.style.fontWeight = "bold"
-    tr_foot.appendChild(th)
+    var td = document.createElement('td')
+    td.colSpan =  3
+    td.innerHTML = 'Total'
+    td.style.fontWeight = "bold"
+    tr_foot.appendChild(td)
 
     var baseClassName = generate_baseClassName()
     var list_totName = ["totalww", "totalml100g", "totalvv", "totalml1000g", "totalfcost"]
@@ -159,9 +159,9 @@ function creationTFoot(tableFoot, tr_foot){
     }else{
         counter = td_counter
         for (var i=3; i < counter; i++){
-            var th = document.createElement('th')
-            th.className = list[i-3]
-            tr_foot.appendChild(th)
+            var td = document.createElement('td')
+            td.className = list[i-3]
+            tr_foot.appendChild(td)
         }
     }
 }
