@@ -509,7 +509,7 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
             totalArrayMaster = ['Total', sumofTiRemoving, sumofVV, sumof100ml, sumofWW, sumofCost]
 
             masterMatrixTransposed = [listofRawMatNames,listofTiRemoving, listofVV, listof100ml, listofWW, listofCost]
-            global masterMatrix
+            # global masterMatrix
             masterMatrix = [[masterMatrixTransposed[j][i] for j in range(len(masterMatrixTransposed))] for i in range(len(masterMatrixTransposed[0]))] 
             masterMatrix.extend([totalArrayMaster])
         
