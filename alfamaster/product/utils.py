@@ -268,14 +268,6 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
     matrixCalculatedValues = [ml100gArray, vvArray, ml1000gArray, fcostArray]
     listof_calculated_values = []
-    # TODO: check this 
-    # for val in listofIndex:
-    #     # print("val in listofIndex : {}".format(val))
-    #     for arr in matrixCalculatedValues:
-    #         for k,v in enumerate(arr):
-    #             if k == val:
-    #                 # print("k: {} - v: {}".format(k,v))
-    #                 listof_calculated_values.append(v)
 
     for i in listofIndex:
         for arr in matrixCalculatedValues:
@@ -404,6 +396,12 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                 new_value = float(current_value) + value_to_add_to_max_rawMat
                 new_value = "{:.3f}".format(new_value)
                 listofTiRemoving[index_of_max_rawMat] = new_value
+                print('prev val: {} - adding {} to {} - current val: {}'.format(current_value, value_to_add_to_max_rawMat,  matrixTransposed[0][index_of_max_rawMat], new_value))
+            if value_to_add_to_h2o > 0:
+                prev_value_h2o = listofTiRemoving[0]
+                current_value_h2o = float(prev_value_h2o) + float(value_to_add_to_h2o)
+                listofTiRemoving[0] = current_value_h2o
+                print('prev h2o val: {} - adding {} to h2o - current h2o val: {}'.format(prev_value_h2o, value_to_add_to_h2o, current_value_h2o))
 
 
             listofVV = []
@@ -419,53 +417,53 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                 else:
                     # TODO: check for res <= 1
                     print("starting check for res <= 1")
-                    # if res <= 1:
-                    #     print("TODO: check which value of VV insert")
-                    #     print("RawMatName: {} || idx of res <= 1 : {} || matrixofVV :\n{}".format(listofRawMatNames[k], k, matrixofVV))
+                    if res <= 1:
+                        print("TODO: check which value of VV insert")
+                        print("RawMatName: {} || idx of res <= 1 : {} || matrixofVV :\n{}".format(listofRawMatNames[k], k, matrixofVV))
 
-                    #     tmp_listof_vv_current_rawMat = []
-                    #     for arr in matrixofVV:
-                    #         print("vv: {} of {}".format(arr[k], listofRawMatNames[k]))
-                    #         tmp_listof_vv_current_rawMat.append(arr[k])
+                        tmp_listof_vv_current_rawMat = []
+                        for arr in matrixofVV:
+                            print("vv: {} of {}".format(arr[k], listofRawMatNames[k]))
+                            tmp_listof_vv_current_rawMat.append(arr[k])
 
-                    #     print("\t_tmp_listof_vv_current_rawMat : {}".format(tmp_listof_vv_current_rawMat))
+                        print("\t_tmp_listof_vv_current_rawMat : {}".format(tmp_listof_vv_current_rawMat))
 
-                    #     listof_vv_checks = []
-                    #     for key,v in enumerate(tmp_listof_vv_current_rawMat):
-                    #         calc = 0
-                    #         margin = float(tmp_listof_vv_current_rawMat[0]) * 0.1
-                    #         print("key: {} | len {}".format(key, len(tmp_listof_vv_current_rawMat)))
-                    #         if k < (len(tmp_listof_vv_current_rawMat) - 1):
-                    #             calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[key+1]))
-                    #         else:
-                    #             calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[0]))
+                        listof_vv_checks = []
+                        for key,v in enumerate(tmp_listof_vv_current_rawMat):
+                            calc = 0
+                            margin = float(tmp_listof_vv_current_rawMat[0]) * 0.1
+                            print("key: {} | len {}".format(key, len(tmp_listof_vv_current_rawMat)))
+                            if k < (len(tmp_listof_vv_current_rawMat) - 1):
+                                calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[key+1]))
+                            else:
+                                calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[0]))
 
-                    #         print("calc : {} | margin: {}".format(calc, margin))
-                    #         if calc < margin:
-                    #             # print("1 - correct")
-                    #             listof_vv_checks.append(1)
-                    #         else:
-                    #             # print("0 - uncorrect")
-                    #             listof_vv_checks.append(0)
+                            print("calc : {} | margin: {}".format(calc, margin))
+                            if calc < margin:
+                                # print("1 - correct")
+                                listof_vv_checks.append(1)
+                            else:
+                                # print("0 - uncorrect")
+                                listof_vv_checks.append(0)
                             
-                    #     print("\tlistof_vv_checks : {}".format(listof_vv_checks))
-                    #     if(len(set(listof_vv_checks))==1):
-                    #         # rispetto base1-10% < VALUE x < base1+10%
-                    #         print("All elements in list are same")
-                    #         base1 = float(tmp_listof_vv_current_rawMat[0])
-                    #         margin = 0.1
-                    #         leftBound = base1 - (base1 * margin)
-                    #         rightBound = base1 + (base1 * margin)
-                    #         if res > leftBound and res < rightBound:
-                    #             print("res > leftBound && res < rightBound")
-                    #         else:
-                    #             print("****   NO **** res > leftBound && res < rightBound")
-                    #             # mostro contenuto vvB1 al posto del valore calcolato
-                    #             # print("vvB1 val calculated : {}".format(tmp_listof_vv_current_rawMat[k]))
-                    #             # res = tmp_listof_vv_current_rawMat[k]
-                    #     else:
-                    #         # non rispetto base1-10% < VALUE x < base1+10%
-                    #         print("All elements in list are not same...save calculated res for {}".format(listofRawMatNames[k]))
+                        print("\tlistof_vv_checks : {}".format(listof_vv_checks))
+                        if(len(set(listof_vv_checks))==1):
+                            # rispetto base1-10% < VALUE x < base1+10%
+                            print("All elements in list are same")
+                            base1 = float(tmp_listof_vv_current_rawMat[0])
+                            margin = 0.1
+                            leftBound = base1 - (base1 * margin)
+                            rightBound = base1 + (base1 * margin)
+                            if res > leftBound and res < rightBound:
+                                print("res > leftBound && res < rightBound")
+                            else:
+                                print("****   NO **** res > leftBound && res < rightBound")
+                                # mostro contenuto vvB1 al posto del valore calcolato
+                                # print("vvB1 val calculated : {}".format(tmp_listof_vv_current_rawMat[k]))
+                                # res = tmp_listof_vv_current_rawMat[k]
+                        else:
+                            # non rispetto base1-10% < VALUE x < base1+10%
+                            print("All elements in list are not same...save calculated res for {}".format(listofRawMatNames[k]))
                 listofVV.append(res)
                 sumofVV += res
 
