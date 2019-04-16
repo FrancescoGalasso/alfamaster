@@ -416,10 +416,10 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                     res = 0.000
                 else:
                     # TODO: check for res <= 1
-                    print("starting check for res <= 1")
+                    # print("starting check for res <= 1")
                     if res <= 1:
-                        print("TODO: check which value of VV insert")
-                        print("RawMatName: {} || idx of res <= 1 : {} || matrixofVV :\n{}".format(listofRawMatNames[k], k, matrixofVV))
+                        print("TODO: check which value of VV insert  || res <= 1")
+                        print("RawMatName: {} || idx of res <= 1 : {} || matrixofVV : {}".format(listofRawMatNames[k], k, matrixofVV))
 
                         tmp_listof_vv_current_rawMat = []
                         for arr in matrixofVV:
@@ -432,13 +432,13 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                         for key,v in enumerate(tmp_listof_vv_current_rawMat):
                             calc = 0
                             margin = float(tmp_listof_vv_current_rawMat[0]) * 0.1
-                            print("key: {} | len {}".format(key, len(tmp_listof_vv_current_rawMat)))
+                            # print("key: {} | len {}".format(key, len(tmp_listof_vv_current_rawMat)))
                             if k < (len(tmp_listof_vv_current_rawMat) - 1):
                                 calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[key+1]))
                             else:
                                 calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[0]))
 
-                            print("calc : {} | margin: {}".format(calc, margin))
+                            # print("calc : {} | margin: {}".format(calc, margin))
                             if calc < margin:
                                 # print("1 - correct")
                                 listof_vv_checks.append(1)
@@ -447,7 +447,7 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                                 listof_vv_checks.append(0)
                             
                         print("\tlistof_vv_checks : {}".format(listof_vv_checks))
-                        if(len(set(listof_vv_checks))==1):
+                        if(len(set(listof_vv_checks))== 1 and listof_vv_checks[0] == 1):
                             # rispetto base1-10% < VALUE x < base1+10%
                             print("All elements in list are same")
                             base1 = float(tmp_listof_vv_current_rawMat[0])
@@ -455,15 +455,15 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                             leftBound = base1 - (base1 * margin)
                             rightBound = base1 + (base1 * margin)
                             if res > leftBound and res < rightBound:
-                                print("res > leftBound && res < rightBound")
+                                print("res > leftBound && res < rightBound  -> show calculated res: {} for {}".format(res, listofRawMatNames[k]))
                             else:
                                 print("****   NO **** res > leftBound && res < rightBound")
                                 # mostro contenuto vvB1 al posto del valore calcolato
-                                # print("vvB1 val calculated : {}".format(tmp_listof_vv_current_rawMat[k]))
-                                # res = tmp_listof_vv_current_rawMat[k]
+                                print("vvB1 val calculated : {}".format(tmp_listof_vv_current_rawMat[k]))
+                                res = tmp_listof_vv_current_rawMat[k]
                         else:
                             # non rispetto base1-10% < VALUE x < base1+10%
-                            print("All elements in list are not same...save calculated res for {}".format(listofRawMatNames[k]))
+                            print("All elements in list are not same or all values are 0...save calculated res: {} for {}".format(res, listofRawMatNames[k]))
                 listofVV.append(res)
                 sumofVV += res
 
