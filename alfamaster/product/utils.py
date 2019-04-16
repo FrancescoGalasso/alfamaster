@@ -231,13 +231,13 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
 
         # print("sumofWW: {}".format(sumofWW))
         # print("sumofMl100g: {}".format(sumofMl100g))
-        print("ml100gArray: {}".format(ml100gArray))
+        # print("ml100gArray: {}".format(ml100gArray))
         # print("sumofVv: {}".format(sumofVv))
-        print("vvArray: {}".format(vvArray))
+        # print("vvArray: {}".format(vvArray))
         # print("sumofMl1000g: {}".format(sumofMl1000g))
-        print("ml1000gArray: {}".format(ml1000gArray))
+        # print("ml1000gArray: {}".format(ml1000gArray))
         # print("sumofFcost:{}".format(fcostArray))
-        print("fcostArray: {}".format(fcostArray))
+        # print("fcostArray: {}".format(fcostArray))
         print("::::::::")
 
     # ! ~~ create base listofIndex depending on base's number
@@ -253,35 +253,46 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
             except:
                 print(" @ exception @")
                 break
-
     # ! ~~ create calcuted listofIndex based on [ml100gArray, vvArray, ml1000gArray, fcostArray]
     _tmp = []
     import copy
     _tmp = copy.copy(listofIndex)
-    print(_tmp)
-    for i in range(4):
+    low_val = _tmp[0]
+    high_val = _tmp[1]
+    diff = int(high_val) - int(low_val)
+    for i in range(diff):
         idx = i+1
         for n in _tmp:
             new_value = int(n)+idx
             listofIndex.append(new_value)
 
-    # print("listofIndex : {}".format(listofIndex))
-
     matrixCalculatedValues = [ml100gArray, vvArray, ml1000gArray, fcostArray]
     listof_calculated_values = []
-    for val in listofIndex:
-        print(val)
+    # TODO: check this 
+    # for val in listofIndex:
+    #     # print("val in listofIndex : {}".format(val))
+    #     for arr in matrixCalculatedValues:
+    #         for k,v in enumerate(arr):
+    #             if k == val:
+    #                 # print("k: {} - v: {}".format(k,v))
+    #                 listof_calculated_values.append(v)
+
+    for i in listofIndex:
         for arr in matrixCalculatedValues:
             for k,v in enumerate(arr):
-                if k == val:
-                    print("k: {} - v: {}".format(k,v))
+                if k == i:
                     listof_calculated_values.append(v)
 
     for idx, array in enumerate(matrixFormula):
-            for v in array:
-                if v is None:
-                    idxNone = array.index(v)
-                    array[idxNone] = listof_calculated_values.pop(0)
+        for v in array:
+            if v is None:
+                idxNone = array.index(v)
+                try:
+                    value = listof_calculated_values.pop(0)
+                    array[idxNone] = value
+                except:
+                    print('exception on idxNone:{}'.format(idxNone))
+                    print('exception on listof_calculated_values:{}'.listof_calculated_values)
 
     return matrixFormula
 
