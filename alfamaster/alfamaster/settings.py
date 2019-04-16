@@ -25,7 +25,7 @@ SECRET_KEY = 'w46zbs)&vh$65@3)(v9ls!@ypvk!jf-=u(aktwnneo)ee4&bvr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # LOGGING PATH
 #LOG_PATH = '/home/galasso/Desktop/django_dev2.log'
