@@ -396,12 +396,12 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                 new_value = float(current_value) + value_to_add_to_max_rawMat
                 new_value = "{:.3f}".format(new_value)
                 listofTiRemoving[index_of_max_rawMat] = new_value
-                print('prev val: {} - adding {} to {} - current val: {}'.format(current_value, value_to_add_to_max_rawMat,  matrixTransposed[0][index_of_max_rawMat], new_value))
+                print('\tprev val: {} - adding {} to {} - current val: {}'.format(current_value, value_to_add_to_max_rawMat,  matrixTransposed[0][index_of_max_rawMat], new_value))
             if value_to_add_to_h2o > 0:
                 prev_value_h2o = listofTiRemoving[0]
                 current_value_h2o = float(prev_value_h2o) + float(value_to_add_to_h2o)
                 listofTiRemoving[0] = current_value_h2o
-                print('prev h2o val: {} - adding {} to h2o - current h2o val: {}'.format(prev_value_h2o, value_to_add_to_h2o, current_value_h2o))
+                print('\tprev h2o val: {} - adding {} to h2o - current h2o val: {}'.format(prev_value_h2o, value_to_add_to_h2o, current_value_h2o))
 
 
             listofVV = []
