@@ -2,18 +2,11 @@ var td_counter = 0;
 var global_num_raw_material = 0
 var global_num_bases = 0
 var global_baseClassName = []
-var global_sw = []
-var global_data = ''
-var _sum_ti = 0.0
-var h2o = 0.0
 var global_more_rawMaterial = 0
-var global_inputValues = []
 var global_colorStrength = false
 var global_popupNewProd = false
-var show_save_form = false
 
 var global_startingFormulaMatrix = []
-// var checkArray = [true, true, true, true]
 var skipTestColorStrenght = true
 
 function generateTable(id){
@@ -49,7 +42,6 @@ function generateTable(id){
     */
     var thead_col = ["Raw material", "Specific weight [g/mL]", "RM cost"]
     var thead_col_base = ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost"]
-    var thead_col_master = ["TiO<sub>2</sub> removing", "%<sub>v/v</sub>", "g/100mL", "%<sub>w/w</sub>", "Formula Cost"]
     var myTableDiv = document.getElementById("main-dashboard-inner-container-table-bases")
 
     var table = document.createElement('TABLE')
@@ -78,16 +70,12 @@ function generateTable(id){
     creationTBody(num_raw_material, tableBody)
 
         // creation of tfoot for the table
-    // var table_tfoot = document.getElementsByTagName('tfoot')
-    // if(table_tfoot){
-    //     alert("DAMN IT! esisto già")
-    // }
     var tr_foot = document.createElement('tr')
     tableFoot.appendChild(tr_foot)
     creationTFoot(tableFoot, tr_foot)
 
     myTableDiv.appendChild(table)
-    setClassesForCalculation()
+    // setClassesForCalculation()
 }
 
 function creationTHead(tr_head, list_of_thead){
@@ -165,221 +153,6 @@ function creationTFoot(tableFoot, tr_foot){
         }
     }
 }
-
-async function generateTableFillLvl(){
-
-    var el = document.getElementById('generatedTableFillLvl')
-    if(el){
-        el.remove(); // Removes elem with the 'generatedTableFillLvl' id
-    }
-    await sleep(200);    // sleep 0.2 sec
-    console.log('generateTableFillLvl')
-
-    // generate the table
-    var thead_col = ["Volume TiO<sub>2</sub> Slurry (%<sub>v/v</sub>)", "Fill level (%<sub>v/v</sub>)", "Definitive fill level"]
-    var myTableDiv = document.getElementById("tableFillCalculation")
-
-
-    var table = document.createElement('TABLE')
-    table.id = "generatedTableFillLvl"
-    var tableHead = document.createElement('THEAD')
-    var tableBody = document.createElement('TBODY')
-    table.appendChild(tableHead)
-    table.appendChild(tableBody)
-
-            // creation of caption for the table
-    var tableCaption = document.createElement('CAPTION')
-    tableCaption.innerHTML = "<b>Fill level calculation</b>"
-    tableCaption.style.textAlign = "center"
-    table.appendChild(tableCaption)
-
-
-            // creation of thead for the table
-    var tr_head = document.createElement('tr')
-    tableHead.appendChild(tr_head)
-    var list_of_thead = [thead_col]
-    creationTHead(tr_head, list_of_thead)
-
-            // creation of tbody for the table
-    var tr_body = document.createElement('tr')
-    tableBody.appendChild(tr_body)
-    var cells_b1 = document.querySelectorAll('.vv_b1');
-    var cells_ti = document.querySelectorAll('.vv_ti');
-    var vb1 = cells_b1[2].textContent
-    var vti = cells_ti[2].textContent
-
-    var op = ""
-    var op2 = ""
-    var op3 = ""
-
-    var tableDetailorUpdate = document.getElementById('tdetail')
-    if(tableDetailorUpdate){
-        // something
-        if (lvl_fill_prod.indexOf('[') > -1 && lvl_fill_prod.indexOf(']') > -1){
-            lvl_fill_prod = lvl_fill_prod.slice(1,-1)
-        }
-        var listofLvl_fill = lvl_fill_prod.split(',').map(Number);
-        op = listofLvl_fill[0]
-        op2 = 100 - op
-        op3 = op2
-    }else{
-        var _op1 = parseFloat(vb1)
-        var _op2 = parseFloat(vti)
-        var _op = (100*_op1)/_op2
-        op = parseFloat(_op).toFixed(0)
-        op2 = 100 - op
-        op3 = op2
-    }
-
-    var op_listì = [op, op2, op3]
-    for (var i = 0; i<op_listì.length; i++){
-        var td = document.createElement('TD')
-        td.innerHTML = op_listì[i]
-        td.style.textAlign = "center"
-        tr_body.appendChild(td)  
-    }
-         
-    myTableDiv.appendChild(table)
-
-    // generateColorStrength
-    if(window.location.href.indexOf("update") > -1){
-        console.log("URL UPDATE")
-        if(global_colorStrength){
-            $('#main-dashboard-inner-colorstrength').css("visibility", "visible");
-        }else if(global_popupNewProd){
-            alert("DEVI CREARE NUOVO PRODOTTO!")
-            $('#main-dashboard-inner-colorstrength').css("visibility", "hidden");
-            return
-        } else {
-            if(typeof show_save_form !== "undefined" && show_save_form == true){
-                $('#main-dashboard-form-save').css("display", "block");  
-                $('#btn_update_save').css("visibility", "visible");
-            }          
-        }
-    }else{
-        $('#main-dashboard-inner-colorstrength').css("visibility", "visible");
-    }
-
-    generateTableMaster()
-}
-
-async function generateTableMaster(){
-
-    var el = document.getElementById('generatedTableMaster')
-    if(el){
-        el.remove(); // Removes elem with the 'generateTableMaster' id
-    }
-
-    await sleep(200);    // sleep 0.2 sec
-    console.log('generateTableMaster')
-
-    var _table = ""
-    var cell_table = ""
-    if ( $( "#tdetail" ).length ){
-        _table = '#tdetail'
-        cell_table = 'th'
-    } else {
-        _table = '#main-dashboard-inner-table-bases'
-        cell_table = 'td'
-    }
-
-    var formulaCost = $(_table+' thead tr:nth-child(2) '+cell_table+':eq(7)').text()
-    var array = formulaCost.split('['),
-        fc = '<div>'+array[0]+'</div>', c = '<div>['+array[1]+'</div>';
-
-    // var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", fc+c]
-    var thead_col_base = ["Raw material","TiO<sub>2</sub> removing [ml]", "%<sub>v/v</sub>","g/100mL", "%<sub>w/w</sub>", formulaCost]
-
-    var myTableDiv = document.getElementById("tableMaster")
-
-
-    var table = document.createElement('TABLE') 
-    table.id = "generatedTableMaster"
-    var tableHead = document.createElement('THEAD')
-    var tableBody = document.createElement('TBODY')
-    var tableFoot = document.createElement('TFOOT')
-    table.appendChild(tableHead)
-    table.appendChild(tableBody)
-    table.appendChild(tableFoot)
-
-            // creation of caption for the table
-    var tableCaption = document.createElement('CAPTION')
-    tableCaption.innerHTML = "<b>MASTER</b>"
-    tableCaption.style.textAlign = "center"
-    table.appendChild(tableCaption)
-
-            // creation of thead for the table
-    var tr_head = document.createElement('tr')
-    tableHead.appendChild(tr_head)
-    var list_of_thead = [thead_col_base]
-    creationTHead(tr_head, list_of_thead)
-
-            // creation of tbody for the table
-    creationTBodyMaster(global_num_raw_material, tableBody)
-
-            // creation of tfoot for the table
-    var tr_foot = document.createElement('tr')
-    tableFoot.appendChild(tr_foot)
-    tableFoot.style.borderStyle = "solid" // css 
-    tableFoot.style.borderColor = "black" // css
-    creationTFootMaster(tableFoot, tr_foot)
-
-    myTableDiv.appendChild(table)
-
-            // add className
-    setClassesForCalculationMaster()
-
-            // populate table with data
-    generateDataMaster()
-}
-
-function creationTBodyMaster(global_num_raw_material, tableBody){
-    var listofRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>']
-    var listofRawMaterialTmp = $('table tbody tr td:nth-child(1)').get()
-    listofRawMaterialTmp.splice(-1, 1)
-    listofRawMaterialTmp.splice(0, 3)
-
-    // var listofRawMaterialFinal = []
-    listofRawMaterial.push(...listofRawMaterialTmp)
-
-    for (var i = 0; i< global_num_raw_material; i ++){
-        var tr_body = document.createElement('tr')
-        tableBody.appendChild(tr_body)
-
-        for (var j=0; j< 6; j++){
-            var td = document.createElement('TD')
-            td.style.height = "30px"
-            if (j == 0){
-                var value = ""
-                if(listofRawMaterial[i].textContent === undefined){
-                    value = listofRawMaterial[i]
-                } else{
-                    value = listofRawMaterial[i].textContent
-
-                }
-                td.innerHTML = value
-            }
-            tr_body.appendChild(td)           
-        }
-    }
-}
-
-function creationTFootMaster(tableFoot, tr_foot){
-    var th = document.createElement('th')
-    th.innerHTML = 'Total'
-    th.style.fontWeight = "bold"
-    tr_foot.appendChild(th)
-
-    var list_totName = ["totalrem", "totalvv", "totalg100ml", "totalww", "totalfcost"]
-
-    for (var i=0; i < 5; i++){
-        var th = document.createElement('th')
-        th.className = list_totName[i]
-        th.classList.add("to_update")
-        tr_foot.appendChild(th)
-    }
-}
-
 
 /*
 *
@@ -534,23 +307,6 @@ function setClassesForCalculation(){
 
     for (var j=2; j < td_counter+1; j++){
         $('table tbody tr td:nth-child('+j+')').addClass(listClassNameBase[j-2]);
-    }
-}
-
-    // class name for #main-dashboard-inner-table-basesMaster
-function setClassesForCalculationMaster(){
-
-    var list_class = ["tirem_m", "vv_m", "g100ml_m", "ww_m", "fc_m"]
-    var t = 0;
-    var table = document.getElementById("generatedTableMaster")
-
-    for (var j=2; j < 7; j++){
-        var cells = table.querySelectorAll('td:nth-child('+j+')')
-        for(var i = 0 ; i < cells.length ; i++) {
-            var _class = list_class[t]
-            cells[i].classList.add(_class)
-        }
-        t++
     }
 }
 
@@ -763,14 +519,6 @@ $( document ).ready(function() {
     $('#main-dashboard-inner-grid-container-select-formula-currency').append(option);
 
     console.log("doc ready!")
-
-    var inputB1 = $("#tdetail tbody tr td:nth-child(4)")
-    for (var i=0; i< inputB1.length; i++){
-        if(i<4){
-            var tmp = inputB1[i].textContent
-            global_inputValues.push(tmp)
-        }
-    }
 
     if(window.location.href.indexOf("update") > -1){
         console.log("URL UPDATE")
@@ -997,7 +745,7 @@ function generateDataFromServer() {
         populateTableFooterWithDataFromServer(payloadFooter)
 
 
-        // TODO: check if skipTestColorStrenght is true, show master table and save bnt
+        // check if skipTestColorStrenght is true, show master table and save bnt
         if (skipTestColorStrenght){
             console.log("post ajax")
             console.log("skipTestColorStrenght -> ", skipTestColorStrenght)
@@ -1028,7 +776,6 @@ function generateDataMasterFromServer() {
         if ( reply.length > 0 ) {
             console.log("SUCCESS Master callback")
             $('#main-dashboard-inner-table-master').css("display", "inline")
-            // $('#btn_update_save').css("visibility", "visible");
             $('#main-dashboard-form-save').css('display', 'inline')
             populateTableMasterWithDataFromServer(reply)
         } else {
@@ -1036,7 +783,6 @@ function generateDataMasterFromServer() {
         }
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
-        //  serrorFunction();
         console.log("ERROR callback")
         alert("ERROR!") }
     );
@@ -1048,7 +794,6 @@ function populateTableBasesWithDataFromServer(payload) {
         var colValue = $("#main-dashboard-inner-table-bases tbody tr:eq("+i+")");
         var numofCellsRow = colValue.find('td').length
         for (var j=0; j < numofCellsRow; j++) {
-            // oldValue = colValue.find('td:eq('+j+')')
             newValue = payload[i][j]
             colValue.find('td:eq('+j+')').text(newValue)
         }
@@ -1059,7 +804,6 @@ function populateTableFooterWithDataFromServer(payload) {
     var footer = $("#main-dashboard-inner-table-bases tfoot tr");
     var numofCellsRow = footer.find('td').length
     for (var j=1; j < numofCellsRow; j++) {
-        // oldValue = colValue.find('td:eq('+j+')')
         newValue = payload[j-1]
         footer.find('td:eq('+j+')').text(newValue)
     }

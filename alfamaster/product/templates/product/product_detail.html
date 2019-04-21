@@ -15,8 +15,6 @@
 
 <!-- ================== BEGIN BASE JS ================== -->
 <script src="{% static 'js/loadingOverlay.js' %}"></script>
-<script src="{% static 'js/table.js' %}"></script>  
-<script src="{% static 'js/utils.js' %}"></script>
 <!-- ================== END BASE JS ================== -->
 
 
@@ -34,7 +32,6 @@
 	var currency = '{{prod_currency}}'
 	var prod_admin = '{{prod_admin}}'
 	var history_id = '{{history_id}}'
-	// var lvl_fill_prod = '{{prod_lvl_fill}}'
 </script>
 <!-- ================== END PAGE LEVEL JS ================== -->
 
@@ -152,6 +149,8 @@
 			$('#main-dashboard-inner-detailpage-table-bases thead tr:nth-child(1) th:eq('+i+')').css('text-align', 'center');
 			$('#main-dashboard-inner-detailpage-table-bases thead tr:nth-child(1) th:eq('+i+')').css('font-size', 'larger');
 		}
+		$('#main-dashboard-inner-detailpage-table-bases tfoot').css('border', '3px solid black');
+		$('#main-dashboard-inner-detailpage-table-bases tfoot').css('font-weight', 'bold');
 	</script>
 	<hr/>
 </div>
