@@ -6,9 +6,9 @@
  ----------------------------
  
  <!-- ======== GLOBAL SCRIPT SETTING ======== -->
- 01. Handle document
- 02. Handle table bases creation
- 03. Handle table behaviors
+ 01. Handle Document
+ 02. Handle Table bases creation
+ 03. Handle Table behaviors
  04. Handle data from server
  05. Utility Scripts
  06. Handle onClick call
@@ -120,6 +120,13 @@ $( document ).ready(function() {
         hideOrShowElements("loadOnUpdate")
         var keyupAction = false
     }
+
+    $( '#main-dashboard-inner-grid-container-select-formula-currency' ).change(function() {
+        var selectedCurrency = $( "select option:selected" ).text()
+        $(".thead-currency").each(function (){
+            $(this).text(selectedCurrency)
+        });
+    });
 });
 
 /* 02. Handle table bases creation
@@ -157,7 +164,7 @@ function generateTable(id){
     *       generate the table
     */
     var thead_col = ["Raw material", "Specific weight [g/mL]", "RM cost"]
-    var thead_col_base = ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost"]
+    var thead_col_base = ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost <div class='thead-currency'>EUR - €</div>"]
     var myTableDiv = document.getElementById("main-dashboard-inner-container-table-bases")
 
     var table = document.createElement('TABLE')
