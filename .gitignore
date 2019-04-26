@@ -13,3 +13,6 @@ dumps/
 
 node_modules/
 package-lock.json
+
+masterenvpy3
+setenv.sh
