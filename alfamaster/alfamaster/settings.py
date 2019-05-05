@@ -36,7 +36,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # LOGGING PATH
-#LOG_PATH = '/home/galasso/Desktop/django_dev2.log'
 LOG_PATH = './logs/alfamaster.log'
 
 # Application definition
