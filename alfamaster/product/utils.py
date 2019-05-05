@@ -347,7 +347,9 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
             for k,v in enumerate(listofBase1VV):
                 res = 0.000
                 forced_res_to_zero = False 
-                if k != 2 and k != 4 :
+                wwB1_current_RawMat = matrixTransposed[3][k]
+                print('wwB1 : {}'.format(wwB1_current_RawMat))
+                if k != 2 and k != 4 and float(wwB1_current_RawMat) > 0:
                     res = (float(listofBase1VV[k]) - float(listofTiVV[k])*((100-defLvl)/100))/(defLvl/100)
                     # check for no default raw materials
                     if k > 4:
@@ -360,7 +362,7 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                         print("\ncurrent raw mat: {} | specificWeight: {} | wwB1currentRawMat: {} | wwBNcurrentRawMat: {}".format(
                             matrixTransposed[0][k], specific_Weight_RawMat, wwB1_current_RawMat, wwBN_current_RawMat))
 
-                        if specific_Weight_RawMat > 2:
+                        if specific_Weight_RawMat > 1.5 and float(wwB1_current_RawMat) > 1:
                             if wwB1_current_RawMat <= wwBN_current_RawMat and diff <= limit:
                                 print("{} is a RAW MATERIAL SOLID\nCalculated normally\nadd to rawMatSolid list\n".format(matrixTransposed[0][k]))
                                 tuple_ = (res, diff, k)
@@ -376,14 +378,17 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                                 "\nadd calculated value {} to max rawMatSolid in the rawMatSolid list\n".format(matrixTransposed[0][k], res))
                                 forced_res_to_zero = True
                                 value_to_add_to_max_rawMat += float(res)
-                        else:
+                        elif specific_Weight_RawMat < 1.5 and float(wwB1_current_RawMat) > 10:
                             if wwB1_current_RawMat > wwBN_current_RawMat and diff > limit:
                                 print("{} is not a RAW MATERIAL SOLID\nmustbe calculated to ZERO on MASTER TABLE." \
                                 "\nAdd calculated value to h2o".format(matrixTransposed[0][k]))
                                 forced_res_to_zero = True
                                 value_to_add_to_h2o += float(res)
-                            else:
-                                print("{} is not a RAW MATERIAL SOLID\nnothing to do".format(matrixTransposed[0][k]))
+                            # else:
+                            #     print("{} is not a RAW MATERIAL SOLID\nnothing to do".format(matrixTransposed[0][k]))
+                        elif float(wwB1_current_RawMat) < 10:
+                            print("{} is not a RAW MATERIAL SOLID\nnothing to do".format(matrixTransposed[0][k]))
+
                 res = "{:.3f}".format(res)
                 if forced_res_to_zero :
                     listofTiRemoving.append(float(0.000))
