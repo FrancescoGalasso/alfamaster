@@ -1,6 +1,38 @@
 # file_master_online
 Django site for the interactive usage of file_excell_master provided by laboratory
 
+# Project Layout
+The project layout reflect the one suggested by Daniel Roy Greenfeld and Audrey Roy Greenfeld in the book "Two Scoops of Django
+Best Practices For Django 1.8"
+```
+<repository_root>/
+    <django_project_root>/
+        <configuration_root>/
+```
+
+Example of suggested layout
+```
+icecreamratings_project/
+    .gitignore
+    Makefile
+    docs/
+    README.rst
+    requirements.txt
+    icecreamratings/
+        manage.py
+        media/ # Development ONLY!
+        products/
+        profiles/
+        ratings/
+        static/
+        templates/
+        config/
+            __init__.py
+            settings/
+            urls.py
+            wsgi.py
+```
+
 # Prerequisites
 
 ## Install Postgres 9-6 
