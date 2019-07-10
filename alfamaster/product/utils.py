@@ -201,6 +201,7 @@ def populateMatrixFormulaBody(matrixFormula, nbases):
             operand1_vv = ml100gArray[idx+index]
             operand2_vv = sumofMl100g
             _vv = (float(operand1_vv)*100)/float(operand2_vv)
+            print('DEBUG::: operand1_vv:{} , operand2_vv: {}'.format(operand1_vv, operand2_vv))
             vv = "{:.3f}".format(_vv)
             sumofVv += float(vv)
             tmpVV.append(vv)
@@ -348,38 +349,59 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                 res = 0.000
                 forced_res_to_zero = False 
                 wwB1_current_RawMat = matrixTransposed[3][k]
-                print('wwB1 : {}'.format(wwB1_current_RawMat))
-                if k != 2 and k != 4 and float(wwB1_current_RawMat) > 0:
+                print('\nwwB1 : {}'.format(wwB1_current_RawMat))
+                # if k != 2 and k != 4 and float(wwB1_current_RawMat) > 0:
+                if k != 2 and k != 4:
                     res = (float(listofBase1VV[k]) - float(listofTiVV[k])*((100-defLvl)/100))/(defLvl/100)
-                    # check for no default raw materials
+                    print('rmvv_i: {}, rmS_i: {}, defLvl: {}'.format(float(listofBase1VV[k]), float(listofTiVV[k]), defLvl))
+                    print('TiO2 Removing calculated: {} for RawMat: {}'.format(res, matrixTransposed[0][k]))
+                    # check for no default raw materials (no water, no binder, no Ti )
                     if k > 4:
                         wwB1_current_RawMat = matrixTransposed[3][k]
                         index = len(matrixTransposed)
                         wwBN_current_RawMat = matrixTransposed[index-5][k]
                         diff = abs(float(wwB1_current_RawMat) - float(wwBN_current_RawMat))
-                        limit = float(wwB1_current_RawMat) * 10/100
+                        limit = float(wwB1_current_RawMat) * 15/100
                         specific_Weight_RawMat = float(matrixTransposed[1][k])
-                        print("\ncurrent raw mat: {} | specificWeight: {} | wwB1currentRawMat: {} | wwBNcurrentRawMat: {}".format(
-                            matrixTransposed[0][k], specific_Weight_RawMat, wwB1_current_RawMat, wwBN_current_RawMat))
+                        print("\tcurrent raw mat: {} | specificWeight: {} | wwB1currentRawMat: {} | wwBNcurrentRawMat: {}, diff: {}, limit: {}".format(
+                            matrixTransposed[0][k], specific_Weight_RawMat, wwB1_current_RawMat, wwBN_current_RawMat, diff, limit))
 
-                        if specific_Weight_RawMat > 1.5 and float(wwB1_current_RawMat) > 1:
-                            if wwB1_current_RawMat <= wwBN_current_RawMat and diff <= limit:
+                        # if specific_Weight_RawMat > 1.5 and float(wwB1_current_RawMat) > 1:
+                            # if wwB1_current_RawMat <= wwBN_current_RawMat and diff <= limit:
+                            #     print("{} is a RAW MATERIAL SOLID\nCalculated normally\nadd to rawMatSolid list\n".format(matrixTransposed[0][k]))
+                            #     tuple_ = (res, diff, k)
+                            #     listof_solid_rawMat.append(tuple_)
+                            # elif wwB1_current_RawMat <= wwBN_current_RawMat and diff > limit:
+                            #     print("{} is a RAW MATERIAL SOLID\nCalculated normally\n".format(matrixTransposed[0][k]))
+                            # elif wwB1_current_RawMat > wwBN_current_RawMat and diff <= limit:
+                            #     print("{} is a RAW MATERIAL SOLID\nCalculated normally\nadd to rawMatSolid list\n".format(matrixTransposed[0][k]))
+                            #     tuple_ = (res, diff, k)
+                            #     listof_solid_rawMat.append(tuple_)
+                            # elif wwB1_current_RawMat > wwBN_current_RawMat and diff > limit:
+                            #     print("{} is a RAW MATERIAL SOLID\nCalculated must be shown as ZERO" \
+                            #     "\nadd calculated value {} to max rawMatSolid in the rawMatSolid list\n".format(matrixTransposed[0][k], res))
+                            #     forced_res_to_zero = True
+                            #     value_to_add_to_max_rawMat += float(res)
+
+                            # test 10/07/19
+                        if specific_Weight_RawMat > 1.5:
+                            if wwB1_current_RawMat <= wwBN_current_RawMat:
                                 print("{} is a RAW MATERIAL SOLID\nCalculated normally\nadd to rawMatSolid list\n".format(matrixTransposed[0][k]))
                                 tuple_ = (res, diff, k)
                                 listof_solid_rawMat.append(tuple_)
-                            elif wwB1_current_RawMat <= wwBN_current_RawMat and diff > limit:
-                                print("{} is a RAW MATERIAL SOLID\nCalculated normally\n".format(matrixTransposed[0][k]))
                             elif wwB1_current_RawMat > wwBN_current_RawMat and diff <= limit:
-                                print("{} is a RAW MATERIAL SOLID\nCalculated normally\nadd to rawMatSolid list\n".format(matrixTransposed[0][k]))
-                                tuple_ = (res, diff, k)
-                                listof_solid_rawMat.append(tuple_)
+                                print("{} is a RAW MATERIAL SOLID\nCalculated normally".format(matrixTransposed[0][k]))
                             elif wwB1_current_RawMat > wwBN_current_RawMat and diff > limit:
                                 print("{} is a RAW MATERIAL SOLID\nCalculated must be shown as ZERO" \
                                 "\nadd calculated value {} to max rawMatSolid in the rawMatSolid list\n".format(matrixTransposed[0][k], res))
                                 forced_res_to_zero = True
                                 value_to_add_to_max_rawMat += float(res)
-                        elif specific_Weight_RawMat < 1.5 and float(wwB1_current_RawMat) > 10:
+
+
+                        # elif specific_Weight_RawMat < 1.5 and float(wwB1_current_RawMat) > 10:
+                        elif specific_Weight_RawMat < 1.5 and float(wwB1_current_RawMat) > 2:
                             if wwB1_current_RawMat > wwBN_current_RawMat and diff > limit:
+                                print('wwB1_current_RawMat: {}, wwBN: {}, diff: {}, limit: {}'.format(wwB1_current_RawMat, wwBN_current_RawMat, diff, limit))
                                 print("{} is not a RAW MATERIAL SOLID\nmustbe calculated to ZERO on MASTER TABLE." \
                                 "\nAdd calculated value to h2o".format(matrixTransposed[0][k]))
                                 forced_res_to_zero = True
@@ -388,6 +410,11 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                             #     print("{} is not a RAW MATERIAL SOLID\nnothing to do".format(matrixTransposed[0][k]))
                         elif float(wwB1_current_RawMat) < 10:
                             print("{} is not a RAW MATERIAL SOLID\nnothing to do".format(matrixTransposed[0][k]))
+                        # if TiO2 removing value is < 0,  set it to 0
+                        if res < 0:
+                            print('forcing {} TiO2 removing to 0'.format(matrixTransposed[0][k]))
+                            forced_res_to_zero = True
+                            res = 0.000
 
                 res = "{:.3f}".format(res)
                 if forced_res_to_zero :
@@ -395,9 +422,11 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                 else:
                     listofTiRemoving.append(float(res))
                 sumofTiRemoving += float(res)
+            print('DEBUG:: list-solid_rawMat: {}'.format(listof_solid_rawMat))
             if listof_solid_rawMat:
                 from operator import itemgetter
                 index_of_max_rawMat = max(listof_solid_rawMat,key=itemgetter(1,2))[2]
+                print('DEBUG:: max rawMat: {}'.format(max(listof_solid_rawMat,key=itemgetter(1,2))))
                 current_value = listofTiRemoving[index_of_max_rawMat]
                 new_value = float(current_value) + value_to_add_to_max_rawMat
                 new_value = "{:.3f}".format(new_value)
@@ -424,15 +453,15 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                     # TODO: check for res <= 1
                     # print("starting check for res <= 1")
                     if res <= 1:
-                        print("TODO: check which value of VV insert  || res <= 1")
-                        print("RawMatName: {} || idx of res <= 1 : {} || matrixofVV : {}".format(listofRawMatNames[k], k, matrixofVV))
+                        # print("TODO: check which value of VV insert  || res <= 1")
+                        # print("RawMatName: {} || idx of res <= 1 : {} || matrixofVV : {}".format(listofRawMatNames[k], k, matrixofVV))
 
                         tmp_listof_vv_current_rawMat = []
                         for arr in matrixofVV:
-                            print("vv: {} of {}".format(arr[k], listofRawMatNames[k]))
+                            # print("vv: {} of {}".format(arr[k], listofRawMatNames[k]))
                             tmp_listof_vv_current_rawMat.append(arr[k])
 
-                        print("\t_tmp_listof_vv_current_rawMat : {}".format(tmp_listof_vv_current_rawMat))
+                        # print("\t_tmp_listof_vv_current_rawMat : {}".format(tmp_listof_vv_current_rawMat))
 
                         listof_vv_checks = []
                         for key,v in enumerate(tmp_listof_vv_current_rawMat):
@@ -440,7 +469,9 @@ def calculateMasterToHtml(lista, Fillvl, nbases):
                             margin = float(tmp_listof_vv_current_rawMat[0]) * 0.1
                             # print("key: {} | len {}".format(key, len(tmp_listof_vv_current_rawMat)))
                             if k < (len(tmp_listof_vv_current_rawMat) - 1):
-                                calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[key+1]))
+                                # print('k: {}, len(tmp_listof_vv_current_rawMat): {}'.format(k, len(tmp_listof_vv_current_rawMat) - 1))
+                                if key+1 <= k:
+                                    calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[key+1]))
                             else:
                                 calc = abs(float(tmp_listof_vv_current_rawMat[key]) - float(tmp_listof_vv_current_rawMat[0]))
 
