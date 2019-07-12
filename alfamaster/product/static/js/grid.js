@@ -127,6 +127,26 @@ $( document ).ready(function() {
             $(this).text(selectedCurrency)
         });
     });
+
+    // handle chkbox for show less columns
+    $('#chk-show-less-columns').change(function() {
+        if($(this).is(":checked")) {
+            $(".hidable").each(function() {
+                $(this).css("display","none");
+            });
+
+            $(".shortable").each(function() {
+                $(this).attr('colspan',3);
+            }); 
+        } else {
+            $(".hidable").each(function() {
+                $(this).css("display","");
+            });
+            $(".shortable").each(function() {
+                $(this).attr('colspan',5);
+            });
+        }
+    });
 });
 
 /* 02. Handle table bases creation
@@ -201,6 +221,13 @@ function generateTable(id){
 }
 
 function creationTHead(tr_head, list_of_thead){
+    // example of list_of_thead - 3 bases and 1 TiO2 Slurry
+    // 0: (3) ["Raw material", "Specific weight [g/mL]", "RM cost"]
+    // 1: (5) ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost <div class='thead-currency'>EUR - €</div>"]
+    // 2: (5) ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost <div class='thead-currency'>EUR - €</div>"]
+    // 3: (5) ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost <div class='thead-currency'>EUR - €</div>"]
+    // 4: (5) ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost <div class='thead-currency'>EUR - €</div>"]
+
     for (var j=0; j < list_of_thead.length; j++){
         for (var i=0; i< list_of_thead[j].length; i++) {
             var td = document.createElement('TD')
@@ -210,6 +237,10 @@ function creationTHead(tr_head, list_of_thead){
             td.style.textAlign = "center"
             tr_head.appendChild(td)
             td_counter++
+
+            if (j > 0 && (i == 1 || i == 3)) {
+                td.classList.add('hidable')
+            }
         }
     }
 }
@@ -218,6 +249,7 @@ function creationTBody(num_raw_material, tableBody){
     var defaultRawMaterial = ['H<sub>2</sub>O', 'Binder', 'TiO<sub>2</sub>', 'Binder 2', 'TiO<sub>2</sub> 2', 'Ext TiO<sub>2</sub> 3' ]
 
     var indexInput=[1,2,3]
+    var hidableIndex = generateHidableIndexTableBases()
     for(var q = 0; q<global_num_bases; q++){
         var calcTmpValue = 3+(5*(q+1))    //8, 13, 18 ...
         indexInput.push(calcTmpValue)
@@ -240,7 +272,11 @@ function creationTBody(num_raw_material, tableBody){
                 td.contentEditable = true
                 td.style.backgroundColor = "#ffff00"  
             }
-            tr_body.appendChild(td)           
+            tr_body.appendChild(td)
+            
+            if( $.inArray(j, hidableIndex) != -1){
+                td.classList.add('hidable')
+            }
         }
     }
 }
@@ -256,6 +292,11 @@ function creationTFoot(tableFoot, tr_foot){
     for (var i=3; i < td_counter; i++){
         var td = document.createElement('td')
         tr_foot.appendChild(td)
+
+        var hidableIndex = generateHidableIndexTableBases()
+        if( $.inArray(i, hidableIndex) != -1){
+            td.classList.add('hidable')
+        }
     }
 }
 
@@ -316,8 +357,25 @@ function addTheadBases(tr_head, thead_bases){
             td.style.textAlign = "center"
             td.colSpan = 5; 
             tr_head.appendChild(td)
+            td.classList.add("shortable")
         }
     }
+}
+
+function generateHidableIndexTableBases() {
+    var hidableIndex = [4,6,9,11,14,16] // idx for base1, TiO2 slurry and base2 .. the default bases
+    for(var q = 0; q<global_num_bases; q++){
+        // if bases value is bigger than 2
+        var last_element = hidableIndex[hidableIndex.length - 1]
+        if(q > 1 ) {
+            column_1 = parseInt(last_element) + 3
+            column_2 = column_1 + 2
+            hidableIndex.push(column_1, column_2);
+            console.log('::: hidableIndex, ', hidableIndex)
+        }
+    }
+
+    return hidableIndex
 }
 
 /* 03. Handle table behaviors
@@ -681,6 +739,7 @@ function hideOrShowElements(action){
             $('#main-dashboard-inner-grid-container-addremove').css('display', 'block')
             $('#main-dashboard-inner-grid-container-btn-calculate').css('display', 'block')
             $('#main-dashboard-inner-grid-container-select').css('display', 'block')
+            $('#main-dashboard-inner-grid-container-checkbox').css('display', 'block')
             break;
         case "calculateBasesOnUpdate":
             $("#main-dashboard-inner-table-fillcalculation").css("display", "none")

@@ -26,6 +26,7 @@
     3.6 Component - Color Strength Setting
     3.7 Component - Select Elements
     3.8 Component - Container Elements
+    3.9 Component - CheckBox Elements
 
 */
 
@@ -453,4 +454,10 @@ div.modal-footer form {
 
 #main-dashboard-inner-grid-container-select {
     display:none;
+}
+
+/* 3.9 Component - CheckBox Elements */
+
+#main-dashboard-inner-grid-container-checkbox {
+    display: none;
 }
