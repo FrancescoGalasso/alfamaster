@@ -39,9 +39,9 @@ def basesListToHtml(lista, currency = ""):
 
 
     thead1stRow = [None, None, None, 'Base1 (PASTEL)', 'TiO<sub>2</sub> slurry', 'Base2']
-    thead2ndRow = ['Raw material', 'Specific weight [g/mL]', 'RM cost']
+    thead2ndRow = ['Raw material', 'Specific weight [g/mL]', 'RM cost ['+currency+' / Kg ]']
     theadBase = ['%w/w','mL/100g', '%v/v', 'mL/1000g']
-    formulaCost = 'Formula Cost ['+currency+']'
+    formulaCost = 'Formula Cost [ '+currency+' / L ]'
     theadBase.append(formulaCost)
     
     for i in range(nbases):

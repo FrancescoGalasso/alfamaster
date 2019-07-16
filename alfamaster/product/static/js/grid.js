@@ -183,8 +183,8 @@ function generateTable(id){
     /*
     *       generate the table
     */
-    var thead_col = ["Raw material", "Specific weight [g/mL]", "RM cost"]
-    var thead_col_base = ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost <div class='thead-currency'>EUR - €</div>"]
+    var thead_col = ["Raw material", "Specific weight [g/mL]", "RM cost <div class='thead-currency'>EUR - €</div>/ Kg"]
+    var thead_col_base = ["%<sub>w/w</sub>", "mL/100g", "%<sub>v/v</sub>", "mL/1000g", "Formula Cost <div class='thead-currency'>EUR - €</div>/ L"]
     var myTableDiv = document.getElementById("main-dashboard-inner-container-table-bases")
 
     var table = document.createElement('TABLE')
@@ -420,6 +420,7 @@ function removeLastRawMatAdded(){
 }
 
 // TODO: check for refactor on server side of showLessDetails & showLessDetailsMaster
+// TODO: check for possible delete of showLessDetails & showLessDetailsMaster
 /**
  * 
  * If the user authenticated is not an admin user, show less details (hide mL/100g; mL/1000g) on table #tdetail
