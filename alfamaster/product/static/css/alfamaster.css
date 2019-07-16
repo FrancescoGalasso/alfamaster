@@ -306,6 +306,10 @@ input[type=number]::-webkit-outer-spin-button {
     display: none;
 }
 
+.highlight {
+    border: 2pt solid red !important;
+}
+
 /* 3.4 Component - Button */
 
 /* 3.4.1 Component - Button - list.html */

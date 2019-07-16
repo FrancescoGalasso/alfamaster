@@ -147,6 +147,7 @@ $( document ).ready(function() {
             });
         }
     });
+
 });
 
 /* 02. Handle table bases creation
@@ -270,7 +271,11 @@ function creationTBody(num_raw_material, tableBody){
             }
             if (indexInput.indexOf(j) > -1 || (j == 0 && i >= 5)){
                 td.contentEditable = true
-                td.style.backgroundColor = "#ffff00"  
+                td.style.backgroundColor = "#ffff00"
+                td.onclick = function () {
+                    var tr_tdCurrent = $(this).parent('tr')
+                    highlightCurrentTableRow(tr_tdCurrent)
+                };
             }
             tr_body.appendChild(td)
             
@@ -371,7 +376,7 @@ function generateHidableIndexTableBases() {
             column_1 = parseInt(last_element) + 3
             column_2 = column_1 + 2
             hidableIndex.push(column_1, column_2);
-            console.log('::: hidableIndex, ', hidableIndex)
+            // console.log('::: hidableIndex, ', hidableIndex)
         }
     }
 
@@ -495,6 +500,15 @@ function showLessDetailsMaster(){
             }
         }
     }
+}
+
+function highlightCurrentTableRow(currentRow){
+    $('#main-dashboard-inner-table-bases > tbody  > tr').each(function(index, trow){
+        if ($(this).hasClass('highlight')) {
+            $(this).removeClass("highlight");
+        }
+    });
+    currentRow.addClass("highlight")
 }
 
 /* 04. Handle data from server
@@ -730,6 +744,12 @@ function hideOrShowElements(action){
             $('#main-dashboard-inner-table-master tbody').empty()
             $("#main-dashboard-inner-colorstrength-btn-verify").css({ 'cursor' : '', 'pointer-events' : '' , 'opacity' : ''});
             $('#main-dashboard-form-save').css('display', 'none')
+            $('#main-dashboard-inner-table-bases > tbody tr').removeClass('highlight')
+            // $('#main-dashboard-inner-table-bases > tbody  > tr').each(function(index, trow){
+            //     if ($(this).hasClass('highlight')) {
+            //         $(this).removeClass("highlight");
+            //     }
+            // });
           break;
         case "hideGridContainer":
             $('.main-dashboard-inner-grid-container').css('display', 'none')
