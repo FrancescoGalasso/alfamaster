@@ -745,11 +745,6 @@ function hideOrShowElements(action){
             $("#main-dashboard-inner-colorstrength-btn-verify").css({ 'cursor' : '', 'pointer-events' : '' , 'opacity' : ''});
             $('#main-dashboard-form-save').css('display', 'none')
             $('#main-dashboard-inner-table-bases > tbody tr').removeClass('highlight')
-            // $('#main-dashboard-inner-table-bases > tbody  > tr').each(function(index, trow){
-            //     if ($(this).hasClass('highlight')) {
-            //         $(this).removeClass("highlight");
-            //     }
-            // });
           break;
         case "hideGridContainer":
             $('.main-dashboard-inner-grid-container').css('display', 'none')
