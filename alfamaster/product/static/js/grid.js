@@ -219,6 +219,17 @@ function generateTable(id){
     creationTFoot(tableFoot, tr_foot)
 
     myTableDiv.appendChild(table)
+
+    // hide columns after table creation
+    if ($('#chk-show-less-columns').is(":checked")){
+        $(".hidable").each(function() {
+            $(this).css("display","none");
+        });
+
+        $(".shortable").each(function() {
+            $(this).attr('colspan',3);
+        });
+    }
 }
 
 function creationTHead(tr_head, list_of_thead){
