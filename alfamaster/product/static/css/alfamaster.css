@@ -118,7 +118,8 @@ td {
 /* 2.2 Sidebar & sidebar elements */
 
 .main-dashboard-sidebar-nav {
-    width: 210px;
+    /* width: 210px; */
+    width: 75px;
     position: fixed;
     z-index: 1;
     top: 100;
@@ -140,9 +141,9 @@ td {
     padding-left: -8px !important;  /* forse da cambiare!*/
 }
 
-.main-dashboard-sidebar-nav-item:last-child{
+/* .main-dashboard-sidebar-nav-item:last-child{
     margin-left: 120px;
-}
+} */
 
 .main-dashboard-sidebar-nav-item-glyphicon{
     display: inline-block;
@@ -156,7 +157,7 @@ td {
 }
 
 .main-dashboard-sidebar-nav-item a {
-    padding: 6px 8px 6px 0px;
+    padding: 14px 8px 14px 0px;
     text-decoration: none;
     font-size: 25px;
     color: #818181;
@@ -186,7 +187,8 @@ td {
   }
 
 #main-dashboard{
-    margin-left: 200px; 
+    /* margin-left: 200px;  */
+    margin-left: 65px;
     padding: 6px 10px;
     /* https://stackoverflow.com/questions/3452950/fixed-width-div-losing-its-background-color-upon-resizing-the-browser-window */
     min-width: 1150px;
