@@ -552,7 +552,8 @@ function retrivePayloadFromTableBases() {
 function generateDataFromServer() {
 
     hideOrShowElements("calculateBases")
-    skipTestColorStrenght = true
+    // skipTestColorStrenght = true
+    skipTestColorStrenght = false
     var matrix = retrivePayloadFromTableBases()
     var payload = {'payload':matrix}
     console.log("payload to server -> ", payload);
