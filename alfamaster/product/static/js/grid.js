@@ -148,11 +148,9 @@ $( document ).ready(function() {
         }
     });
 
-    // handle show less columns for product detail page
+    // handle show less columns for product detail page or update product page
     if(window.location.href.indexOf("product") > -1) {
-        console.log('pagina product detail')
         var hidableIndex = generateHidableIndexTableBases() 
-        console.log('hidableIndex ->', hidableIndex)
 
         if($('#main-dashboard-inner-detailpage-table-bases tr').elemExists()) {
             var table_id_tr = '#main-dashboard-inner-detailpage-table-bases tr'
