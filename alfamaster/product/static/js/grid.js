@@ -148,6 +148,68 @@ $( document ).ready(function() {
         }
     });
 
+    // handle show less columns for product detail page
+    if(window.location.href.indexOf("product") > -1) {
+        console.log('pagina product detail')
+        var hidableIndex = generateHidableIndexTableBases() 
+        console.log('hidableIndex ->', hidableIndex)
+
+        if($('#main-dashboard-inner-detailpage-table-bases tr').elemExists()) {
+            var table_id_tr = '#main-dashboard-inner-detailpage-table-bases tr'
+        }
+        if($('#main-dashboard-inner-table-bases tr').elemExists()) {
+            var table_id_tr = '#main-dashboard-inner-table-bases tr'
+        }
+
+		$(table_id_tr).each(function(index, trow){
+			var currentRow=$(this);
+            var rowCount = $(table_id_tr).length;
+            var tmp = ''
+            if (index == 1) {
+                // tr inside thead: 2nd line
+                tmp = currentRow.find('th')
+            } else if (index > 1 && index < rowCount - 1) {
+                // tr inside tbody
+                tmp = currentRow.find('td')
+            } else if (index === rowCount - 1) {
+                // tr inside tfoot
+                tmp = currentRow.find('td')
+                hidableIndex.forEach(myFunction);
+
+                function myFunction(value, index, array) {
+                    val = parseInt(value) - 2
+                    array[index] = val
+                }
+            } else {
+                // tr inside thead: 1st line
+                tmp = currentRow.find('th[colspan]')
+                tmp.each(function(subindex, cell){
+                    $(this).addClass('shortable')
+                });
+                return true
+            }
+            tmp.each(function(subindex, cell){
+                if (hidableIndex.includes(parseInt(subindex))) {
+                    cell.classList.add('hidable')
+                }
+
+                if (cell.contentEditable) {
+                    cell.onclick = function () {
+                        var tr_tdCurrent = $(this).parent('tr')
+                        highlightCurrentTableRow(tr_tdCurrent)
+                    };
+                }
+            });
+
+            $(".hidable").each(function() {
+                $(this).css("display","none");
+            });
+
+            $(".shortable").each(function() {
+                $(this).attr('colspan',3);
+            }); 
+        });
+    }
 });
 
 /* 02. Handle table bases creation
@@ -380,6 +442,12 @@ function addTheadBases(tr_head, thead_bases){
 
 function generateHidableIndexTableBases() {
     var hidableIndex = [4,6,9,11,14,16] // idx for base1, TiO2 slurry and base2 .. the default bases
+
+    if(global_num_bases == 0) {
+        //if zero then check 
+        global_num_bases = parseInt(bases_num) - 1
+    }
+
     for(var q = 0; q<global_num_bases; q++){
         // if bases value is bigger than 2
         var last_element = hidableIndex[hidableIndex.length - 1]
