@@ -444,8 +444,16 @@ function generateHidableIndexTableBases() {
     var hidableIndex = [4,6,9,11,14,16] // idx for base1, TiO2 slurry and base2 .. the default bases
 
     if(global_num_bases == 0) {
-        //if zero then check 
-        global_num_bases = parseInt(bases_num) - 1
+        //if zero then check
+        try {
+            global_num_bases = parseInt(bases_num) - 1
+        } catch (e) {
+            if (e instanceof ReferenceError) {
+                // Handle error as necessary
+                console.log('reference error for bases_num')
+            }
+        }
+        
     }
 
     for(var q = 0; q<global_num_bases; q++){
